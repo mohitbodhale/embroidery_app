@@ -1,0 +1,243 @@
+- generic [ref=f3e2]:
+  - navigation [ref=f3e3]:
+    - list [ref=f3e4]:
+      - listitem [ref=f3e5]:
+        - button "" [ref=f3e6] [cursor=pointer]
+      - listitem [ref=f3e8]:
+        - link "Embroidery System" [ref=f3e9] [cursor=pointer]:
+          - /url: /jobs
+    - list [ref=f3e10]:
+      - listitem [ref=f3e11]:
+        - button " Test Scheduler" [ref=f3e12] [cursor=pointer]:
+          - generic [ref=f3e13]: 
+          - generic [ref=f3e14]: Test Scheduler
+        - text: 
+  - generic [ref=f3e15]:
+    - complementary [ref=f3e16]:
+      - link "Embroidery" [ref=f3e17] [cursor=pointer]:
+        - /url: /jobs
+      - navigation [ref=f3e21]:
+        - menu [ref=f3e22]:
+          - listitem [ref=f3e23]:
+            - link " Scheduling Board" [ref=f3e24] [cursor=pointer]:
+              - /url: /jobs
+              - generic [ref=f3e25]: 
+              - paragraph [ref=f3e26]: Scheduling Board
+          - listitem [ref=f3e27]:
+            - link " Create Job" [ref=f3e28] [cursor=pointer]:
+              - /url: /jobs/add
+              - generic [ref=f3e29]: 
+              - paragraph [ref=f3e30]: Create Job
+          - listitem [ref=f3e31]:
+            - link " Logout" [ref=f3e32] [cursor=pointer]:
+              - /url: /users/logout
+              - generic [ref=f3e33]: 
+              - paragraph [ref=f3e34]: Logout
+    - generic [ref=f3e35]:
+      - generic [ref=f3e38]:
+        - heading " JOB_2026_001 · Complete Workflow Test" [level=1] [ref=f3e40]:
+          - generic [ref=f3e41]: 
+          - text: JOB_2026_001 · Complete Workflow Test
+        - list [ref=f3e43]:
+          - listitem [ref=f3e44]:
+            - link "" [ref=f3e45] [cursor=pointer]:
+              - /url: /jobs
+          - listitem [ref=f3e47]: / JOB_2026_001 · Complete Workflow Test
+      - generic [ref=f3e49]:
+        - generic [ref=f3e51]:
+          - generic [ref=f3e52]:
+            - generic [ref=f3e53]: Status
+            - generic [ref=f3e54]: In Production
+            - generic [ref=f3e55]: Created Sep 02, 2026
+          - generic [ref=f3e56]:
+            - term [ref=f3e57]: Job number
+            - definition [ref=f3e58]: JOB_2026_001
+            - term [ref=f3e59]: Title
+            - definition [ref=f3e60]: Complete Workflow Test
+            - term [ref=f3e61]: Digitizer
+            - definition [ref=f3e62]:
+              - generic [ref=f3e63]: 
+              - text: Test Digitizer
+            - term [ref=f3e64]: Quality checker
+            - definition [ref=f3e65]:
+              - generic [ref=f3e66]: 
+              - text: Test QC
+            - term [ref=f3e67]: Organization
+            - definition [ref=f3e68]:
+              - generic [ref=f3e69]: 
+              - text: Default Company
+            - term [ref=f3e70]: Scheduled date
+            - definition [ref=f3e71]:
+              - generic [ref=f3e72]: 
+              - text: Sep 10, 2026
+          - generic [ref=f3e73]:
+            - generic [ref=f3e74]:
+              - strong [ref=f3e75]:
+                - generic [ref=f3e76]: 
+                - text: Attachments
+              - link "+ Add file" [ref=f3e77] [cursor=pointer]:
+                - /url: /job-attachments/add?job_id=1&redirect=%2Fjobs%2Fview%2F1
+                - generic [ref=f3e78]: +
+                - text: Add file
+            - table [ref=f3e80]:
+              - rowgroup [ref=f3e81]:
+                - row [ref=f3e82]:
+                  - columnheader "File" [ref=f3e83]
+                  - columnheader "Type" [ref=f3e84]
+                  - columnheader "Size" [ref=f3e85]
+                  - columnheader "Uploaded" [ref=f3e86]
+                  - columnheader "Actions" [ref=f3e87]
+              - rowgroup [ref=f3e88]:
+                - row [ref=f3e89]:
+                  - cell [ref=f3e90]:
+                    - link " test_design1.txt" [ref=f3e91] [cursor=pointer]:
+                      - /url: /uploads/attachments/1/de4fd19a3c0d1e6f.txt
+                      - generic [ref=f3e92]: 
+                      - text: test_design1.txt
+                  - cell "DESIGN FILES" [ref=f3e93]
+                  - cell "83 Bytes" [ref=f3e95]
+                  - cell "Sep 02, 2026 18:05" [ref=f3e96]
+                  - cell [ref=f3e97]:
+                    - generic [ref=f3e98]:
+                      - link "" [ref=f3e99] [cursor=pointer]:
+                        - /url: /job-attachments/download/1
+                      - button "" [ref=f3e102] [cursor=pointer]
+                - row [ref=f3e104]:
+                  - cell [ref=f3e105]:
+                    - link " test_design2.txt" [ref=f3e106] [cursor=pointer]:
+                      - /url: /uploads/attachments/1/cb31da8c7bba7ba6.txt
+                      - generic [ref=f3e107]: 
+                      - text: test_design2.txt
+                  - cell "DESIGN FILES" [ref=f3e108]
+                  - cell "89 Bytes" [ref=f3e110]
+                  - cell "Sep 02, 2026 18:05" [ref=f3e111]
+                  - cell [ref=f3e112]:
+                    - generic [ref=f3e113]:
+                      - link "" [ref=f3e114] [cursor=pointer]:
+                        - /url: /job-attachments/download/2
+                      - button "" [ref=f3e117] [cursor=pointer]
+                - row [ref=f3e119]:
+                  - cell [ref=f3e120]:
+                    - link " test_design3.txt" [ref=f3e121] [cursor=pointer]:
+                      - /url: /uploads/attachments/1/c978e468d2ae1d82.txt
+                      - generic [ref=f3e122]: 
+                      - text: test_design3.txt
+                  - cell "DESIGN FILES" [ref=f3e123]
+                  - cell "84 Bytes" [ref=f3e125]
+                  - cell "Sep 02, 2026 18:05" [ref=f3e126]
+                  - cell [ref=f3e127]:
+                    - generic [ref=f3e128]:
+                      - link "" [ref=f3e129] [cursor=pointer]:
+                        - /url: /job-attachments/download/3
+                      - button "" [ref=f3e132] [cursor=pointer]
+          - generic [ref=f3e134]:
+            - strong [ref=f3e135]:
+              - generic [ref=f3e136]: 
+              - text: Activity log
+            - generic [ref=f3e137]:
+              - generic [ref=f3e138]:
+                - generic [ref=f3e139]: 
+                - generic [ref=f3e141]:
+                  - generic [ref=f3e142]:
+                    - generic [ref=f3e143]: Note
+                    - generic [ref=f3e144]: Sep 02, 2026 18:06
+                  - generic [ref=f3e145]: Digitizer started working on the design
+                  - generic [ref=f3e146]:
+                    - generic [ref=f3e147]: 
+                    - text: System
+              - generic [ref=f3e148]:
+                - generic [ref=f3e149]: 
+                - generic [ref=f3e151]:
+                  - generic [ref=f3e152]:
+                    - generic [ref=f3e153]: Submitted For Qc
+                    - generic [ref=f3e154]: Sep 02, 2026 18:07
+                  - generic [ref=f3e155]: EMB file submitted for QC review.
+                  - generic [ref=f3e156]:
+                    - generic [ref=f3e157]: 
+                    - text: System
+              - generic [ref=f3e158]:
+                - generic [ref=f3e159]: 
+                - generic [ref=f3e161]:
+                  - generic [ref=f3e162]:
+                    - generic [ref=f3e163]: Note
+                    - generic [ref=f3e164]: Sep 02, 2026 18:09
+                  - generic [ref=f3e165]: QC reviewed the job - looks good
+                  - generic [ref=f3e166]:
+                    - generic [ref=f3e167]: 
+                    - text: System
+              - generic [ref=f3e168]:
+                - generic [ref=f3e169]: 
+                - generic [ref=f3e171]:
+                  - generic [ref=f3e172]:
+                    - generic [ref=f3e173]: Approved
+                    - generic [ref=f3e174]: Sep 02, 2026 18:09
+                  - generic [ref=f3e175]: Approved by QC
+                  - generic [ref=f3e176]:
+                    - generic [ref=f3e177]: 
+                    - text: System
+              - generic [ref=f3e178]:
+                - generic [ref=f3e179]: 
+                - generic [ref=f3e181]:
+                  - generic [ref=f3e182]:
+                    - generic [ref=f3e183]: Production Started
+                    - generic [ref=f3e184]: Sep 02, 2026 18:12
+                  - generic [ref=f3e185]: Production processing started.
+                  - generic [ref=f3e186]:
+                    - generic [ref=f3e187]: 
+                    - text: System
+          - generic [ref=f3e188]:
+            - heading " Add note" [level=3] [ref=f3e190]:
+              - generic [ref=f3e191]: 
+              - text: Add note
+            - generic [ref=f3e194]:
+              - generic [ref=f3e195]:
+                - generic [ref=f3e196]: Comment
+                - textbox "Add a note about this job..." [ref=f3e197]
+              - button " Save note" [ref=f3e199] [cursor=pointer]:
+                - generic [ref=f3e200]: 
+                - text: Save note
+        - generic [ref=f3e201]:
+          - heading " Assignment" [level=3] [ref=f3e203]:
+            - generic [ref=f3e204]: 
+            - text: Assignment
+          - generic [ref=f3e207]:
+            - generic [ref=f3e208]:
+              - generic [ref=f3e209]: Digitizer
+              - combobox [ref=f3e210]:
+                - option "Select Digitizer" [selected]
+                - option "Test Digitizer"
+                - option "Digitizer Two"
+                - option "Digitizer Three"
+            - generic [ref=f3e211]:
+              - generic [ref=f3e212]: Quality checker
+              - combobox [ref=f3e213]:
+                - option "Select QC" [selected]
+                - option "Test QC"
+            - button " Update" [ref=f3e215] [cursor=pointer]:
+              - generic [ref=f3e216]: 
+              - text: Update
+        - generic [ref=f3e217]:
+          - link " Back to jobs" [ref=f3e218] [cursor=pointer]:
+            - /url: /jobs
+            - generic [ref=f3e219]: 
+            - text: Back to jobs
+          - generic [ref=f3e220]:
+            - link " Edit" [ref=f3e221] [cursor=pointer]:
+              - /url: /jobs/edit/1
+              - generic [ref=f3e222]: 
+              - text: Edit
+            - button " Delete" [ref=f3e224] [cursor=pointer]:
+              - generic [ref=f3e225]: 
+              - text: Delete
+  - contentinfo [ref=f3e226]:
+    - generic [ref=f3e228]:
+      - generic [ref=f3e229]:
+        - strong [ref=f3e230]: Embroidery System
+        - generic [ref=f3e231]: · Production workflow
+      - generic [ref=f3e232]:
+        - generic [ref=f3e233]:
+          - generic [ref=f3e234]: 
+          - generic [ref=f3e235]: v1.0.0
+        - button " Automatic testing" [ref=f3e236] [cursor=pointer]:
+          - generic [ref=f3e237]: 
+          - generic [ref=f3e238]: Automatic testing

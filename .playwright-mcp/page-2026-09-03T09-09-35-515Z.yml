@@ -1,0 +1,260 @@
+- generic [ref=f3e2]:
+  - navigation [ref=f3e3]:
+    - list [ref=f3e4]:
+      - listitem [ref=f3e5]:
+        - button "" [ref=f3e6] [cursor=pointer]
+      - listitem [ref=f3e8]:
+        - link "Embroidery System" [ref=f3e9] [cursor=pointer]:
+          - /url: /jobs
+    - list [ref=f3e10]:
+      - listitem [ref=f3e11]:
+        - button " Admin User Real PNG" [ref=f3e12] [cursor=pointer]:
+          - generic [ref=f3e13]: 
+          - generic [ref=f3e14]: Admin User Real PNG
+        - text:  
+  - generic [ref=f3e15]:
+    - complementary [ref=f3e16]:
+      - link "Embroidery" [ref=f3e17] [cursor=pointer]:
+        - /url: /jobs
+      - navigation [ref=f3e21]:
+        - menu [ref=f3e22]:
+          - listitem [ref=f3e23]:
+            - link " Operations Dashboard" [ref=f3e24] [cursor=pointer]:
+              - /url: /pages/admin-dashboard
+              - generic [ref=f3e25]: 
+              - paragraph [ref=f3e26]: Operations Dashboard
+          - listitem [ref=f3e27]: MASTERS
+          - listitem [ref=f3e28]:
+            - link " Users" [ref=f3e29] [cursor=pointer]:
+              - /url: /users
+              - generic [ref=f3e30]: 
+              - paragraph [ref=f3e31]: Users
+          - listitem [ref=f3e32]:
+            - link " Roles" [ref=f3e33] [cursor=pointer]:
+              - /url: /roles
+              - generic [ref=f3e34]: 
+              - paragraph [ref=f3e35]: Roles
+          - listitem [ref=f3e36]:
+            - link " Job Statuses" [ref=f3e37] [cursor=pointer]:
+              - /url: /job-statuses
+              - generic [ref=f3e38]: 
+              - paragraph [ref=f3e39]: Job Statuses
+          - listitem [ref=f3e40]: ACTIVITY
+          - listitem [ref=f3e41]:
+            - link " Activity Logs" [ref=f3e42] [cursor=pointer]:
+              - /url: /job-logs
+              - generic [ref=f3e43]: 
+              - paragraph [ref=f3e44]: Activity Logs
+    - generic [ref=f3e45]:
+      - generic [ref=f3e48]:
+        - heading " Users" [level=1] [ref=f3e50]:
+          - generic [ref=f3e51]: 
+          - text: Users
+        - list [ref=f3e53]:
+          - listitem [ref=f3e54]:
+            - link "" [ref=f3e55] [cursor=pointer]:
+              - /url: /pages/admin-dashboard
+          - listitem [ref=f3e57]: / Users
+      - generic [ref=f3e60]:
+        - generic [ref=f3e61]:
+          - heading " Team members" [level=3] [ref=f3e62]:
+            - generic [ref=f3e63]: 
+            - text: Team members
+          - generic [ref=f3e64]:
+            - link " Export CSV" [ref=f3e65] [cursor=pointer]:
+              - /url: /users/export
+              - generic [ref=f3e66]: 
+              - text: Export CSV
+            - link "+ New user" [ref=f3e67] [cursor=pointer]:
+              - /url: /users/add
+              - generic [ref=f3e68]: +
+              - text: New user
+        - table [ref=f3e71]:
+          - rowgroup [ref=f3e72]:
+            - row [ref=f3e73]:
+              - columnheader [ref=f3e74]:
+                - link "Name" [ref=f3e75] [cursor=pointer]:
+                  - /url: /users?sort=name&direction=asc
+              - columnheader [ref=f3e76]:
+                - link "Email" [ref=f3e77] [cursor=pointer]:
+                  - /url: /users?sort=email&direction=asc
+              - columnheader [ref=f3e78]:
+                - link "Role" [ref=f3e79] [cursor=pointer]:
+                  - /url: /users?sort=role&direction=asc
+              - columnheader [ref=f3e80]:
+                - link "Joined" [ref=f3e81] [cursor=pointer]:
+                  - /url: /users?sort=created_at&direction=asc
+              - columnheader "Organization" [ref=f3e82]
+              - columnheader "Actions" [ref=f3e83]
+          - rowgroup [ref=f3e84]:
+            - row [ref=f3e85]:
+              - 'cell "D David Martinez #17" [ref=f3e86]':
+                - generic [ref=f3e87]:
+                  - generic [ref=f3e88]: D
+                  - generic [ref=f3e89]:
+                    - generic [ref=f3e90]: David Martinez
+                    - generic [ref=f3e91]: "#17"
+              - cell "production@embroidery.local" [ref=f3e92]
+              - cell "Production" [ref=f3e93]
+              - cell "Sep 02, 2026" [ref=f3e95]
+              - cell "Default Company" [ref=f3e96]
+              - cell [ref=f3e97]:
+                - generic [ref=f3e98]:
+                  - link "" [ref=f3e99] [cursor=pointer]:
+                    - /url: /users/view/17
+                  - link "" [ref=f3e101] [cursor=pointer]:
+                    - /url: /users/edit/17
+                  - link "" [ref=f3e103] [cursor=pointer]:
+                    - /url: "#"
+            - row [ref=f3e105]:
+              - 'cell "S Scheduler Two #18" [ref=f3e106]':
+                - generic [ref=f3e107]:
+                  - generic [ref=f3e108]: S
+                  - generic [ref=f3e109]:
+                    - generic [ref=f3e110]: Scheduler Two
+                    - generic [ref=f3e111]: "#18"
+              - cell "scheduler2@embroidery.local" [ref=f3e112]
+              - cell "Scheduler" [ref=f3e113]
+              - cell "Sep 02, 2026" [ref=f3e115]
+              - cell "Default Company" [ref=f3e116]
+              - cell [ref=f3e117]:
+                - generic [ref=f3e118]:
+                  - link "" [ref=f3e119] [cursor=pointer]:
+                    - /url: /users/view/18
+                  - link "" [ref=f3e121] [cursor=pointer]:
+                    - /url: /users/edit/18
+                  - link "" [ref=f3e123] [cursor=pointer]:
+                    - /url: "#"
+            - row [ref=f3e125]:
+              - 'cell "A Admin User Real PNG #2" [ref=f3e126]':
+                - generic [ref=f3e127]:
+                  - generic [ref=f3e128]: A
+                  - generic [ref=f3e129]:
+                    - generic [ref=f3e130]: Admin User Real PNG
+                    - generic [ref=f3e131]: "#2"
+              - cell "newadmin@stitchcraft.com" [ref=f3e132]
+              - cell "Admin" [ref=f3e133]
+              - cell "Sep 01, 2026" [ref=f3e135]
+              - cell "Default Company" [ref=f3e136]
+              - cell [ref=f3e137]:
+                - generic [ref=f3e138]:
+                  - link "" [ref=f3e139] [cursor=pointer]:
+                    - /url: /users/view/2
+                  - link "" [ref=f3e141] [cursor=pointer]:
+                    - /url: /users/edit/2
+                  - link "" [ref=f3e143] [cursor=pointer]:
+                    - /url: "#"
+            - row [ref=f3e145]:
+              - 'cell "D Digitizer Two #19" [ref=f3e146]':
+                - generic [ref=f3e147]:
+                  - generic [ref=f3e148]: D
+                  - generic [ref=f3e149]:
+                    - generic [ref=f3e150]: Digitizer Two
+                    - generic [ref=f3e151]: "#19"
+              - cell "digitizer2@embroidery.local" [ref=f3e152]
+              - cell "Digitizer" [ref=f3e153]
+              - cell "Sep 02, 2026" [ref=f3e155]
+              - cell "Default Company" [ref=f3e156]
+              - cell [ref=f3e157]:
+                - generic [ref=f3e158]:
+                  - link "" [ref=f3e159] [cursor=pointer]:
+                    - /url: /users/view/19
+                  - link "" [ref=f3e161] [cursor=pointer]:
+                    - /url: /users/edit/19
+                  - link "" [ref=f3e163] [cursor=pointer]:
+                    - /url: "#"
+            - row [ref=f3e165]:
+              - 'cell "D Digitizer Three #20" [ref=f3e166]':
+                - generic [ref=f3e167]:
+                  - generic [ref=f3e168]: D
+                  - generic [ref=f3e169]:
+                    - generic [ref=f3e170]: Digitizer Three
+                    - generic [ref=f3e171]: "#20"
+              - cell "digitizer3@embroidery.local" [ref=f3e172]
+              - cell "Digitizer" [ref=f3e173]
+              - cell "Sep 02, 2026" [ref=f3e175]
+              - cell "Default Company" [ref=f3e176]
+              - cell [ref=f3e177]:
+                - generic [ref=f3e178]:
+                  - link "" [ref=f3e179] [cursor=pointer]:
+                    - /url: /users/view/20
+                  - link "" [ref=f3e181] [cursor=pointer]:
+                    - /url: /users/edit/20
+                  - link "" [ref=f3e183] [cursor=pointer]:
+                    - /url: "#"
+            - row [ref=f3e185]:
+              - 'cell "M Maria Gonzalez #14" [ref=f3e186]':
+                - generic [ref=f3e187]:
+                  - generic [ref=f3e188]: M
+                  - generic [ref=f3e189]:
+                    - generic [ref=f3e190]: Maria Gonzalez
+                    - generic [ref=f3e191]: "#14"
+              - cell "scheduler@embroidery.local" [ref=f3e192]
+              - cell "Scheduler" [ref=f3e193]
+              - cell "Sep 02, 2026" [ref=f3e195]
+              - cell "Default Company" [ref=f3e196]
+              - cell [ref=f3e197]:
+                - generic [ref=f3e198]:
+                  - link "" [ref=f3e199] [cursor=pointer]:
+                    - /url: /users/view/14
+                  - link "" [ref=f3e201] [cursor=pointer]:
+                    - /url: /users/edit/14
+                  - link "" [ref=f3e203] [cursor=pointer]:
+                    - /url: "#"
+            - row [ref=f3e205]:
+              - 'cell "J James Chen #15" [ref=f3e206]':
+                - generic [ref=f3e207]:
+                  - generic [ref=f3e208]: J
+                  - generic [ref=f3e209]:
+                    - generic [ref=f3e210]: James Chen
+                    - generic [ref=f3e211]: "#15"
+              - cell "digitizer@embroidery.local" [ref=f3e212]
+              - cell "Digitizer" [ref=f3e213]
+              - cell "Sep 02, 2026" [ref=f3e215]
+              - cell "Default Company" [ref=f3e216]
+              - cell [ref=f3e217]:
+                - generic [ref=f3e218]:
+                  - link "" [ref=f3e219] [cursor=pointer]:
+                    - /url: /users/view/15
+                  - link "" [ref=f3e221] [cursor=pointer]:
+                    - /url: /users/edit/15
+                  - link "" [ref=f3e223] [cursor=pointer]:
+                    - /url: "#"
+            - row [ref=f3e225]:
+              - 'cell "S Sarah Thompson #16" [ref=f3e226]':
+                - generic [ref=f3e227]:
+                  - generic [ref=f3e228]: S
+                  - generic [ref=f3e229]:
+                    - generic [ref=f3e230]: Sarah Thompson
+                    - generic [ref=f3e231]: "#16"
+              - cell "qc@embroidery.local" [ref=f3e232]
+              - cell "Quality Checker" [ref=f3e233]
+              - cell "Sep 02, 2026" [ref=f3e235]
+              - cell "Default Company" [ref=f3e236]
+              - cell [ref=f3e237]:
+                - generic [ref=f3e238]:
+                  - link "" [ref=f3e239] [cursor=pointer]:
+                    - /url: /users/view/16
+                  - link "" [ref=f3e241] [cursor=pointer]:
+                    - /url: /users/edit/16
+                  - link "" [ref=f3e243] [cursor=pointer]:
+                    - /url: "#"
+        - generic [ref=f3e246]:
+          - paragraph [ref=f3e247]: Page 1 of 1 — 8 users
+          - list [ref=f3e248]:
+            - listitem [ref=f3e249]:
+              - generic [ref=f3e250]: ‹
+            - listitem [ref=f3e251]:
+              - generic [ref=f3e252]: ›
+  - contentinfo [ref=f3e253]:
+    - generic [ref=f3e255]:
+      - generic [ref=f3e256]:
+        - strong [ref=f3e257]: Embroidery System
+        - generic [ref=f3e258]: · Production workflow
+      - generic [ref=f3e259]:
+        - generic [ref=f3e260]:
+          - generic [ref=f3e261]: 
+          - generic [ref=f3e262]: v1.0.0
+        - button " Automatic testing" [ref=f3e263] [cursor=pointer]:
+          - generic [ref=f3e264]: 
+          - generic [ref=f3e265]: Automatic testing

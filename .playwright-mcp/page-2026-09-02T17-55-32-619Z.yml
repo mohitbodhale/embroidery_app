@@ -1,0 +1,185 @@
+- generic [ref=f3e2]:
+  - navigation [ref=f3e3]:
+    - list [ref=f3e4]:
+      - listitem [ref=f3e5]:
+        - button "" [ref=f3e6] [cursor=pointer]
+      - listitem [ref=f3e8]:
+        - link "Embroidery System" [ref=f3e9] [cursor=pointer]:
+          - /url: /jobs
+    - list [ref=f3e10]:
+      - listitem [ref=f3e11]:
+        - button " Test Digitizer" [ref=f3e12] [cursor=pointer]:
+          - generic [ref=f3e13]: 
+          - generic [ref=f3e14]: Test Digitizer
+        - text: 
+  - generic [ref=f3e15]:
+    - complementary [ref=f3e16]:
+      - link "Embroidery" [ref=f3e17] [cursor=pointer]:
+        - /url: /jobs
+      - navigation [ref=f3e21]:
+        - menu [ref=f3e22]:
+          - listitem [ref=f3e23]:
+            - link " My Digitizing Queue" [ref=f3e24] [cursor=pointer]:
+              - /url: /jobs
+              - generic [ref=f3e25]: 
+              - paragraph [ref=f3e26]: My Digitizing Queue
+          - listitem [ref=f3e27]:
+            - link " Attachments" [ref=f3e28] [cursor=pointer]:
+              - /url: /job-attachments
+              - generic [ref=f3e29]: 
+              - paragraph [ref=f3e30]: Attachments
+          - listitem [ref=f3e31]:
+            - link " Logout" [ref=f3e32] [cursor=pointer]:
+              - /url: /users/logout
+              - generic [ref=f3e33]: 
+              - paragraph [ref=f3e34]: Logout
+    - generic [ref=f3e35]:
+      - generic [ref=f3e38]:
+        - heading " Edit job JOB_2026_007" [level=1] [ref=f3e40]:
+          - generic [ref=f3e41]: 
+          - text: Edit job JOB_2026_007
+        - list [ref=f3e43]:
+          - listitem [ref=f3e44]:
+            - link "" [ref=f3e45] [cursor=pointer]:
+              - /url: /jobs
+          - listitem [ref=f3e47]: / Edit job JOB_2026_007
+      - generic [ref=f3e51]:
+        - generic [ref=f3e52]:
+          - generic [ref=f3e53]: Status
+          - generic [ref=f3e54]: In Digitizing
+          - generic [ref=f3e55]: Created Sep 02, 2026
+        - generic [ref=f3e56]:
+          - generic [ref=f3e57]:
+            - generic [ref=f3e58]:
+              - generic [ref=f3e59]: Job number
+              - textbox [ref=f3e60]: JOB_2026_007
+            - generic [ref=f3e61]:
+              - generic [ref=f3e62]: Title
+              - textbox [ref=f3e63]: Single File Upload Test
+          - generic [ref=f3e64]:
+            - generic [ref=f3e65]: Instructions
+            - textbox [ref=f3e66]
+          - generic [ref=f3e67]:
+            - generic [ref=f3e68]:
+              - generic [ref=f3e69]: Status
+              - combobox [ref=f3e70]:
+                - option [selected]
+                - option "Draft"
+                - option "Scheduled"
+                - option "In Digitizing"
+                - option "Digitized"
+                - option "QC Rejected"
+                - option "QC Approved"
+                - option "In Production"
+                - option "Completed"
+            - generic [ref=f3e71]:
+              - generic [ref=f3e72]: Digitizer
+              - combobox [ref=f3e73]:
+                - option "Unassigned"
+                - option "Admin User"
+                - option "Test Scheduler"
+                - option "Test Digitizer" [selected]
+                - option "Test QC"
+                - option "Test Production"
+                - option "Scheduler Two"
+                - option "Digitizer Two"
+                - option "Digitizer Three"
+            - generic [ref=f3e74]:
+              - generic [ref=f3e75]: Quality checker
+              - combobox [ref=f3e76]:
+                - option "Unassigned"
+                - option "Admin User"
+                - option "Test Scheduler"
+                - option "Test Digitizer"
+                - option "Test QC" [selected]
+                - option "Test Production"
+                - option "Scheduler Two"
+                - option "Digitizer Two"
+                - option "Digitizer Three"
+          - generic [ref=f3e77]:
+            - generic [ref=f3e78]:
+              - generic [ref=f3e79]: Scheduled date
+              - textbox [ref=f3e80]: 2026-09-09
+            - generic [ref=f3e81]:
+              - generic [ref=f3e82]: Organization
+              - combobox [ref=f3e83]:
+                - option "Default Company" [selected]
+                - option "StitchCraft Org"
+          - separator [ref=f3e84]
+          - heading " Attachments" [level=4] [ref=f3e85]:
+            - generic [ref=f3e86]: 
+            - text: Attachments
+          - table [ref=f3e88]:
+            - rowgroup [ref=f3e89]:
+              - row [ref=f3e90]:
+                - columnheader "File" [ref=f3e91]
+                - columnheader "Type" [ref=f3e92]
+                - columnheader "Size" [ref=f3e93]
+                - columnheader "Uploaded by" [ref=f3e94]
+                - columnheader "When" [ref=f3e95]
+                - columnheader "Actions" [ref=f3e96]
+            - rowgroup [ref=f3e97]:
+              - row [ref=f3e98]:
+                - cell [ref=f3e99]:
+                  - link " design_file.txt" [ref=f3e100] [cursor=pointer]:
+                    - /url: /uploads/attachments/9/4b6b72200d43f0ba.txt
+                    - generic [ref=f3e101]: 
+                    - text: design_file.txt
+                - cell "DESIGN FILE" [ref=f3e102]
+                - cell "107 Bytes" [ref=f3e104]
+                - cell "Test Scheduler" [ref=f3e105]
+                - cell "Sep 02, 2026 17:43" [ref=f3e106]
+                - cell [ref=f3e107]:
+                  - link "" [ref=f3e109] [cursor=pointer]:
+                    - /url: /job-attachments/download/3
+              - row [ref=f3e111]:
+                - cell [ref=f3e112]:
+                  - link " design_file2.txt" [ref=f3e113] [cursor=pointer]:
+                    - /url: /uploads/attachments/9/57a139cda4439e4d.txt
+                    - generic [ref=f3e114]: 
+                    - text: design_file2.txt
+                - cell "DIGITIZER UPLOAD" [ref=f3e115]
+                - cell "97 Bytes" [ref=f3e117]
+                - cell "Test Digitizer" [ref=f3e118]
+                - cell "Sep 02, 2026 17:50" [ref=f3e119]
+                - cell [ref=f3e120]:
+                  - generic [ref=f3e121]:
+                    - link "" [ref=f3e122] [cursor=pointer]:
+                      - /url: /job-attachments/download/6
+                    - button "" [ref=f3e124] [cursor=pointer]
+          - generic [ref=f3e126]:
+            - generic [ref=f3e127]:
+              - generic [ref=f3e128]: Add more files
+              - button "Choose File" [ref=f3e129] [cursor=pointer]
+              - generic [ref=f3e130]: PDF, images, archives, embroidery formats (max 20 MB each)
+            - generic [ref=f3e131]:
+              - generic [ref=f3e132]: Attachment type (optional)
+              - textbox "e.g. Design file" [ref=f3e133]
+            - generic [ref=f3e134]:
+              - generic [ref=f3e135]: Notes (optional)
+              - textbox "Any notes" [ref=f3e136]
+          - generic [ref=f3e137]:
+            - link " Back" [ref=f3e138] [cursor=pointer]:
+              - /url: /jobs
+              - generic [ref=f3e139]: 
+              - text: Back
+            - generic [ref=f3e140]:
+              - link " Delete" [ref=f3e141] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=f3e142]: 
+                - text: Delete
+              - button " Save changes" [ref=f3e143] [cursor=pointer]:
+                - generic [ref=f3e144]: 
+                - text: Save changes
+  - contentinfo [ref=f3e145]:
+    - generic [ref=f3e147]:
+      - generic [ref=f3e148]:
+        - strong [ref=f3e149]: Embroidery System
+        - generic [ref=f3e150]: · Production workflow
+      - generic [ref=f3e151]:
+        - generic [ref=f3e152]:
+          - generic [ref=f3e153]: 
+          - generic [ref=f3e154]: v1.0.0
+        - button " Automatic testing" [ref=f3e155] [cursor=pointer]:
+          - generic [ref=f3e156]: 
+          - generic [ref=f3e157]: Automatic testing

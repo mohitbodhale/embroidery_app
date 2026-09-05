@@ -1,0 +1,3 @@
+[     997ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost/embroidery_app/users/login:0
+[   37917ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) @ http://localhost/embroidery_app/users/login:0
+[  476287ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) @ http://localhost/embroidery_app/users/login:0

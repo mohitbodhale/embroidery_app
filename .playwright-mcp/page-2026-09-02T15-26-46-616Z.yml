@@ -1,0 +1,96 @@
+- generic [ref=f3e2]:
+  - navigation [ref=f3e3]:
+    - list [ref=f3e4]:
+      - listitem [ref=f3e5]:
+        - button "" [ref=f3e6] [cursor=pointer]
+      - listitem [ref=f3e8]:
+        - link "Embroidery System" [ref=f3e9] [cursor=pointer]:
+          - /url: /jobs
+    - list [ref=f3e10]:
+      - listitem [ref=f3e11]:
+        - button " Test Scheduler" [ref=f3e12] [cursor=pointer]:
+          - generic [ref=f3e13]: 
+          - generic [ref=f3e14]: Test Scheduler
+        - text: 
+  - generic [ref=f3e15]:
+    - complementary [ref=f3e16]:
+      - link "Embroidery" [ref=f3e17] [cursor=pointer]:
+        - /url: /jobs
+      - navigation [ref=f3e21]:
+        - menu [ref=f3e22]:
+          - listitem [ref=f3e23]:
+            - link " Scheduling Board" [ref=f3e24] [cursor=pointer]:
+              - /url: /jobs
+              - generic [ref=f3e25]: 
+              - paragraph [ref=f3e26]: Scheduling Board
+          - listitem [ref=f3e27]:
+            - link " Create Job" [ref=f3e28] [cursor=pointer]:
+              - /url: /jobs/add
+              - generic [ref=f3e29]: 
+              - paragraph [ref=f3e30]: Create Job
+          - listitem [ref=f3e31]:
+            - link " Attachments" [ref=f3e32] [cursor=pointer]:
+              - /url: /job-attachments
+              - generic [ref=f3e33]: 
+              - paragraph [ref=f3e34]: Attachments
+          - listitem [ref=f3e35]:
+            - link " Activity Logs" [ref=f3e36] [cursor=pointer]:
+              - /url: /job-logs
+              - generic [ref=f3e37]: 
+              - paragraph [ref=f3e38]: Activity Logs
+          - listitem [ref=f3e39]:
+            - link " Logout" [ref=f3e40] [cursor=pointer]:
+              - /url: /users/logout
+              - generic [ref=f3e41]: 
+              - paragraph [ref=f3e42]: Logout
+    - generic [ref=f3e43]:
+      - generic [ref=f3e46]:
+        - heading " Add attachment" [level=1] [ref=f3e48]:
+          - generic [ref=f3e49]: 
+          - text: Add attachment
+        - list [ref=f3e51]:
+          - listitem [ref=f3e52]:
+            - link "" [ref=f3e53] [cursor=pointer]:
+              - /url: /jobs
+          - listitem [ref=f3e55]: / Add attachment
+      - generic [ref=f3e58]:
+        - heading " Add attachment" [level=3] [ref=f3e60]:
+          - generic [ref=f3e61]: 
+          - text: Add attachment
+        - generic [ref=f3e63]:
+          - generic [ref=f3e64]:
+            - generic [ref=f3e65]:
+              - generic [ref=f3e66]: Job
+              - combobox [ref=f3e67]:
+                - option "Select job" [selected]
+                - option "Test Embroidery Job"
+            - generic [ref=f3e68]:
+              - generic [ref=f3e69]: Files (select one or more)
+              - button "Choose File" [ref=f3e70] [cursor=pointer]
+              - generic [ref=f3e71]: PDF, images, archives, embroidery formats (max 20 MB each)
+            - generic [ref=f3e72]:
+              - generic [ref=f3e73]: Attachment type
+              - textbox "e.g. Design file, Reference photo" [ref=f3e74]
+            - generic [ref=f3e75]:
+              - generic [ref=f3e76]: Notes (optional)
+              - textbox "Any notes about these files" [ref=f3e77]
+          - generic [ref=f3e78]:
+            - link " Cancel" [ref=f3e79] [cursor=pointer]:
+              - /url: /job-attachments
+              - generic [ref=f3e80]: 
+              - text: Cancel
+            - button " Upload files" [ref=f3e81] [cursor=pointer]:
+              - generic [ref=f3e82]: 
+              - text: Upload files
+  - contentinfo [ref=f3e83]:
+    - generic [ref=f3e85]:
+      - generic [ref=f3e86]:
+        - strong [ref=f3e87]: Embroidery System
+        - generic [ref=f3e88]: · Production workflow
+      - generic [ref=f3e89]:
+        - generic [ref=f3e90]:
+          - generic [ref=f3e91]: 
+          - generic [ref=f3e92]: v1.0.0
+        - button " Automatic testing" [ref=f3e93] [cursor=pointer]:
+          - generic [ref=f3e94]: 
+          - generic [ref=f3e95]: Automatic testing

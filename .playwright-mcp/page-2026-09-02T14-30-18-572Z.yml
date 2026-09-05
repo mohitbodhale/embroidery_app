@@ -1,0 +1,9 @@
+- generic [ref=f1e2]:
+  - heading "You are not authorized to view this job." [level=2] [ref=f1e3]
+  - paragraph [ref=f1e4]:
+    - strong [ref=f1e5]: "Error:"
+    - text: The requested address
+    - strong [ref=f1e6]: "'/jobs/view/79'"
+    - text: was not found on this server.
+  - link "Back" [ref=f1e7] [cursor=pointer]:
+    - /url: javascript:history.back()

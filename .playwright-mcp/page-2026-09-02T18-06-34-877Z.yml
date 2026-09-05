@@ -1,0 +1,175 @@
+- generic [ref=f19e2]:
+  - navigation [ref=f19e3]:
+    - list [ref=f19e4]:
+      - listitem [ref=f19e5]:
+        - button "" [ref=f19e6] [cursor=pointer]
+      - listitem [ref=f19e8]:
+        - link "Embroidery System" [ref=f19e9] [cursor=pointer]:
+          - /url: /jobs
+    - list [ref=f19e10]:
+      - listitem [ref=f19e11]:
+        - button " Test Digitizer" [ref=f19e12] [cursor=pointer]:
+          - generic [ref=f19e13]: 
+          - generic [ref=f19e14]: Test Digitizer
+        - text: 
+  - generic [ref=f19e15]:
+    - complementary [ref=f19e16]:
+      - link "Embroidery" [ref=f19e17] [cursor=pointer]:
+        - /url: /jobs
+      - navigation [ref=f19e21]:
+        - menu [ref=f19e22]:
+          - listitem [ref=f19e23]:
+            - link " My Digitizing Queue" [ref=f19e24] [cursor=pointer]:
+              - /url: /jobs
+              - generic [ref=f19e25]: 
+              - paragraph [ref=f19e26]: My Digitizing Queue
+          - listitem [ref=f19e27]:
+            - link " Attachments" [ref=f19e28] [cursor=pointer]:
+              - /url: /job-attachments
+              - generic [ref=f19e29]: 
+              - paragraph [ref=f19e30]: Attachments
+          - listitem [ref=f19e31]:
+            - link " Logout" [ref=f19e32] [cursor=pointer]:
+              - /url: /users/logout
+              - generic [ref=f19e33]: 
+              - paragraph [ref=f19e34]: Logout
+    - generic [ref=f19e35]:
+      - generic [ref=f19e38]:
+        - heading " JOB_2026_001 · Complete Workflow Test" [level=1] [ref=f19e40]:
+          - generic [ref=f19e41]: 
+          - text: JOB_2026_001 · Complete Workflow Test
+        - list [ref=f19e43]:
+          - listitem [ref=f19e44]:
+            - link "" [ref=f19e45] [cursor=pointer]:
+              - /url: /jobs
+          - listitem [ref=f19e47]: / JOB_2026_001 · Complete Workflow Test
+      - generic [ref=f19e49]:
+        - generic [ref=f19e51]:
+          - generic [ref=f19e52]:
+            - generic [ref=f19e53]: Status
+            - generic [ref=f19e54]: In Digitizing
+            - generic [ref=f19e55]: Created Sep 02, 2026
+          - generic [ref=f19e56]:
+            - term [ref=f19e57]: Job number
+            - definition [ref=f19e58]: JOB_2026_001
+            - term [ref=f19e59]: Title
+            - definition [ref=f19e60]: Complete Workflow Test
+            - term [ref=f19e61]: Digitizer
+            - definition [ref=f19e62]:
+              - generic [ref=f19e63]: 
+              - text: Test Digitizer
+            - term [ref=f19e64]: Quality checker
+            - definition [ref=f19e65]:
+              - generic [ref=f19e66]: 
+              - text: Test QC
+            - term [ref=f19e67]: Organization
+            - definition [ref=f19e68]:
+              - generic [ref=f19e69]: 
+              - text: Default Company
+            - term [ref=f19e70]: Scheduled date
+            - definition [ref=f19e71]:
+              - generic [ref=f19e72]: 
+              - text: Sep 10, 2026
+          - generic [ref=f19e73]:
+            - generic [ref=f19e74]:
+              - strong [ref=f19e75]:
+                - generic [ref=f19e76]: 
+                - text: Attachments
+              - link "+ Add file" [ref=f19e77] [cursor=pointer]:
+                - /url: /job-attachments/add?job_id=1&redirect=%2Fjobs%2Fview%2F1
+                - generic [ref=f19e78]: +
+                - text: Add file
+            - table [ref=f19e80]:
+              - rowgroup [ref=f19e81]:
+                - row [ref=f19e82]:
+                  - columnheader "File" [ref=f19e83]
+                  - columnheader "Type" [ref=f19e84]
+                  - columnheader "Size" [ref=f19e85]
+                  - columnheader "Uploaded" [ref=f19e86]
+                  - columnheader "Actions" [ref=f19e87]
+              - rowgroup [ref=f19e88]:
+                - row [ref=f19e89]:
+                  - cell [ref=f19e90]:
+                    - link " test_design1.txt" [ref=f19e91] [cursor=pointer]:
+                      - /url: /uploads/attachments/1/de4fd19a3c0d1e6f.txt
+                      - generic [ref=f19e92]: 
+                      - text: test_design1.txt
+                  - cell "DESIGN FILES" [ref=f19e93]
+                  - cell "83 Bytes" [ref=f19e95]
+                  - cell "Sep 02, 2026 18:05" [ref=f19e96]
+                  - cell [ref=f19e97]:
+                    - generic [ref=f19e98]:
+                      - link "" [ref=f19e99] [cursor=pointer]:
+                        - /url: /job-attachments/download/1
+                      - button "" [ref=f19e102] [cursor=pointer]
+                - row [ref=f19e104]:
+                  - cell [ref=f19e105]:
+                    - link " test_design2.txt" [ref=f19e106] [cursor=pointer]:
+                      - /url: /uploads/attachments/1/cb31da8c7bba7ba6.txt
+                      - generic [ref=f19e107]: 
+                      - text: test_design2.txt
+                  - cell "DESIGN FILES" [ref=f19e108]
+                  - cell "89 Bytes" [ref=f19e110]
+                  - cell "Sep 02, 2026 18:05" [ref=f19e111]
+                  - cell [ref=f19e112]:
+                    - generic [ref=f19e113]:
+                      - link "" [ref=f19e114] [cursor=pointer]:
+                        - /url: /job-attachments/download/2
+                      - button "" [ref=f19e117] [cursor=pointer]
+                - row [ref=f19e119]:
+                  - cell [ref=f19e120]:
+                    - link " test_design3.txt" [ref=f19e121] [cursor=pointer]:
+                      - /url: /uploads/attachments/1/c978e468d2ae1d82.txt
+                      - generic [ref=f19e122]: 
+                      - text: test_design3.txt
+                  - cell "DESIGN FILES" [ref=f19e123]
+                  - cell "84 Bytes" [ref=f19e125]
+                  - cell "Sep 02, 2026 18:05" [ref=f19e126]
+                  - cell [ref=f19e127]:
+                    - generic [ref=f19e128]:
+                      - link "" [ref=f19e129] [cursor=pointer]:
+                        - /url: /job-attachments/download/3
+                      - button "" [ref=f19e132] [cursor=pointer]
+          - generic [ref=f19e134]:
+            - heading " Add note" [level=3] [ref=f19e136]:
+              - generic [ref=f19e137]: 
+              - text: Add note
+            - generic [ref=f19e140]:
+              - generic [ref=f19e141]:
+                - generic [ref=f19e142]: Comment
+                - textbox "Add a note about this job..." [ref=f19e143]
+              - button " Save note" [ref=f19e145] [cursor=pointer]:
+                - generic [ref=f19e146]: 
+                - text: Save note
+        - generic [ref=f19e147]:
+          - generic [ref=f19e148]:
+            - generic [ref=f19e149]: 
+            - text: When finished, submit the file for QC review.
+          - button " Submit EMB for QC" [ref=f19e151] [cursor=pointer]:
+            - generic [ref=f19e152]: 
+            - text: Submit EMB for QC
+        - generic [ref=f19e153]:
+          - link " Back to jobs" [ref=f19e154] [cursor=pointer]:
+            - /url: /jobs
+            - generic [ref=f19e155]: 
+            - text: Back to jobs
+          - generic [ref=f19e156]:
+            - link " Edit" [ref=f19e157] [cursor=pointer]:
+              - /url: /jobs/edit/1
+              - generic [ref=f19e158]: 
+              - text: Edit
+            - button " Delete" [ref=f19e160] [cursor=pointer]:
+              - generic [ref=f19e161]: 
+              - text: Delete
+  - contentinfo [ref=f19e162]:
+    - generic [ref=f19e164]:
+      - generic [ref=f19e165]:
+        - strong [ref=f19e166]: Embroidery System
+        - generic [ref=f19e167]: · Production workflow
+      - generic [ref=f19e168]:
+        - generic [ref=f19e169]:
+          - generic [ref=f19e170]: 
+          - generic [ref=f19e171]: v1.0.0
+        - button " Automatic testing" [ref=f19e172] [cursor=pointer]:
+          - generic [ref=f19e173]: 
+          - generic [ref=f19e174]: Automatic testing

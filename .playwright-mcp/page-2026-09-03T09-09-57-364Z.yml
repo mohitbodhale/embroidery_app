@@ -1,0 +1,290 @@
+- generic [ref=f4e2]:
+  - navigation [ref=f4e3]:
+    - list [ref=f4e4]:
+      - listitem [ref=f4e5]:
+        - button "" [ref=f4e6] [cursor=pointer]
+      - listitem [ref=f4e8]:
+        - link "Embroidery System" [ref=f4e9] [cursor=pointer]:
+          - /url: /jobs
+    - list [ref=f4e10]:
+      - listitem [ref=f4e11]:
+        - button " Admin User Real PNG" [ref=f4e12] [cursor=pointer]:
+          - generic [ref=f4e13]: 
+          - generic [ref=f4e14]: Admin User Real PNG
+        - text:  
+  - generic [ref=f4e15]:
+    - complementary [ref=f4e16]:
+      - link "Embroidery" [ref=f4e17] [cursor=pointer]:
+        - /url: /jobs
+      - navigation [ref=f4e21]:
+        - menu [ref=f4e22]:
+          - listitem [ref=f4e23]:
+            - link " Operations Dashboard" [ref=f4e24] [cursor=pointer]:
+              - /url: /pages/admin-dashboard
+              - generic [ref=f4e25]: 
+              - paragraph [ref=f4e26]: Operations Dashboard
+          - listitem [ref=f4e27]: MASTERS
+          - listitem [ref=f4e28]:
+            - link " Users" [ref=f4e29] [cursor=pointer]:
+              - /url: /users
+              - generic [ref=f4e30]: 
+              - paragraph [ref=f4e31]: Users
+          - listitem [ref=f4e32]:
+            - link " Roles" [ref=f4e33] [cursor=pointer]:
+              - /url: /roles
+              - generic [ref=f4e34]: 
+              - paragraph [ref=f4e35]: Roles
+          - listitem [ref=f4e36]:
+            - link " Job Statuses" [ref=f4e37] [cursor=pointer]:
+              - /url: /job-statuses
+              - generic [ref=f4e38]: 
+              - paragraph [ref=f4e39]: Job Statuses
+          - listitem [ref=f4e40]: ACTIVITY
+          - listitem [ref=f4e41]:
+            - link " Activity Logs" [ref=f4e42] [cursor=pointer]:
+              - /url: /job-logs
+              - generic [ref=f4e43]: 
+              - paragraph [ref=f4e44]: Activity Logs
+    - generic [ref=f4e45]:
+      - generic [ref=f4e48]:
+        - heading " Pages" [level=1] [ref=f4e50]:
+          - generic [ref=f4e51]: 
+          - text: Pages
+        - list [ref=f4e53]:
+          - listitem [ref=f4e54]:
+            - link "" [ref=f4e55] [cursor=pointer]:
+              - /url: /pages/admin-dashboard
+          - listitem [ref=f4e57]: / Pages
+      - generic [ref=f4e59]:
+        - generic [ref=f4e60]:
+          - generic [ref=f4e62]:
+            - generic [ref=f4e63]: 
+            - generic [ref=f4e65]: "8"
+            - generic [ref=f4e66]: Total Users
+            - generic [ref=f4e67]: 8 active
+          - generic [ref=f4e69]:
+            - generic [ref=f4e70]: 
+            - generic [ref=f4e72]: "1"
+            - generic [ref=f4e73]: Total Jobs
+            - generic [ref=f4e74]: 1 open · 0 done
+          - generic [ref=f4e76]:
+            - generic [ref=f4e77]: 
+            - generic [ref=f4e79]: "1"
+            - generic [ref=f4e80]: Attachments
+            - generic [ref=f4e81]: files uploaded
+          - generic [ref=f4e83]:
+            - generic [ref=f4e84]: 
+            - generic [ref=f4e86]: "2"
+            - generic [ref=f4e87]: Activity Events
+            - generic [ref=f4e88]: across all jobs
+        - generic [ref=f4e89]:
+          - generic [ref=f4e91]:
+            - heading " Users by Role" [level=3] [ref=f4e93]:
+              - generic [ref=f4e94]: 
+              - text: Users by Role
+            - generic [ref=f4e95]:
+              - generic [ref=f4e96]:
+                - generic [ref=f4e97]:
+                  - strong [ref=f4e99]: Administrator
+                  - code [ref=f4e100]: admin
+                - generic [ref=f4e103]: "1"
+              - generic [ref=f4e104]:
+                - generic [ref=f4e105]:
+                  - strong [ref=f4e107]: Scheduler
+                  - code [ref=f4e108]: scheduler
+                - generic [ref=f4e111]: "1"
+              - generic [ref=f4e112]:
+                - generic [ref=f4e113]:
+                  - strong [ref=f4e115]: Digitizer
+                  - code [ref=f4e116]: digitizer
+                - generic [ref=f4e119]: "1"
+              - generic [ref=f4e120]:
+                - generic [ref=f4e121]:
+                  - strong [ref=f4e123]: QC Reviewer
+                  - code [ref=f4e124]: quality_checker
+                - generic [ref=f4e127]: "1"
+              - generic [ref=f4e128]:
+                - generic [ref=f4e129]:
+                  - strong [ref=f4e131]: Production
+                  - code [ref=f4e132]: production
+                - generic [ref=f4e135]: "1"
+              - generic [ref=f4e136]:
+                - generic [ref=f4e137]:
+                  - strong [ref=f4e139]: Pending
+                  - code [ref=f4e140]: pending
+                - generic [ref=f4e142]: "0"
+          - generic [ref=f4e144]:
+            - heading " Jobs by Status" [level=3] [ref=f4e146]:
+              - generic [ref=f4e147]: 
+              - text: Jobs by Status
+            - generic [ref=f4e148]:
+              - generic [ref=f4e149]:
+                - strong [ref=f4e152]: Draft
+                - generic [ref=f4e154]: "0"
+              - generic [ref=f4e155]:
+                - strong [ref=f4e158]: Scheduled
+                - generic [ref=f4e160]: "0"
+              - generic [ref=f4e161]:
+                - strong [ref=f4e164]: In Digitizing
+                - generic [ref=f4e166]: "0"
+              - generic [ref=f4e167]:
+                - strong [ref=f4e170]: Digitized
+                - generic [ref=f4e173]: "1"
+              - generic [ref=f4e174]:
+                - strong [ref=f4e177]: QC Rejected
+                - generic [ref=f4e179]: "0"
+              - generic [ref=f4e180]:
+                - strong [ref=f4e183]: QC Approved
+                - generic [ref=f4e185]: "0"
+              - generic [ref=f4e186]:
+                - strong [ref=f4e189]: In Production
+                - generic [ref=f4e191]: "0"
+              - generic [ref=f4e192]:
+                - generic [ref=f4e193]:
+                  - strong [ref=f4e195]: Completed
+                  - generic [ref=f4e196]: end
+                - generic [ref=f4e198]: "0"
+        - generic [ref=f4e199]:
+          - generic [ref=f4e201]:
+            - heading " User Workload" [level=3] [ref=f4e203]:
+              - generic [ref=f4e204]: 
+              - text: User Workload
+            - table [ref=f4e207]:
+              - rowgroup [ref=f4e208]:
+                - row [ref=f4e209]:
+                  - columnheader "User" [ref=f4e210]
+                  - columnheader "Role" [ref=f4e211]
+                  - columnheader "Created" [ref=f4e212]
+                  - columnheader "Digitizing" [ref=f4e213]
+                  - columnheader "QC" [ref=f4e214]
+                  - columnheader "Logs" [ref=f4e215]
+              - rowgroup [ref=f4e216]:
+                - row [ref=f4e217]:
+                  - cell "J James Chen digitizer@embroidery.local" [ref=f4e218]:
+                    - generic [ref=f4e219]:
+                      - generic [ref=f4e220]: J
+                      - generic [ref=f4e221]:
+                        - strong [ref=f4e223]: James Chen
+                        - generic [ref=f4e224]: digitizer@embroidery.local
+                  - cell "Digitizer" [ref=f4e225]
+                  - cell "0" [ref=f4e227]
+                  - cell "1" [ref=f4e228]
+                  - cell "0" [ref=f4e229]
+                  - cell "2" [ref=f4e230]
+                - row [ref=f4e231]:
+                  - cell "M Maria Gonzalez scheduler@embroidery.local" [ref=f4e232]:
+                    - generic [ref=f4e233]:
+                      - generic [ref=f4e234]: M
+                      - generic [ref=f4e235]:
+                        - strong [ref=f4e237]: Maria Gonzalez
+                        - generic [ref=f4e238]: scheduler@embroidery.local
+                  - cell "Scheduler" [ref=f4e239]
+                  - cell "1" [ref=f4e241]
+                  - cell "0" [ref=f4e242]
+                  - cell "0" [ref=f4e243]
+                  - cell "0" [ref=f4e244]
+                - row [ref=f4e245]:
+                  - cell "S Sarah Thompson qc@embroidery.local" [ref=f4e246]:
+                    - generic [ref=f4e247]:
+                      - generic [ref=f4e248]: S
+                      - generic [ref=f4e249]:
+                        - strong [ref=f4e251]: Sarah Thompson
+                        - generic [ref=f4e252]: qc@embroidery.local
+                  - cell "QC Reviewer" [ref=f4e253]
+                  - cell "0" [ref=f4e255]
+                  - cell "0" [ref=f4e256]
+                  - cell "1" [ref=f4e257]
+                  - cell "0" [ref=f4e258]
+                - row [ref=f4e259]:
+                  - cell "A Admin User Real PNG newadmin@stitchcraft.com" [ref=f4e260]:
+                    - generic [ref=f4e261]:
+                      - generic [ref=f4e262]: A
+                      - generic [ref=f4e263]:
+                        - strong [ref=f4e265]: Admin User Real PNG
+                        - generic [ref=f4e266]: newadmin@stitchcraft.com
+                  - cell "Administrator" [ref=f4e267]
+                  - cell "0" [ref=f4e269]
+                  - cell "0" [ref=f4e270]
+                  - cell "0" [ref=f4e271]
+                  - cell "0" [ref=f4e272]
+                - row [ref=f4e273]:
+                  - cell "D David Martinez production@embroidery.local" [ref=f4e274]:
+                    - generic [ref=f4e275]:
+                      - generic [ref=f4e276]: D
+                      - generic [ref=f4e277]:
+                        - strong [ref=f4e279]: David Martinez
+                        - generic [ref=f4e280]: production@embroidery.local
+                  - cell "Production" [ref=f4e281]
+                  - cell "0" [ref=f4e283]
+                  - cell "0" [ref=f4e284]
+                  - cell "0" [ref=f4e285]
+                  - cell "0" [ref=f4e286]
+                - row [ref=f4e287]:
+                  - cell "D Digitizer Three digitizer3@embroidery.local" [ref=f4e288]:
+                    - generic [ref=f4e289]:
+                      - generic [ref=f4e290]: D
+                      - generic [ref=f4e291]:
+                        - strong [ref=f4e293]: Digitizer Three
+                        - generic [ref=f4e294]: digitizer3@embroidery.local
+                  - cell "—" [ref=f4e295]
+                  - cell "0" [ref=f4e297]
+                  - cell "0" [ref=f4e298]
+                  - cell "0" [ref=f4e299]
+                  - cell "0" [ref=f4e300]
+                - row [ref=f4e301]:
+                  - cell "D Digitizer Two digitizer2@embroidery.local" [ref=f4e302]:
+                    - generic [ref=f4e303]:
+                      - generic [ref=f4e304]: D
+                      - generic [ref=f4e305]:
+                        - strong [ref=f4e307]: Digitizer Two
+                        - generic [ref=f4e308]: digitizer2@embroidery.local
+                  - cell "—" [ref=f4e309]
+                  - cell "0" [ref=f4e311]
+                  - cell "0" [ref=f4e312]
+                  - cell "0" [ref=f4e313]
+                  - cell "0" [ref=f4e314]
+                - row [ref=f4e315]:
+                  - cell "S Scheduler Two scheduler2@embroidery.local" [ref=f4e316]:
+                    - generic [ref=f4e317]:
+                      - generic [ref=f4e318]: S
+                      - generic [ref=f4e319]:
+                        - strong [ref=f4e321]: Scheduler Two
+                        - generic [ref=f4e322]: scheduler2@embroidery.local
+                  - cell "—" [ref=f4e323]
+                  - cell "0" [ref=f4e325]
+                  - cell "0" [ref=f4e326]
+                  - cell "0" [ref=f4e327]
+                  - cell "0" [ref=f4e328]
+          - generic [ref=f4e330]:
+            - heading " Recent Activity" [level=3] [ref=f4e332]:
+              - generic [ref=f4e333]: 
+              - text: Recent Activity
+            - generic [ref=f4e334]:
+              - generic [ref=f4e335]:
+                - generic [ref=f4e336]: 
+                - generic [ref=f4e338]:
+                  - generic [ref=f4e339]:
+                    - strong [ref=f4e340]: James Chen
+                    - text: on Admin Dashboard Test
+                  - generic [ref=f4e341]: submitted_for_qc · Sep 2, 7:36 pm
+                  - generic [ref=f4e342]: EMB file submitted for QC review.
+              - generic [ref=f4e343]:
+                - generic [ref=f4e344]: 
+                - generic [ref=f4e346]:
+                  - generic [ref=f4e347]:
+                    - strong [ref=f4e348]: James Chen
+                    - text: on Admin Dashboard Test
+                  - generic [ref=f4e349]: note · Sep 2, 7:36 pm
+                  - generic [ref=f4e350]: Digitizer reviewed the design files
+  - contentinfo [ref=f4e351]:
+    - generic [ref=f4e353]:
+      - generic [ref=f4e354]:
+        - strong [ref=f4e355]: Embroidery System
+        - generic [ref=f4e356]: · Production workflow
+      - generic [ref=f4e357]:
+        - generic [ref=f4e358]:
+          - generic [ref=f4e359]: 
+          - generic [ref=f4e360]: v1.0.0
+        - button " Automatic testing" [ref=f4e361] [cursor=pointer]:
+          - generic [ref=f4e362]: 
+          - generic [ref=f4e363]: Automatic testing

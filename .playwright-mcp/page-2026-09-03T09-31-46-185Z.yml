@@ -1,0 +1,191 @@
+- generic [ref=f4e2]:
+  - navigation [ref=f4e3]:
+    - list [ref=f4e4]:
+      - listitem [ref=f4e5]:
+        - button "" [ref=f4e6] [cursor=pointer]
+      - listitem [ref=f4e8]:
+        - link "Embroidery System" [ref=f4e9] [cursor=pointer]:
+          - /url: /jobs
+    - list [ref=f4e10]:
+      - listitem [ref=f4e11]:
+        - button " Admin User Real PNG" [ref=f4e12] [cursor=pointer]:
+          - generic [ref=f4e13]: 
+          - generic [ref=f4e14]: Admin User Real PNG
+        - text:  
+  - generic [ref=f4e15]:
+    - complementary [ref=f4e16]:
+      - link "Embroidery" [ref=f4e17] [cursor=pointer]:
+        - /url: /jobs
+      - navigation [ref=f4e21]:
+        - menu [ref=f4e22]:
+          - listitem [ref=f4e23]:
+            - link " Operations Dashboard" [ref=f4e24] [cursor=pointer]:
+              - /url: /pages/admin-dashboard
+              - generic [ref=f4e25]: 
+              - paragraph [ref=f4e26]: Operations Dashboard
+          - listitem [ref=f4e27]: MASTERS
+          - listitem [ref=f4e28]:
+            - link " Users" [ref=f4e29] [cursor=pointer]:
+              - /url: /users
+              - generic [ref=f4e30]: 
+              - paragraph [ref=f4e31]: Users
+          - listitem [ref=f4e32]:
+            - link " Roles" [ref=f4e33] [cursor=pointer]:
+              - /url: /roles
+              - generic [ref=f4e34]: 
+              - paragraph [ref=f4e35]: Roles
+          - listitem [ref=f4e36]:
+            - link " Job Statuses" [ref=f4e37] [cursor=pointer]:
+              - /url: /job-statuses
+              - generic [ref=f4e38]: 
+              - paragraph [ref=f4e39]: Job Statuses
+          - listitem [ref=f4e40]: ACTIVITY
+          - listitem [ref=f4e41]:
+            - link " Activity Logs" [ref=f4e42] [cursor=pointer]:
+              - /url: /job-logs
+              - generic [ref=f4e43]: 
+              - paragraph [ref=f4e44]: Activity Logs
+    - generic [ref=f4e45]:
+      - generic [ref=f4e48]:
+        - heading " Roles" [level=1] [ref=f4e50]:
+          - generic [ref=f4e51]: 
+          - text: Roles
+        - list [ref=f4e53]:
+          - listitem [ref=f4e54]:
+            - link "" [ref=f4e55] [cursor=pointer]:
+              - /url: /pages/admin-dashboard
+          - listitem [ref=f4e57]: / Roles
+      - generic [ref=f4e60]:
+        - generic [ref=f4e61]:
+          - heading " Roles" [level=3] [ref=f4e62]:
+            - generic [ref=f4e63]: 
+            - text: Roles
+          - generic [ref=f4e64]:
+            - link " Export CSV" [ref=f4e65] [cursor=pointer]:
+              - /url: /roles/export
+              - generic [ref=f4e66]: 
+              - text: Export CSV
+            - link "+ New Role" [ref=f4e67] [cursor=pointer]:
+              - /url: /roles/add
+              - generic [ref=f4e68]: +
+              - text: New Role
+        - table [ref=f4e71]:
+          - rowgroup [ref=f4e72]:
+            - row [ref=f4e73]:
+              - columnheader "Order" [ref=f4e74]
+              - columnheader "Name" [ref=f4e75]
+              - columnheader "Label" [ref=f4e76]
+              - columnheader "Description" [ref=f4e77]
+              - columnheader "Color" [ref=f4e78]
+              - columnheader "Status" [ref=f4e79]
+              - columnheader "Users" [ref=f4e80]
+              - columnheader "Actions" [ref=f4e81]
+          - rowgroup [ref=f4e82]:
+            - row [ref=f4e83]:
+              - cell "1" [ref=f4e84]
+              - cell [ref=f4e85]:
+                - code [ref=f4e86]: admin
+              - cell [ref=f4e87]:
+                - strong [ref=f4e88]: Administrator
+              - cell "Full system access, manages users and masters" [ref=f4e89]
+              - cell "#dc3545" [ref=f4e90]
+              - cell "Active" [ref=f4e92]
+              - cell "1" [ref=f4e94]
+              - cell [ref=f4e96]:
+                - generic [ref=f4e97]:
+                  - link "" [ref=f4e98] [cursor=pointer]:
+                    - /url: /roles/edit/1
+                  - link "" [ref=f4e100] [cursor=pointer]:
+                    - /url: "#"
+            - row [ref=f4e102]:
+              - cell "2" [ref=f4e103]
+              - cell [ref=f4e104]:
+                - code [ref=f4e105]: scheduler
+              - cell [ref=f4e106]:
+                - strong [ref=f4e107]: Scheduler
+              - cell "Creates jobs, assigns work, manages attachments" [ref=f4e108]
+              - cell "#0d6efd" [ref=f4e109]
+              - cell "Active" [ref=f4e111]
+              - cell "1" [ref=f4e113]
+              - cell [ref=f4e115]:
+                - generic [ref=f4e116]:
+                  - link "" [ref=f4e117] [cursor=pointer]:
+                    - /url: /roles/edit/2
+                  - link "" [ref=f4e119] [cursor=pointer]:
+                    - /url: "#"
+            - row [ref=f4e121]:
+              - cell "3" [ref=f4e122]
+              - cell [ref=f4e123]:
+                - code [ref=f4e124]: digitizer
+              - cell [ref=f4e125]:
+                - strong [ref=f4e126]: Digitizer
+              - cell "Digitizes artwork for jobs" [ref=f4e127]
+              - cell "#198754" [ref=f4e128]
+              - cell "Active" [ref=f4e130]
+              - cell "1" [ref=f4e132]
+              - cell [ref=f4e134]:
+                - generic [ref=f4e135]:
+                  - link "" [ref=f4e136] [cursor=pointer]:
+                    - /url: /roles/edit/3
+                  - link "" [ref=f4e138] [cursor=pointer]:
+                    - /url: "#"
+            - row [ref=f4e140]:
+              - cell "4" [ref=f4e141]
+              - cell [ref=f4e142]:
+                - code [ref=f4e143]: quality_checker
+              - cell [ref=f4e144]:
+                - strong [ref=f4e145]: QC Reviewer
+              - cell "Reviews and approves digitized artwork" [ref=f4e146]
+              - cell "#fd7e14" [ref=f4e147]
+              - cell "Active" [ref=f4e149]
+              - cell "1" [ref=f4e151]
+              - cell [ref=f4e153]:
+                - generic [ref=f4e154]:
+                  - link "" [ref=f4e155] [cursor=pointer]:
+                    - /url: /roles/edit/4
+                  - link "" [ref=f4e157] [cursor=pointer]:
+                    - /url: "#"
+            - row [ref=f4e159]:
+              - cell "5" [ref=f4e160]
+              - cell [ref=f4e161]:
+                - code [ref=f4e162]: production
+              - cell [ref=f4e163]:
+                - strong [ref=f4e164]: Production
+              - cell "Produces approved jobs" [ref=f4e165]
+              - cell "#6f42c1" [ref=f4e166]
+              - cell "Active" [ref=f4e168]
+              - cell "1" [ref=f4e170]
+              - cell [ref=f4e172]:
+                - generic [ref=f4e173]:
+                  - link "" [ref=f4e174] [cursor=pointer]:
+                    - /url: /roles/edit/5
+                  - link "" [ref=f4e176] [cursor=pointer]:
+                    - /url: "#"
+            - row [ref=f4e178]:
+              - cell "6" [ref=f4e179]
+              - cell [ref=f4e180]:
+                - code [ref=f4e181]: pending
+              - cell [ref=f4e182]:
+                - strong [ref=f4e183]: Pending
+              - cell "Awaiting admin approval" [ref=f4e184]
+              - cell "#6c757d" [ref=f4e185]
+              - cell "Active" [ref=f4e187]
+              - cell "0" [ref=f4e189]
+              - cell [ref=f4e191]:
+                - generic [ref=f4e192]:
+                  - link "" [ref=f4e193] [cursor=pointer]:
+                    - /url: /roles/edit/6
+                  - link "" [ref=f4e195] [cursor=pointer]:
+                    - /url: "#"
+  - contentinfo [ref=f4e197]:
+    - generic [ref=f4e199]:
+      - generic [ref=f4e200]:
+        - strong [ref=f4e201]: Embroidery System
+        - generic [ref=f4e202]: · Production workflow
+      - generic [ref=f4e203]:
+        - generic [ref=f4e204]:
+          - generic [ref=f4e205]: 
+          - generic [ref=f4e206]: v1.0.0
+        - button " Automatic testing" [ref=f4e207] [cursor=pointer]:
+          - generic [ref=f4e208]: 
+          - generic [ref=f4e209]: Automatic testing

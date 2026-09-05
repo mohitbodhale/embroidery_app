@@ -1,0 +1,5 @@
+[    1144ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost:8765/users/reset-admin-password:0
+[    1145ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost:8765/users/reset-admin-password:0
+[   22414ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost:8765/users/login:0
+[   38768ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) @ http://localhost:8765/users/login:0
+[   76642ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) @ http://localhost:8765/users/login:0

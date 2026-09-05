@@ -1,0 +1,49 @@
+- generic [ref=f3e2]:
+  - complementary [ref=f3e3]:
+    - generic [ref=f3e4]:
+      - link "Embroidery" [ref=f3e5] [cursor=pointer]:
+        - /url: /
+      - heading "Production workflow, simplified." [level=2] [ref=f3e8]
+      - paragraph [ref=f3e9]: Schedule embroidery jobs, track digitizing & QC, and keep your shop floor in sync — all from one place.
+      - list [ref=f3e10]:
+        - listitem [ref=f3e11]:
+          - generic [ref=f3e12]: 
+          - text: Role-aware dashboards for every team
+        - listitem [ref=f3e13]:
+          - generic [ref=f3e14]: 
+          - text: Real-time job status & activity logs
+        - listitem [ref=f3e15]:
+          - generic [ref=f3e16]: 
+          - text: Attachments, QC review, production tracking
+      - generic [ref=f3e17]:
+        - generic [ref=f3e18]: © 2026 Embroidery System
+        - generic [ref=f3e19]: v1.0.0
+  - main [ref=f3e20]:
+    - generic [ref=f3e21]:
+      - heading "Welcome back" [level=1] [ref=f3e22]
+      - paragraph [ref=f3e23]: Sign in to continue to your workspace
+      - generic [ref=f3e24] [cursor=pointer]: Invalid email or password.
+      - generic [ref=f3e25]:
+        - generic [ref=f3e26]:
+          - generic [ref=f3e27]: Email address
+          - generic [ref=f3e28]:
+            - textbox "you@example.com" [active] [ref=f3e29]: newadmin@stitchcraft.com
+            - generic [ref=f3e30]: 
+        - generic [ref=f3e32]:
+          - generic [ref=f3e33]: Password
+          - generic [ref=f3e34]:
+            - textbox "Enter your password" [ref=f3e35]: Password123!
+            - generic [ref=f3e36]: 
+        - button " Sign In" [ref=f3e38] [cursor=pointer]:
+          - generic [ref=f3e39]: 
+          - text: Sign In
+      - generic [ref=f3e40]:
+        - link " Create account" [ref=f3e41] [cursor=pointer]:
+          - /url: /users/register
+          - generic [ref=f3e42]: 
+          - text: Create account
+        - text: ·
+        - link " Reset admin" [ref=f3e43] [cursor=pointer]:
+          - /url: /users/reset-admin-password
+          - generic [ref=f3e44]: 
+          - text: Reset admin

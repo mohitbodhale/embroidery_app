@@ -1,0 +1,125 @@
+- generic [ref=f83e2]:
+  - navigation [ref=f83e3]:
+    - list [ref=f83e4]:
+      - listitem [ref=f83e5]:
+        - button "" [ref=f83e6] [cursor=pointer]
+      - listitem [ref=f83e8]:
+        - link "Embroidery System" [ref=f83e9] [cursor=pointer]:
+          - /url: /jobs
+    - list [ref=f83e10]:
+      - listitem [ref=f83e11]:
+        - button " Test Scheduler" [ref=f83e12] [cursor=pointer]:
+          - generic [ref=f83e13]: 
+          - generic [ref=f83e14]: Test Scheduler
+        - text: 
+  - generic [ref=f83e15]:
+    - complementary [ref=f83e16]:
+      - link "Embroidery" [ref=f83e17] [cursor=pointer]:
+        - /url: /jobs
+      - navigation [ref=f83e21]:
+        - menu [ref=f83e22]:
+          - listitem [ref=f83e23]:
+            - link " Scheduling Board" [ref=f83e24] [cursor=pointer]:
+              - /url: /jobs
+              - generic [ref=f83e25]: 
+              - paragraph [ref=f83e26]: Scheduling Board
+          - listitem [ref=f83e27]:
+            - link " Create Job" [ref=f83e28] [cursor=pointer]:
+              - /url: /jobs/add
+              - generic [ref=f83e29]: 
+              - paragraph [ref=f83e30]: Create Job
+          - listitem [ref=f83e31]:
+            - link " Attachments" [ref=f83e32] [cursor=pointer]:
+              - /url: /job-attachments
+              - generic [ref=f83e33]: 
+              - paragraph [ref=f83e34]: Attachments
+          - listitem [ref=f83e35]:
+            - link " Activity Logs" [ref=f83e36] [cursor=pointer]:
+              - /url: /job-logs
+              - generic [ref=f83e37]: 
+              - paragraph [ref=f83e38]: Activity Logs
+          - listitem [ref=f83e39]:
+            - link " Logout" [ref=f83e40] [cursor=pointer]:
+              - /url: /users/logout
+              - generic [ref=f83e41]: 
+              - paragraph [ref=f83e42]: Logout
+    - generic [ref=f83e43]:
+      - generic [ref=f83e46]:
+        - heading " Create job" [level=1] [ref=f83e48]:
+          - generic [ref=f83e49]: 
+          - text: Create job
+        - list [ref=f83e51]:
+          - listitem [ref=f83e52]:
+            - link "" [ref=f83e53] [cursor=pointer]:
+              - /url: /jobs
+          - listitem [ref=f83e55]: / Create job
+      - generic [ref=f83e60]:
+        - generic [ref=f83e61]:
+          - generic [ref=f83e62]:
+            - generic [ref=f83e63]: Job number
+            - textbox [ref=f83e64]: JOB_2026_007
+            - generic [ref=f83e65]: Auto-generated. You can edit if needed.
+          - generic [ref=f83e66]:
+            - generic [ref=f83e67]: Title
+            - textbox "Brief description" [ref=f83e68]
+        - generic [ref=f83e69]:
+          - generic [ref=f83e70]:
+            - generic [ref=f83e71]: Organization
+            - combobox [ref=f83e72]:
+              - option "Select organization" [selected]
+              - option "Default Company"
+              - option "StitchCraft Org"
+          - generic [ref=f83e73]:
+            - generic [ref=f83e74]: Scheduled date
+            - textbox [ref=f83e75]
+        - generic [ref=f83e76]:
+          - generic [ref=f83e77]: Instructions
+          - textbox "Special instructions, color notes, sizing, etc." [ref=f83e78]
+        - generic [ref=f83e79]:
+          - generic [ref=f83e80]:
+            - generic [ref=f83e81]: Assign digitizer
+            - combobox [ref=f83e82]:
+              - option "Select digitizer" [selected]
+              - option "Test Digitizer"
+              - option "Digitizer Two"
+              - option "Digitizer Three"
+          - generic [ref=f83e83]:
+            - generic [ref=f83e84]: Assign quality checker
+            - combobox [ref=f83e85]:
+              - option "Select QC" [selected]
+              - option "Test QC"
+        - separator [ref=f83e86]
+        - heading " Attachments" [level=4] [ref=f83e87]:
+          - generic [ref=f83e88]: 
+          - text: Attachments
+        - generic [ref=f83e89]:
+          - generic [ref=f83e90]:
+            - generic [ref=f83e91]: Files (select one or more)
+            - button "Choose File" [ref=f83e92] [cursor=pointer]
+            - generic [ref=f83e93]: PDF, images, archives, embroidery formats (max 20 MB each)
+          - generic [ref=f83e94]:
+            - generic [ref=f83e95]: Attachment type (optional, applies to all)
+            - textbox "e.g. Design file, Reference photo" [ref=f83e96]
+          - generic [ref=f83e97]:
+            - generic [ref=f83e98]: Notes (optional, applies to all)
+            - textbox "Any notes about these files" [ref=f83e99]
+        - generic [ref=f83e100]:
+          - link " Back to jobs" [ref=f83e101] [cursor=pointer]:
+            - /url: /jobs
+            - generic [ref=f83e102]: 
+            - text: Back to jobs
+          - button " Create job" [ref=f83e103] [cursor=pointer]:
+            - generic [ref=f83e104]: 
+            - text: Create job
+  - contentinfo [ref=f83e105]:
+    - generic [ref=f83e107]:
+      - generic [ref=f83e108]:
+        - strong [ref=f83e109]: Embroidery System
+        - generic [ref=f83e110]: · Production workflow
+      - generic [ref=f83e111]:
+        - generic [ref=f83e112]:
+          - generic [ref=f83e113]: 
+          - generic [ref=f83e114]: v1.0.0
+        - button " Automatic testing" [ref=f83e115] [cursor=pointer]:
+          - generic [ref=f83e116]: 
+          - generic [ref=f83e117]: Automatic testing

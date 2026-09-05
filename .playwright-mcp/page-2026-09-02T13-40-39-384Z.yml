@@ -1,0 +1,7 @@
+- generic [ref=f30e2]:
+  - heading "An Internal Error Has Occurred." [level=2] [ref=f30e3]
+  - paragraph [ref=f30e4]:
+    - strong [ref=f30e5]: "Error:"
+    - text: An Internal Error Has Occurred.
+  - link "Back" [ref=f30e6] [cursor=pointer]:
+    - /url: javascript:history.back()

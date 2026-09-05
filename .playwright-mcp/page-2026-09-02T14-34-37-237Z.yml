@@ -1,0 +1,135 @@
+- generic [ref=f6e2]:
+  - navigation [ref=f6e3]:
+    - list [ref=f6e4]:
+      - listitem [ref=f6e5]:
+        - button "" [ref=f6e6] [cursor=pointer]
+      - listitem [ref=f6e8]:
+        - link "Embroidery System" [ref=f6e9] [cursor=pointer]:
+          - /url: /jobs
+    - list [ref=f6e10]:
+      - listitem [ref=f6e11]:
+        - button " Test QC" [ref=f6e12] [cursor=pointer]:
+          - generic [ref=f6e13]: 
+          - generic [ref=f6e14]: Test QC
+        - text: 
+  - generic [ref=f6e15]:
+    - complementary [ref=f6e16]:
+      - link "Embroidery" [ref=f6e17] [cursor=pointer]:
+        - /url: /jobs
+      - navigation [ref=f6e21]:
+        - menu [ref=f6e22]:
+          - listitem [ref=f6e23]:
+            - link " QC Review Queue" [ref=f6e24] [cursor=pointer]:
+              - /url: /jobs
+              - generic [ref=f6e25]: 
+              - paragraph [ref=f6e26]: QC Review Queue
+          - listitem [ref=f6e27]:
+            - link " Activity Logs" [ref=f6e28] [cursor=pointer]:
+              - /url: /job-logs
+              - generic [ref=f6e29]: 
+              - paragraph [ref=f6e30]: Activity Logs
+          - listitem [ref=f6e31]:
+            - link " Logout" [ref=f6e32] [cursor=pointer]:
+              - /url: /users/logout
+              - generic [ref=f6e33]: 
+              - paragraph [ref=f6e34]: Logout
+    - generic [ref=f6e35]:
+      - generic [ref=f6e38]:
+        - heading " JOB-2026-001 · Test Embroidery Job" [level=1] [ref=f6e40]:
+          - generic [ref=f6e41]: 
+          - text: JOB-2026-001 · Test Embroidery Job
+        - list [ref=f6e43]:
+          - listitem [ref=f6e44]:
+            - link "" [ref=f6e45] [cursor=pointer]:
+              - /url: /jobs
+          - listitem [ref=f6e47]: / JOB-2026-001 · Test Embroidery Job
+      - generic [ref=f6e49]:
+        - generic [ref=f6e51]:
+          - generic [ref=f6e52]:
+            - generic [ref=f6e53]: Status
+            - generic [ref=f6e54]: Digitized
+            - generic [ref=f6e55]: Created Sep 02, 2026
+          - generic [ref=f6e56]:
+            - term [ref=f6e57]: Job number
+            - definition [ref=f6e58]: JOB-2026-001
+            - term [ref=f6e59]: Title
+            - definition [ref=f6e60]: Test Embroidery Job
+            - term [ref=f6e61]: Digitizer
+            - definition [ref=f6e62]:
+              - generic [ref=f6e63]: 
+              - text: Test Digitizer
+            - term [ref=f6e64]: Quality checker
+            - definition [ref=f6e65]:
+              - generic [ref=f6e66]: 
+              - text: Test QC
+            - term [ref=f6e67]: Organization
+            - definition [ref=f6e68]:
+              - generic [ref=f6e69]: 
+              - text: Default Company
+            - term [ref=f6e70]: Scheduled date
+            - definition [ref=f6e71]:
+              - generic [ref=f6e72]: 
+              - text: Sep 03, 2026
+          - generic [ref=f6e73]:
+            - strong [ref=f6e74]:
+              - generic [ref=f6e75]: 
+              - text: Instructions
+            - blockquote [ref=f6e76]:
+              - paragraph [ref=f6e77]: Test instructions for digitizer
+          - generic [ref=f6e78]:
+            - generic [ref=f6e79]: No attachments yet.
+            - link "+ Add file" [ref=f6e80] [cursor=pointer]:
+              - /url: /job-attachments/add?job_id=79&redirect=%2Fjobs%2Fview%2F79
+              - generic [ref=f6e81]: +
+              - text: Add file
+          - generic [ref=f6e82]:
+            - heading " Add note" [level=3] [ref=f6e84]:
+              - generic [ref=f6e85]: 
+              - text: Add note
+            - generic [ref=f6e88]:
+              - generic [ref=f6e89]:
+                - generic [ref=f6e90]: Comment
+                - textbox "Add a note about this job..." [ref=f6e91]
+              - button " Save note" [ref=f6e93] [cursor=pointer]:
+                - generic [ref=f6e94]: 
+                - text: Save note
+        - generic [ref=f6e95]:
+          - heading " QC Review" [level=3] [ref=f6e97]:
+            - generic [ref=f6e98]: 
+            - text: QC Review
+          - generic [ref=f6e100]:
+            - generic [ref=f6e102]:
+              - generic [ref=f6e103]: Reject with a comment
+              - textbox "Why is this being rejected?" [ref=f6e105]
+              - button " Reject" [ref=f6e106] [cursor=pointer]:
+                - generic [ref=f6e107]: 
+                - text: Reject
+            - button " Approve" [ref=f6e110] [cursor=pointer]:
+              - generic [ref=f6e111]: 
+              - text: Approve
+        - generic [ref=f6e112]:
+          - link " Back to jobs" [ref=f6e113] [cursor=pointer]:
+            - /url: /jobs
+            - generic [ref=f6e114]: 
+            - text: Back to jobs
+          - generic [ref=f6e115]:
+            - link " Edit" [ref=f6e116] [cursor=pointer]:
+              - /url: /jobs/edit/79
+              - generic [ref=f6e117]: 
+              - text: Edit
+            - link " Delete" [ref=f6e118] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=f6e119]: 
+              - text: Delete
+  - contentinfo [ref=f6e120]:
+    - generic [ref=f6e122]:
+      - generic [ref=f6e123]:
+        - strong [ref=f6e124]: Embroidery System
+        - generic [ref=f6e125]: · Production workflow
+      - generic [ref=f6e126]:
+        - generic [ref=f6e127]:
+          - generic [ref=f6e128]: 
+          - generic [ref=f6e129]: v1.0.0
+        - button " Automatic testing" [ref=f6e130] [cursor=pointer]:
+          - generic [ref=f6e131]: 
+          - generic [ref=f6e132]: Automatic testing

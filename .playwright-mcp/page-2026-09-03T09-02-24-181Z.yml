@@ -1,0 +1,48 @@
+- generic [ref=f6e2]:
+  - complementary [ref=f6e3]:
+    - generic [ref=f6e4]:
+      - link "Embroidery" [ref=f6e5] [cursor=pointer]:
+        - /url: /
+      - heading "Production workflow, simplified." [level=2] [ref=f6e8]
+      - paragraph [ref=f6e9]: Schedule embroidery jobs, track digitizing & QC, and keep your shop floor in sync — all from one place.
+      - list [ref=f6e10]:
+        - listitem [ref=f6e11]:
+          - generic [ref=f6e12]: 
+          - text: Role-aware dashboards for every team
+        - listitem [ref=f6e13]:
+          - generic [ref=f6e14]: 
+          - text: Real-time job status & activity logs
+        - listitem [ref=f6e15]:
+          - generic [ref=f6e16]: 
+          - text: Attachments, QC review, production tracking
+      - generic [ref=f6e17]:
+        - generic [ref=f6e18]: © 2026 Embroidery System
+        - generic [ref=f6e19]: v1.0.0
+  - main [ref=f6e20]:
+    - generic [ref=f6e21]:
+      - heading "Welcome back" [level=1] [ref=f6e22]
+      - paragraph [ref=f6e23]: Sign in to continue to your workspace
+      - generic [ref=f6e24]:
+        - generic [ref=f6e25]:
+          - generic [ref=f6e26]: Email address
+          - generic [ref=f6e27]:
+            - textbox "you@example.com" [active] [ref=f6e28]
+            - generic [ref=f6e29]: 
+        - generic [ref=f6e31]:
+          - generic [ref=f6e32]: Password
+          - generic [ref=f6e33]:
+            - textbox "Enter your password" [ref=f6e34]
+            - generic [ref=f6e35]: 
+        - button " Sign In" [ref=f6e37] [cursor=pointer]:
+          - generic [ref=f6e38]: 
+          - text: Sign In
+      - generic [ref=f6e39]:
+        - link " Create account" [ref=f6e40] [cursor=pointer]:
+          - /url: /users/register
+          - generic [ref=f6e41]: 
+          - text: Create account
+        - text: ·
+        - link " Reset admin" [ref=f6e42] [cursor=pointer]:
+          - /url: /users/reset-admin-password
+          - generic [ref=f6e43]: 
+          - text: Reset admin

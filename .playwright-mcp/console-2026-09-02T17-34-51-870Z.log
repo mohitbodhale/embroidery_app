@@ -1,0 +1,2 @@
+[  198745ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://localhost:8765/job-attachments/delete/2:0
+[  210212ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://localhost:8765/job-attachments/add?job_id=8&redirect=%2Fjobs%2Fview%2F8:0

@@ -1,0 +1,113 @@
+- generic [ref=f1e2]:
+  - navigation [ref=f1e3]:
+    - list [ref=f1e4]:
+      - listitem [ref=f1e5]:
+        - button "" [ref=f1e6] [cursor=pointer]
+      - listitem [ref=f1e8]:
+        - link "Embroidery System" [ref=f1e9] [cursor=pointer]:
+          - /url: /jobs
+    - list [ref=f1e10]:
+      - listitem [ref=f1e11]:
+        - button " Maria Gonzalez" [ref=f1e12] [cursor=pointer]:
+          - generic [ref=f1e13]: 
+          - generic [ref=f1e14]: Maria Gonzalez
+        - text:  
+  - generic [ref=f1e15]:
+    - complementary [ref=f1e16]:
+      - link "Embroidery" [ref=f1e17] [cursor=pointer]:
+        - /url: /jobs
+      - navigation [ref=f1e21]:
+        - menu [ref=f1e22]:
+          - listitem [ref=f1e23]:
+            - link " Scheduling Board" [ref=f1e24] [cursor=pointer]:
+              - /url: /jobs
+              - generic [ref=f1e25]: 
+              - paragraph [ref=f1e26]: Scheduling Board
+          - listitem [ref=f1e27]:
+            - link " Create Job" [ref=f1e28] [cursor=pointer]:
+              - /url: /jobs/add
+              - generic [ref=f1e29]: 
+              - paragraph [ref=f1e30]: Create Job
+          - listitem [ref=f1e31]:
+            - link " Logout" [ref=f1e32] [cursor=pointer]:
+              - /url: /users/logout
+              - generic [ref=f1e33]: 
+              - paragraph [ref=f1e34]: Logout
+    - generic [ref=f1e35]:
+      - generic [ref=f1e38]:
+        - heading " Jobs" [level=1] [ref=f1e40]:
+          - generic [ref=f1e41]: 
+          - text: Jobs
+        - list [ref=f1e43]:
+          - listitem [ref=f1e44]:
+            - link "" [ref=f1e45] [cursor=pointer]:
+              - /url: /jobs
+          - listitem [ref=f1e47]: / Jobs
+      - generic [ref=f1e50]:
+        - generic [ref=f1e51]:
+          - heading " All jobs" [level=3] [ref=f1e52]:
+            - generic [ref=f1e53]: 
+            - text: All jobs
+          - link "+ New job" [ref=f1e54] [cursor=pointer]:
+            - /url: /jobs/add
+            - generic [ref=f1e55]: +
+            - text: New job
+        - table [ref=f1e58]:
+          - rowgroup [ref=f1e59]:
+            - row [ref=f1e60]:
+              - columnheader [ref=f1e61]:
+                - 'link "Job #" [ref=f1e62] [cursor=pointer]':
+                  - /url: /jobs?sort=job_number&direction=asc
+              - columnheader [ref=f1e63]:
+                - link "Title" [ref=f1e64] [cursor=pointer]:
+                  - /url: /jobs?sort=title&direction=asc
+              - columnheader [ref=f1e65]:
+                - link "Status" [ref=f1e66] [cursor=pointer]:
+                  - /url: /jobs?sort=status&direction=asc
+              - columnheader [ref=f1e67]:
+                - link "Digitizer" [ref=f1e68] [cursor=pointer]:
+                  - /url: /jobs?sort=digitizer_id&direction=asc
+              - columnheader [ref=f1e69]:
+                - link "Scheduled" [ref=f1e70] [cursor=pointer]:
+                  - /url: /jobs?sort=scheduled_date&direction=asc
+              - columnheader "Actions" [ref=f1e71]
+          - rowgroup [ref=f1e72]:
+            - row [ref=f1e73]:
+              - cell [ref=f1e74]:
+                - link "JOB_2026_001" [ref=f1e75] [cursor=pointer]:
+                  - /url: /jobs/view/1
+              - cell "Admin Dashboard Test" [ref=f1e76]
+              - cell "Digitized" [ref=f1e78]
+              - cell " James Chen" [ref=f1e80]:
+                - generic [ref=f1e81]: 
+                - text: James Chen
+              - cell " Sep 13, 2026" [ref=f1e82]:
+                - generic [ref=f1e83]: 
+                - text: Sep 13, 2026
+              - cell [ref=f1e84]:
+                - generic [ref=f1e85]:
+                  - link "" [ref=f1e86] [cursor=pointer]:
+                    - /url: /jobs/view/1
+                  - link "" [ref=f1e88] [cursor=pointer]:
+                    - /url: /jobs/edit/1
+                  - link "" [ref=f1e90] [cursor=pointer]:
+                    - /url: "#"
+        - generic [ref=f1e93]:
+          - paragraph [ref=f1e94]: Showing 1 of 1 jobs
+          - list [ref=f1e95]:
+            - listitem [ref=f1e96]:
+              - generic [ref=f1e97]: ‹
+            - listitem [ref=f1e98]:
+              - generic [ref=f1e99]: ›
+  - contentinfo [ref=f1e100]:
+    - generic [ref=f1e102]:
+      - generic [ref=f1e103]:
+        - strong [ref=f1e104]: Embroidery System
+        - generic [ref=f1e105]: · Production workflow
+      - generic [ref=f1e106]:
+        - generic [ref=f1e107]:
+          - generic [ref=f1e108]: 
+          - generic [ref=f1e109]: v1.0.0
+        - button " Automatic testing" [ref=f1e110] [cursor=pointer]:
+          - generic [ref=f1e111]: 
+          - generic [ref=f1e112]: Automatic testing

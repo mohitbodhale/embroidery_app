@@ -1,0 +1,48 @@
+- generic [ref=f25e2]:
+  - complementary [ref=f25e3]:
+    - generic [ref=f25e4]:
+      - link "Embroidery" [ref=f25e5] [cursor=pointer]:
+        - /url: /
+      - heading "Production workflow, simplified." [level=2] [ref=f25e8]
+      - paragraph [ref=f25e9]: Schedule embroidery jobs, track digitizing & QC, and keep your shop floor in sync — all from one place.
+      - list [ref=f25e10]:
+        - listitem [ref=f25e11]:
+          - generic [ref=f25e12]: 
+          - text: Role-aware dashboards for every team
+        - listitem [ref=f25e13]:
+          - generic [ref=f25e14]: 
+          - text: Real-time job status & activity logs
+        - listitem [ref=f25e15]:
+          - generic [ref=f25e16]: 
+          - text: Attachments, QC review, production tracking
+      - generic [ref=f25e17]:
+        - generic [ref=f25e18]: © 2026 Embroidery System
+        - generic [ref=f25e19]: v1.0.0
+  - main [ref=f25e20]:
+    - generic [ref=f25e21]:
+      - heading "Welcome back" [level=1] [ref=f25e22]
+      - paragraph [ref=f25e23]: Sign in to continue to your workspace
+      - generic [ref=f25e24]:
+        - generic [ref=f25e25]:
+          - generic [ref=f25e26]: Email address
+          - generic [ref=f25e27]:
+            - textbox "you@example.com" [active] [ref=f25e28]
+            - generic [ref=f25e29]: 
+        - generic [ref=f25e31]:
+          - generic [ref=f25e32]: Password
+          - generic [ref=f25e33]:
+            - textbox "Enter your password" [ref=f25e34]
+            - generic [ref=f25e35]: 
+        - button " Sign In" [ref=f25e37] [cursor=pointer]:
+          - generic [ref=f25e38]: 
+          - text: Sign In
+      - generic [ref=f25e39]:
+        - link " Create account" [ref=f25e40] [cursor=pointer]:
+          - /url: /users/register
+          - generic [ref=f25e41]: 
+          - text: Create account
+        - text: ·
+        - link " Reset admin" [ref=f25e42] [cursor=pointer]:
+          - /url: /users/reset-admin-password
+          - generic [ref=f25e43]: 
+          - text: Reset admin

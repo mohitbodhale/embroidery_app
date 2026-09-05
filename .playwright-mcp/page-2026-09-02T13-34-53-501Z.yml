@@ -1,0 +1,113 @@
+- generic [ref=f17e2]:
+  - navigation [ref=f17e3]:
+    - list [ref=f17e4]:
+      - listitem [ref=f17e5]:
+        - button "" [ref=f17e6] [cursor=pointer]
+      - listitem [ref=f17e8]:
+        - link "Embroidery System" [ref=f17e9] [cursor=pointer]:
+          - /url: /jobs
+    - list [ref=f17e10]:
+      - listitem [ref=f17e11]:
+        - button " Admin User" [ref=f17e12] [cursor=pointer]:
+          - generic [ref=f17e13]: 
+          - generic [ref=f17e14]: Admin User
+        - text: 
+  - generic [ref=f17e15]:
+    - complementary [ref=f17e16]:
+      - link "Embroidery" [ref=f17e17] [cursor=pointer]:
+        - /url: /jobs
+      - navigation [ref=f17e21]:
+        - menu [ref=f17e22]:
+          - listitem [ref=f17e23]:
+            - link " Operations Dashboard" [ref=f17e24] [cursor=pointer]:
+              - /url: /pages/admin-dashboard
+              - generic [ref=f17e25]: 
+              - paragraph [ref=f17e26]: Operations Dashboard
+          - listitem [ref=f17e27]: MASTERS
+          - listitem [ref=f17e28]:
+            - link " Users" [ref=f17e29] [cursor=pointer]:
+              - /url: /users
+              - generic [ref=f17e30]: 
+              - paragraph [ref=f17e31]: Users
+          - listitem [ref=f17e32]:
+            - link " Roles" [ref=f17e33] [cursor=pointer]:
+              - /url: /roles
+              - generic [ref=f17e34]: 
+              - paragraph [ref=f17e35]: Roles
+          - listitem [ref=f17e36]:
+            - link " Job Statuses" [ref=f17e37] [cursor=pointer]:
+              - /url: /job-statuses
+              - generic [ref=f17e38]: 
+              - paragraph [ref=f17e39]: Job Statuses
+          - listitem [ref=f17e40]: ACTIVITY
+          - listitem [ref=f17e41]:
+            - link " Activity Logs" [ref=f17e42] [cursor=pointer]:
+              - /url: /job-logs
+              - generic [ref=f17e43]: 
+              - paragraph [ref=f17e44]: Activity Logs
+          - listitem [ref=f17e45]:
+            - link " Logout" [ref=f17e46] [cursor=pointer]:
+              - /url: /users/logout
+              - generic [ref=f17e47]: 
+              - paragraph [ref=f17e48]: Logout
+    - generic [ref=f17e49]:
+      - generic [ref=f17e52]:
+        - heading " Edit user Test Scheduler" [level=1] [ref=f17e54]:
+          - generic [ref=f17e55]: 
+          - text: Edit user Test Scheduler
+        - list [ref=f17e57]:
+          - listitem [ref=f17e58]:
+            - link "" [ref=f17e59] [cursor=pointer]:
+              - /url: /pages/admin-dashboard
+          - listitem [ref=f17e61]: / Edit user Test Scheduler
+      - generic [ref=f17e66]:
+        - generic [ref=f17e67]:
+          - generic [ref=f17e68]:
+            - generic [ref=f17e69]: Full name
+            - textbox [ref=f17e70]: Test Scheduler
+          - generic [ref=f17e71]:
+            - generic [ref=f17e72]: Email address
+            - textbox [ref=f17e73]: scheduler@embroidery.local
+        - generic [ref=f17e74]:
+          - generic [ref=f17e75]: New password (leave blank to keep current)
+          - textbox "Leave blank to keep current password" [ref=f17e76]: $2y$10$e5veoAW3cG52svok.ZwdBuMH2FYS3HE7DK3crMfcEmCSBusRw9JOm
+        - generic [ref=f17e77]:
+          - generic [ref=f17e78]:
+            - generic [ref=f17e79]: Role
+            - combobox [ref=f17e80]:
+              - option "Pending — no access" [selected]
+              - option "Scheduler"
+              - option "Digitizer"
+              - option "Quality Checker (QC)"
+              - option "Production"
+              - option "Admin"
+          - generic [ref=f17e81]:
+            - generic [ref=f17e82]: Organization
+            - combobox [ref=f17e83]:
+              - option "Default Company" [selected]
+              - option "StitchCraft Org"
+        - generic [ref=f17e84]:
+          - link " Back to users" [ref=f17e85] [cursor=pointer]:
+            - /url: /users
+            - generic [ref=f17e86]: 
+            - text: Back to users
+          - generic [ref=f17e87]:
+            - link " Delete" [ref=f17e88] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=f17e89]: 
+              - text: Delete
+            - button " Save changes" [ref=f17e90] [cursor=pointer]:
+              - generic [ref=f17e91]: 
+              - text: Save changes
+  - contentinfo [ref=f17e92]:
+    - generic [ref=f17e94]:
+      - generic [ref=f17e95]:
+        - strong [ref=f17e96]: Embroidery System
+        - generic [ref=f17e97]: · Production workflow
+      - generic [ref=f17e98]:
+        - generic [ref=f17e99]:
+          - generic [ref=f17e100]: 
+          - generic [ref=f17e101]: v1.0.0
+        - button " Automatic testing" [ref=f17e102] [cursor=pointer]:
+          - generic [ref=f17e103]: 
+          - generic [ref=f17e104]: Automatic testing

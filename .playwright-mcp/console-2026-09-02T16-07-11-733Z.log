@@ -1,0 +1,14 @@
+[  149257ms] [LOG] Form data: {
+  "_method": "POST",
+  "_csrfToken": "EZQV0BzeZmOks4IX4DoV7hnhLTXeIAxG0X6AZBfy5pDVvbtdrUeaVHfDY4Lxz1iGrGp+mJ+LN8ap7Hj5FXo2iaIGNOzufeADL9UeULpBanKyR7ICc8vXouGM2mrOJa1iFPdRt8b7POeYCBusrrMC8A==",
+  "job_number": "",
+  "title": "Auto Number Test",
+  "instructions": "Testing auto job number",
+  "digitizer_id": "15",
+  "qc_id": "16",
+  "scheduled_date": "2026-09-05",
+  "status": "draft",
+  "files[]": {},
+  "attachment_file_type": "",
+  "attachment_comments": ""
+} @ :10

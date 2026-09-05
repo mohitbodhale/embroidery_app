@@ -1,0 +1,49 @@
+- generic [ref=f20e2]:
+  - complementary [ref=f20e3]:
+    - generic [ref=f20e4]:
+      - link "Embroidery" [ref=f20e5] [cursor=pointer]:
+        - /url: /
+      - heading "Production workflow, simplified." [level=2] [ref=f20e8]
+      - paragraph [ref=f20e9]: Schedule embroidery jobs, track digitizing & QC, and keep your shop floor in sync — all from one place.
+      - list [ref=f20e10]:
+        - listitem [ref=f20e11]:
+          - generic [ref=f20e12]: 
+          - text: Role-aware dashboards for every team
+        - listitem [ref=f20e13]:
+          - generic [ref=f20e14]: 
+          - text: Real-time job status & activity logs
+        - listitem [ref=f20e15]:
+          - generic [ref=f20e16]: 
+          - text: Attachments, QC review, production tracking
+      - generic [ref=f20e17]:
+        - generic [ref=f20e18]: © 2026 Embroidery System
+        - generic [ref=f20e19]: v1.0.0
+  - main [ref=f20e20]:
+    - generic [ref=f20e21]:
+      - heading "Welcome back" [level=1] [ref=f20e22]
+      - paragraph [ref=f20e23]: Sign in to continue to your workspace
+      - generic [ref=f20e24] [cursor=pointer]: Invalid email or password.
+      - generic [ref=f20e25]:
+        - generic [ref=f20e26]:
+          - generic [ref=f20e27]: Email address
+          - generic [ref=f20e28]:
+            - textbox "you@example.com" [active] [ref=f20e29]: admin@stitchcraft.com
+            - generic [ref=f20e30]: 
+        - generic [ref=f20e32]:
+          - generic [ref=f20e33]: Password
+          - generic [ref=f20e34]:
+            - textbox "Enter your password" [ref=f20e35]: password123
+            - generic [ref=f20e36]: 
+        - button " Sign In" [ref=f20e38] [cursor=pointer]:
+          - generic [ref=f20e39]: 
+          - text: Sign In
+      - generic [ref=f20e40]:
+        - link " Create account" [ref=f20e41] [cursor=pointer]:
+          - /url: /users/register
+          - generic [ref=f20e42]: 
+          - text: Create account
+        - text: ·
+        - link " Reset admin" [ref=f20e43] [cursor=pointer]:
+          - /url: /users/reset-admin-password
+          - generic [ref=f20e44]: 
+          - text: Reset admin

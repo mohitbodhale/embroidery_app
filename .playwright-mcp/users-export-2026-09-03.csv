@@ -1,0 +1,9 @@
+ID,Name,Email,Role,Organization,Created
+2,"Admin User Real PNG",newadmin@stitchcraft.com,admin,"Default Company","2026-09-01 18:35:24"
+14,"Maria Gonzalez",scheduler@embroidery.local,scheduler,"Default Company","2026-09-02 13:26:41"
+15,"James Chen",digitizer@embroidery.local,digitizer,"Default Company","2026-09-02 13:27:06"
+16,"Sarah Thompson",qc@embroidery.local,quality_checker,"Default Company","2026-09-02 13:27:31"
+17,"David Martinez",production@embroidery.local,production,"Default Company","2026-09-02 13:28:06"
+18,"Scheduler Two",scheduler2@embroidery.local,scheduler,"Default Company","2026-09-02 21:27:23"
+19,"Digitizer Two",digitizer2@embroidery.local,digitizer,"Default Company","2026-09-02 23:10:35"
+20,"Digitizer Three",digitizer3@embroidery.local,digitizer,"Default Company","2026-09-02 23:11:20"

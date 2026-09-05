@@ -1,0 +1,207 @@
+- generic [ref=f28e2]:
+  - navigation [ref=f28e3]:
+    - list [ref=f28e4]:
+      - listitem [ref=f28e5]:
+        - button "" [ref=f28e6] [cursor=pointer]
+      - listitem [ref=f28e8]:
+        - link "Embroidery System" [ref=f28e9] [cursor=pointer]:
+          - /url: /jobs
+    - list [ref=f28e10]:
+      - listitem [ref=f28e11]:
+        - button " Test Production" [ref=f28e12] [cursor=pointer]:
+          - generic [ref=f28e13]: 
+          - generic [ref=f28e14]: Test Production
+        - text: 
+  - generic [ref=f28e15]:
+    - complementary [ref=f28e16]:
+      - link "Embroidery" [ref=f28e17] [cursor=pointer]:
+        - /url: /jobs
+      - navigation [ref=f28e21]:
+        - menu [ref=f28e22]:
+          - listitem [ref=f28e23]:
+            - link " Production Queue" [ref=f28e24] [cursor=pointer]:
+              - /url: /jobs
+              - generic [ref=f28e25]: 
+              - paragraph [ref=f28e26]: Production Queue
+          - listitem [ref=f28e27]:
+            - link " Attachments" [ref=f28e28] [cursor=pointer]:
+              - /url: /job-attachments
+              - generic [ref=f28e29]: 
+              - paragraph [ref=f28e30]: Attachments
+          - listitem [ref=f28e31]:
+            - link " Logout" [ref=f28e32] [cursor=pointer]:
+              - /url: /users/logout
+              - generic [ref=f28e33]: 
+              - paragraph [ref=f28e34]: Logout
+    - generic [ref=f28e35]:
+      - generic [ref=f28e38]:
+        - heading " JOB_2026_001 · Complete Workflow Test" [level=1] [ref=f28e40]:
+          - generic [ref=f28e41]: 
+          - text: JOB_2026_001 · Complete Workflow Test
+        - list [ref=f28e43]:
+          - listitem [ref=f28e44]:
+            - link "" [ref=f28e45] [cursor=pointer]:
+              - /url: /jobs
+          - listitem [ref=f28e47]: / JOB_2026_001 · Complete Workflow Test
+      - generic [ref=f28e49]:
+        - generic [ref=f28e51]:
+          - generic [ref=f28e52]:
+            - generic [ref=f28e53]: Status
+            - generic [ref=f28e54]: QC Approved
+            - generic [ref=f28e55]: Created Sep 02, 2026
+          - generic [ref=f28e56]:
+            - term [ref=f28e57]: Job number
+            - definition [ref=f28e58]: JOB_2026_001
+            - term [ref=f28e59]: Title
+            - definition [ref=f28e60]: Complete Workflow Test
+            - term [ref=f28e61]: Digitizer
+            - definition [ref=f28e62]:
+              - generic [ref=f28e63]: 
+              - text: Test Digitizer
+            - term [ref=f28e64]: Quality checker
+            - definition [ref=f28e65]:
+              - generic [ref=f28e66]: 
+              - text: Test QC
+            - term [ref=f28e67]: Organization
+            - definition [ref=f28e68]:
+              - generic [ref=f28e69]: 
+              - text: Default Company
+            - term [ref=f28e70]: Scheduled date
+            - definition [ref=f28e71]:
+              - generic [ref=f28e72]: 
+              - text: Sep 10, 2026
+          - generic [ref=f28e73]:
+            - generic [ref=f28e74]:
+              - strong [ref=f28e75]:
+                - generic [ref=f28e76]: 
+                - text: Attachments
+              - link "+ Add file" [ref=f28e77] [cursor=pointer]:
+                - /url: /job-attachments/add?job_id=1&redirect=%2Fjobs%2Fview%2F1
+                - generic [ref=f28e78]: +
+                - text: Add file
+            - table [ref=f28e80]:
+              - rowgroup [ref=f28e81]:
+                - row [ref=f28e82]:
+                  - columnheader "File" [ref=f28e83]
+                  - columnheader "Type" [ref=f28e84]
+                  - columnheader "Size" [ref=f28e85]
+                  - columnheader "Uploaded" [ref=f28e86]
+                  - columnheader "Actions" [ref=f28e87]
+              - rowgroup [ref=f28e88]:
+                - row [ref=f28e89]:
+                  - cell [ref=f28e90]:
+                    - link " test_design1.txt" [ref=f28e91] [cursor=pointer]:
+                      - /url: /uploads/attachments/1/de4fd19a3c0d1e6f.txt
+                      - generic [ref=f28e92]: 
+                      - text: test_design1.txt
+                  - cell "DESIGN FILES" [ref=f28e93]
+                  - cell "83 Bytes" [ref=f28e95]
+                  - cell "Sep 02, 2026 18:05" [ref=f28e96]
+                  - cell [ref=f28e97]:
+                    - generic [ref=f28e98]:
+                      - link "" [ref=f28e99] [cursor=pointer]:
+                        - /url: /job-attachments/download/1
+                      - button "" [ref=f28e102] [cursor=pointer]
+                - row [ref=f28e104]:
+                  - cell [ref=f28e105]:
+                    - link " test_design2.txt" [ref=f28e106] [cursor=pointer]:
+                      - /url: /uploads/attachments/1/cb31da8c7bba7ba6.txt
+                      - generic [ref=f28e107]: 
+                      - text: test_design2.txt
+                  - cell "DESIGN FILES" [ref=f28e108]
+                  - cell "89 Bytes" [ref=f28e110]
+                  - cell "Sep 02, 2026 18:05" [ref=f28e111]
+                  - cell [ref=f28e112]:
+                    - generic [ref=f28e113]:
+                      - link "" [ref=f28e114] [cursor=pointer]:
+                        - /url: /job-attachments/download/2
+                      - button "" [ref=f28e117] [cursor=pointer]
+                - row [ref=f28e119]:
+                  - cell [ref=f28e120]:
+                    - link " test_design3.txt" [ref=f28e121] [cursor=pointer]:
+                      - /url: /uploads/attachments/1/c978e468d2ae1d82.txt
+                      - generic [ref=f28e122]: 
+                      - text: test_design3.txt
+                  - cell "DESIGN FILES" [ref=f28e123]
+                  - cell "84 Bytes" [ref=f28e125]
+                  - cell "Sep 02, 2026 18:05" [ref=f28e126]
+                  - cell [ref=f28e127]:
+                    - generic [ref=f28e128]:
+                      - link "" [ref=f28e129] [cursor=pointer]:
+                        - /url: /job-attachments/download/3
+                      - button "" [ref=f28e132] [cursor=pointer]
+          - generic [ref=f28e134]:
+            - strong [ref=f28e135]:
+              - generic [ref=f28e136]: 
+              - text: Activity log
+            - table [ref=f28e138]:
+              - rowgroup [ref=f28e139]:
+                - row [ref=f28e140]:
+                  - columnheader "Action" [ref=f28e141]
+                  - columnheader "Details" [ref=f28e142]
+                  - columnheader "User" [ref=f28e143]
+                  - columnheader "When" [ref=f28e144]
+              - rowgroup [ref=f28e145]:
+                - row [ref=f28e146]:
+                  - cell "Note" [ref=f28e147]
+                  - cell "Digitizer started working on the design" [ref=f28e149]
+                  - cell "System" [ref=f28e150]
+                  - cell "Sep 02, 18:06" [ref=f28e151]
+                - row [ref=f28e152]:
+                  - cell "Submitted For Qc" [ref=f28e153]
+                  - cell "EMB file submitted for QC review." [ref=f28e155]
+                  - cell "System" [ref=f28e156]
+                  - cell "Sep 02, 18:07" [ref=f28e157]
+                - row [ref=f28e158]:
+                  - cell "Note" [ref=f28e159]
+                  - cell "QC reviewed the job - looks good" [ref=f28e161]
+                  - cell "System" [ref=f28e162]
+                  - cell "Sep 02, 18:09" [ref=f28e163]
+                - row [ref=f28e164]:
+                  - cell "Approved" [ref=f28e165]
+                  - cell "Approved by QC" [ref=f28e167]
+                  - cell "System" [ref=f28e168]
+                  - cell "Sep 02, 18:09" [ref=f28e169]
+          - generic [ref=f28e170]:
+            - heading " Add note" [level=3] [ref=f28e172]:
+              - generic [ref=f28e173]: 
+              - text: Add note
+            - generic [ref=f28e176]:
+              - generic [ref=f28e177]:
+                - generic [ref=f28e178]: Comment
+                - textbox "Add a note about this job..." [ref=f28e179]
+              - button " Save note" [ref=f28e181] [cursor=pointer]:
+                - generic [ref=f28e182]: 
+                - text: Save note
+        - generic [ref=f28e183]:
+          - generic [ref=f28e184]:
+            - generic [ref=f28e185]: 
+            - text: Production action
+          - button " Start Production" [ref=f28e187] [cursor=pointer]:
+            - generic [ref=f28e188]: 
+            - text: Start Production
+        - generic [ref=f28e189]:
+          - link " Back to jobs" [ref=f28e190] [cursor=pointer]:
+            - /url: /jobs
+            - generic [ref=f28e191]: 
+            - text: Back to jobs
+          - generic [ref=f28e192]:
+            - link " Edit" [ref=f28e193] [cursor=pointer]:
+              - /url: /jobs/edit/1
+              - generic [ref=f28e194]: 
+              - text: Edit
+            - button " Delete" [ref=f28e196] [cursor=pointer]:
+              - generic [ref=f28e197]: 
+              - text: Delete
+  - contentinfo [ref=f28e198]:
+    - generic [ref=f28e200]:
+      - generic [ref=f28e201]:
+        - strong [ref=f28e202]: Embroidery System
+        - generic [ref=f28e203]: · Production workflow
+      - generic [ref=f28e204]:
+        - generic [ref=f28e205]:
+          - generic [ref=f28e206]: 
+          - generic [ref=f28e207]: v1.0.0
+        - button " Automatic testing" [ref=f28e208] [cursor=pointer]:
+          - generic [ref=f28e209]: 
+          - generic [ref=f28e210]: Automatic testing

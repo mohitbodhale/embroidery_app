@@ -1,0 +1,9 @@
+- generic [ref=f7e2]:
+  - heading "You are not allowed to edit this job." [level=2] [ref=f7e3]
+  - paragraph [ref=f7e4]:
+    - strong [ref=f7e5]: "Error:"
+    - text: The requested address
+    - strong [ref=f7e6]: "'/jobs/edit/9'"
+    - text: was not found on this server.
+  - link "Back" [ref=f7e7] [cursor=pointer]:
+    - /url: javascript:history.back()

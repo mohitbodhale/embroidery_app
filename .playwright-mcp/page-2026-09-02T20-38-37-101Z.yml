@@ -1,0 +1,118 @@
+- generic [ref=f13e2]:
+  - navigation [ref=f13e3]:
+    - list [ref=f13e4]:
+      - listitem [ref=f13e5]:
+        - button "" [ref=f13e6] [cursor=pointer]
+      - listitem [ref=f13e8]:
+        - link "Embroidery System" [ref=f13e9] [cursor=pointer]:
+          - /url: /jobs
+    - list [ref=f13e10]:
+      - listitem [ref=f13e11]:
+        - button " Admin User Test2" [ref=f13e12] [cursor=pointer]:
+          - generic [ref=f13e13]: 
+          - generic [ref=f13e14]: Admin User Test2
+        - text:  
+  - generic [ref=f13e15]:
+    - complementary [ref=f13e16]:
+      - link "Embroidery" [ref=f13e17] [cursor=pointer]:
+        - /url: /jobs
+      - navigation [ref=f13e21]:
+        - menu [ref=f13e22]:
+          - listitem [ref=f13e23]:
+            - link " Operations Dashboard" [ref=f13e24] [cursor=pointer]:
+              - /url: /pages/admin-dashboard
+              - generic [ref=f13e25]: 
+              - paragraph [ref=f13e26]: Operations Dashboard
+          - listitem [ref=f13e27]: MASTERS
+          - listitem [ref=f13e28]:
+            - link " Users" [ref=f13e29] [cursor=pointer]:
+              - /url: /users
+              - generic [ref=f13e30]: 
+              - paragraph [ref=f13e31]: Users
+          - listitem [ref=f13e32]:
+            - link " Roles" [ref=f13e33] [cursor=pointer]:
+              - /url: /roles
+              - generic [ref=f13e34]: 
+              - paragraph [ref=f13e35]: Roles
+          - listitem [ref=f13e36]:
+            - link " Job Statuses" [ref=f13e37] [cursor=pointer]:
+              - /url: /job-statuses
+              - generic [ref=f13e38]: 
+              - paragraph [ref=f13e39]: Job Statuses
+          - listitem [ref=f13e40]: ACTIVITY
+          - listitem [ref=f13e41]:
+            - link " Activity Logs" [ref=f13e42] [cursor=pointer]:
+              - /url: /job-logs
+              - generic [ref=f13e43]: 
+              - paragraph [ref=f13e44]: Activity Logs
+    - generic [ref=f13e45]:
+      - generic [ref=f13e48]:
+        - heading " My Profile" [level=1] [ref=f13e50]:
+          - generic [ref=f13e51]: 
+          - text: My Profile
+        - list [ref=f13e53]:
+          - listitem [ref=f13e54]:
+            - link "" [ref=f13e55] [cursor=pointer]:
+              - /url: /pages/admin-dashboard
+          - listitem [ref=f13e57]: / My Profile
+      - generic [ref=f13e59]:
+        - generic [ref=f13e60] [cursor=pointer]: Profile updated successfully.
+        - generic [ref=f13e61]:
+          - heading " My Profile" [level=3] [ref=f13e63]:
+            - generic [ref=f13e64]: 
+            - text: My Profile
+          - generic [ref=f13e66]:
+            - generic [ref=f13e67]:
+              - generic [ref=f13e68]:
+                - generic [ref=f13e69]: Full name
+                - textbox [ref=f13e70]: Admin User Test2
+              - generic [ref=f13e71]:
+                - generic [ref=f13e72]: Email address
+                - textbox [ref=f13e73]: admin@stitchcraft.com
+              - generic [ref=f13e74]:
+                - generic [ref=f13e75]: New password (leave blank to keep current)
+                - textbox [ref=f13e76]
+              - generic [ref=f13e77]:
+                - generic [ref=f13e78]: Confirm password
+                - textbox [ref=f13e79]
+            - separator [ref=f13e80]
+            - heading " Additional Information" [level=4] [ref=f13e81]:
+              - generic [ref=f13e82]: 
+              - text: Additional Information
+            - generic [ref=f13e83]:
+              - generic [ref=f13e84]:
+                - generic [ref=f13e85]: Phone
+                - textbox "+1 (555) 000-0000" [ref=f13e86]: +1 (555) 111-2222
+              - generic [ref=f13e87]:
+                - generic [ref=f13e88]: Location
+                - textbox "City, Country" [ref=f13e89]: Chicago, USA
+              - generic [ref=f13e90]:
+                - generic [ref=f13e91]: Website
+                - textbox "https://example.com" [ref=f13e92]: https://test.com
+              - generic [ref=f13e93]:
+                - generic [ref=f13e94]: Profile picture
+                - button "Choose File" [ref=f13e95] [cursor=pointer]
+                - generic [ref=f13e96]: JPG, PNG or GIF. Max 2MB.
+              - generic [ref=f13e97]:
+                - generic [ref=f13e98]: Bio
+                - textbox "Tell us a bit about yourself..." [ref=f13e99]: Test bio 2
+            - generic [ref=f13e100]:
+              - link " Back" [ref=f13e101] [cursor=pointer]:
+                - /url: /users
+                - generic [ref=f13e102]: 
+                - text: Back
+              - button " Save changes" [ref=f13e103] [cursor=pointer]:
+                - generic [ref=f13e104]: 
+                - text: Save changes
+  - contentinfo [ref=f13e105]:
+    - generic [ref=f13e107]:
+      - generic [ref=f13e108]:
+        - strong [ref=f13e109]: Embroidery System
+        - generic [ref=f13e110]: · Production workflow
+      - generic [ref=f13e111]:
+        - generic [ref=f13e112]:
+          - generic [ref=f13e113]: 
+          - generic [ref=f13e114]: v1.0.0
+        - button " Automatic testing" [ref=f13e115] [cursor=pointer]:
+          - generic [ref=f13e116]: 
+          - generic [ref=f13e117]: Automatic testing

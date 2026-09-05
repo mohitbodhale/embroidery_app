@@ -1,0 +1,91 @@
+- generic [ref=f7e2]:
+  - navigation [ref=f7e3]:
+    - list [ref=f7e4]:
+      - listitem [ref=f7e5]:
+        - button "" [ref=f7e6] [cursor=pointer]
+      - listitem [ref=f7e8]:
+        - link "Embroidery System" [ref=f7e9] [cursor=pointer]:
+          - /url: /jobs
+    - list [ref=f7e10]:
+      - listitem [ref=f7e11]:
+        - button " Admin User" [ref=f7e12] [cursor=pointer]:
+          - generic [ref=f7e13]: 
+          - generic [ref=f7e14]: Admin User
+        - text:  
+  - generic [ref=f7e15]:
+    - complementary [ref=f7e16]:
+      - link "Embroidery" [ref=f7e17] [cursor=pointer]:
+        - /url: /jobs
+      - navigation [ref=f7e21]:
+        - menu [ref=f7e22]:
+          - listitem [ref=f7e23]:
+            - link " Operations Dashboard" [ref=f7e24] [cursor=pointer]:
+              - /url: /pages/admin-dashboard
+              - generic [ref=f7e25]: 
+              - paragraph [ref=f7e26]: Operations Dashboard
+          - listitem [ref=f7e27]: MASTERS
+          - listitem [ref=f7e28]:
+            - link " Users" [ref=f7e29] [cursor=pointer]:
+              - /url: /users
+              - generic [ref=f7e30]: 
+              - paragraph [ref=f7e31]: Users
+          - listitem [ref=f7e32]:
+            - link " Roles" [ref=f7e33] [cursor=pointer]:
+              - /url: /roles
+              - generic [ref=f7e34]: 
+              - paragraph [ref=f7e35]: Roles
+          - listitem [ref=f7e36]:
+            - link " Job Statuses" [ref=f7e37] [cursor=pointer]:
+              - /url: /job-statuses
+              - generic [ref=f7e38]: 
+              - paragraph [ref=f7e39]: Job Statuses
+          - listitem [ref=f7e40]: ACTIVITY
+          - listitem [ref=f7e41]:
+            - link " Activity Logs" [ref=f7e42] [cursor=pointer]:
+              - /url: /job-logs
+              - generic [ref=f7e43]: 
+              - paragraph [ref=f7e44]: Activity Logs
+    - generic [ref=f7e45]:
+      - generic [ref=f7e48]:
+        - heading " Dashboard" [level=1] [ref=f7e50]:
+          - generic [ref=f7e51]: 
+          - text: Dashboard
+        - list [ref=f7e53]:
+          - listitem [ref=f7e54]:
+            - link "" [ref=f7e55] [cursor=pointer]:
+              - /url: /pages/admin-dashboard
+          - listitem [ref=f7e57]: / Dashboard
+      - generic [ref=f7e60]:
+        - generic [ref=f7e63]:
+          - generic [ref=f7e64]: 
+          - text: Signed in as
+          - strong
+        - generic [ref=f7e66]:
+          - generic [ref=f7e67]: 
+          - generic [ref=f7e69]:
+            - generic [ref=f7e70]: Total
+            - generic [ref=f7e71]: All jobs
+        - generic [ref=f7e73]:
+          - generic [ref=f7e74]:
+            - heading " Recent jobs" [level=3] [ref=f7e75]:
+              - generic [ref=f7e76]: 
+              - text: Recent jobs
+            - link " View all" [ref=f7e77] [cursor=pointer]:
+              - /url: /jobs
+              - generic [ref=f7e78]: 
+              - text: View all
+          - generic [ref=f7e80]:
+            - generic [ref=f7e81]: 
+            - generic [ref=f7e82]: No jobs yet.
+  - contentinfo [ref=f7e83]:
+    - generic [ref=f7e85]:
+      - generic [ref=f7e86]:
+        - strong [ref=f7e87]: Embroidery System
+        - generic [ref=f7e88]: · Production workflow
+      - generic [ref=f7e89]:
+        - generic [ref=f7e90]:
+          - generic [ref=f7e91]: 
+          - generic [ref=f7e92]: v1.0.0
+        - button " Automatic testing" [ref=f7e93] [cursor=pointer]:
+          - generic [ref=f7e94]: 
+          - generic [ref=f7e95]: Automatic testing

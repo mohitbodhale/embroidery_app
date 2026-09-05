@@ -1,0 +1,34 @@
+- generic [ref=f41e2]:
+  - text:   
+  - main [ref=f41e3]:
+    - generic [ref=f41e4]:
+      - link [ref=f41e5] [cursor=pointer]:
+        - /url: /
+        - strong [ref=f41e7]: Embroidery
+      - heading "Welcome back" [level=1] [ref=f41e8]
+      - paragraph [ref=f41e9]: Sign in to continue to your workspace
+      - generic [ref=f41e10] [cursor=pointer]: You have been logged out.
+      - generic [ref=f41e11]:
+        - generic [ref=f41e12]:
+          - generic [ref=f41e13]: Email address
+          - generic [ref=f41e14]:
+            - textbox "you@example.com" [active] [ref=f41e15]
+            - generic [ref=f41e16]: 
+        - generic [ref=f41e18]:
+          - generic [ref=f41e19]: Password
+          - generic [ref=f41e20]:
+            - textbox "Enter your password" [ref=f41e21]
+            - generic [ref=f41e22]: 
+        - button " Sign In" [ref=f41e24] [cursor=pointer]:
+          - generic [ref=f41e25]: 
+          - text: Sign In
+      - generic [ref=f41e26]:
+        - link " Create account" [ref=f41e27] [cursor=pointer]:
+          - /url: /users/register
+          - generic [ref=f41e28]: 
+          - text: Create account
+        - text: ·
+        - link " Reset admin" [ref=f41e29] [cursor=pointer]:
+          - /url: /users/reset-admin-password
+          - generic [ref=f41e30]: 
+          - text: Reset admin

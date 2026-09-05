@@ -1,0 +1,49 @@
+- generic [ref=f1e2]:
+  - complementary [ref=f1e3]:
+    - generic [ref=f1e4]:
+      - link "Embroidery" [ref=f1e5] [cursor=pointer]:
+        - /url: /
+      - heading "Production workflow, simplified." [level=2] [ref=f1e8]
+      - paragraph [ref=f1e9]: Schedule embroidery jobs, track digitizing & QC, and keep your shop floor in sync — all from one place.
+      - list [ref=f1e10]:
+        - listitem [ref=f1e11]:
+          - generic [ref=f1e12]: 
+          - text: Role-aware dashboards for every team
+        - listitem [ref=f1e13]:
+          - generic [ref=f1e14]: 
+          - text: Real-time job status & activity logs
+        - listitem [ref=f1e15]:
+          - generic [ref=f1e16]: 
+          - text: Attachments, QC review, production tracking
+      - generic [ref=f1e17]:
+        - generic [ref=f1e18]: © 2026 Embroidery System
+        - generic [ref=f1e19]: v1.0.0
+  - main [ref=f1e20]:
+    - generic [ref=f1e21]:
+      - heading "Welcome back" [level=1] [ref=f1e22]
+      - paragraph [ref=f1e23]: Sign in to continue to your workspace
+      - generic [ref=f1e24] [cursor=pointer]: Please login to access that page.
+      - generic [ref=f1e25]:
+        - generic [ref=f1e26]:
+          - generic [ref=f1e27]: Email address
+          - generic [ref=f1e28]:
+            - textbox "you@example.com" [active] [ref=f1e29]
+            - generic [ref=f1e30]: 
+        - generic [ref=f1e32]:
+          - generic [ref=f1e33]: Password
+          - generic [ref=f1e34]:
+            - textbox "Enter your password" [ref=f1e35]
+            - generic [ref=f1e36]: 
+        - button " Sign In" [ref=f1e38] [cursor=pointer]:
+          - generic [ref=f1e39]: 
+          - text: Sign In
+      - generic [ref=f1e40]:
+        - link " Create account" [ref=f1e41] [cursor=pointer]:
+          - /url: /users/register
+          - generic [ref=f1e42]: 
+          - text: Create account
+        - text: ·
+        - link " Reset admin" [ref=f1e43] [cursor=pointer]:
+          - /url: /users/reset-admin-password
+          - generic [ref=f1e44]: 
+          - text: Reset admin

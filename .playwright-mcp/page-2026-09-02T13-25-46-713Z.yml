@@ -1,0 +1,38 @@
+- generic [ref=f1e2]:
+  - text:   
+  - main [ref=f1e3]:
+    - generic [ref=f1e4]:
+      - link [ref=f1e5] [cursor=pointer]:
+        - /url: /
+        - strong [ref=f1e7]: Embroidery
+      - heading "Create your account" [level=1] [ref=f1e8]
+      - paragraph [ref=f1e9]: Fill in your details — an admin will assign your role.
+      - generic [ref=f1e10]:
+        - generic [ref=f1e11]:
+          - generic [ref=f1e12]: Full name
+          - generic [ref=f1e13]:
+            - textbox "Jane Doe" [ref=f1e14]
+            - generic [ref=f1e15]: 
+        - generic [ref=f1e17]:
+          - generic [ref=f1e18]: Email address
+          - generic [ref=f1e19]:
+            - textbox "you@example.com" [ref=f1e20]
+            - generic [ref=f1e21]: 
+        - generic [ref=f1e23]:
+          - generic [ref=f1e24]:
+            - generic [ref=f1e25]: Password
+            - generic [ref=f1e26]:
+              - textbox "Min 6 characters" [ref=f1e27]
+              - generic [ref=f1e28]: 
+          - generic [ref=f1e30]:
+            - generic [ref=f1e31]: Confirm password
+            - generic [ref=f1e32]:
+              - textbox "Repeat password" [ref=f1e33]
+              - generic [ref=f1e34]: 
+        - button " Create account" [ref=f1e36] [cursor=pointer]:
+          - generic [ref=f1e37]: 
+          - text: Create account
+      - link " Already have an account? Sign in" [ref=f1e39] [cursor=pointer]:
+        - /url: /users/login
+        - generic [ref=f1e40]: 
+        - text: Already have an account? Sign in

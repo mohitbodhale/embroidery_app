@@ -1,0 +1,179 @@
+- generic [ref=f77e2]:
+  - navigation [ref=f77e3]:
+    - list [ref=f77e4]:
+      - listitem [ref=f77e5]:
+        - button "" [ref=f77e6] [cursor=pointer]
+      - listitem [ref=f77e8]:
+        - link "Embroidery System" [ref=f77e9] [cursor=pointer]:
+          - /url: /jobs
+    - list [ref=f77e10]:
+      - listitem [ref=f77e11]:
+        - button " Test Production" [ref=f77e12] [cursor=pointer]:
+          - generic [ref=f77e13]: 
+          - generic [ref=f77e14]: Test Production
+        - text: 
+  - generic [ref=f77e15]:
+    - complementary [ref=f77e16]:
+      - link "Embroidery" [ref=f77e17] [cursor=pointer]:
+        - /url: /jobs
+      - navigation [ref=f77e21]:
+        - menu [ref=f77e22]:
+          - listitem [ref=f77e23]:
+            - link " Production Queue" [ref=f77e24] [cursor=pointer]:
+              - /url: /jobs
+              - generic [ref=f77e25]: 
+              - paragraph [ref=f77e26]: Production Queue
+          - listitem [ref=f77e27]:
+            - link " Attachments" [ref=f77e28] [cursor=pointer]:
+              - /url: /job-attachments
+              - generic [ref=f77e29]: 
+              - paragraph [ref=f77e30]: Attachments
+          - listitem [ref=f77e31]:
+            - link " Logout" [ref=f77e32] [cursor=pointer]:
+              - /url: /users/logout
+              - generic [ref=f77e33]: 
+              - paragraph [ref=f77e34]: Logout
+    - generic [ref=f77e35]:
+      - generic [ref=f77e38]:
+        - heading " JOB_2026_006 · Scheduler Attachment Test" [level=1] [ref=f77e40]:
+          - generic [ref=f77e41]: 
+          - text: JOB_2026_006 · Scheduler Attachment Test
+        - list [ref=f77e43]:
+          - listitem [ref=f77e44]:
+            - link "" [ref=f77e45] [cursor=pointer]:
+              - /url: /jobs
+          - listitem [ref=f77e47]: / JOB_2026_006 · Scheduler Attachment Test
+      - generic [ref=f77e49]:
+        - generic [ref=f77e51]:
+          - generic [ref=f77e52]:
+            - generic [ref=f77e53]: Status
+            - generic [ref=f77e54]: QC Approved
+            - generic [ref=f77e55]: Created Sep 02, 2026
+          - generic [ref=f77e56]:
+            - term [ref=f77e57]: Job number
+            - definition [ref=f77e58]: JOB_2026_006
+            - term [ref=f77e59]: Title
+            - definition [ref=f77e60]: Scheduler Attachment Test
+            - term [ref=f77e61]: Digitizer
+            - definition [ref=f77e62]:
+              - generic [ref=f77e63]: 
+              - text: Test Digitizer
+            - term [ref=f77e64]: Quality checker
+            - definition [ref=f77e65]:
+              - generic [ref=f77e66]: 
+              - text: Test QC
+            - term [ref=f77e67]: Organization
+            - definition [ref=f77e68]:
+              - generic [ref=f77e69]: 
+              - text: Default Company
+            - term [ref=f77e70]: Scheduled date
+            - definition [ref=f77e71]:
+              - generic [ref=f77e72]: 
+              - text: Sep 08, 2026
+          - generic [ref=f77e73]:
+            - generic [ref=f77e74]:
+              - strong [ref=f77e75]:
+                - generic [ref=f77e76]: 
+                - text: Attachments
+              - link "+ Add file" [ref=f77e77] [cursor=pointer]:
+                - /url: /job-attachments/add?job_id=8&redirect=%2Fjobs%2Fview%2F8
+                - generic [ref=f77e78]: +
+                - text: Add file
+            - table [ref=f77e80]:
+              - rowgroup [ref=f77e81]:
+                - row [ref=f77e82]:
+                  - columnheader "File" [ref=f77e83]
+                  - columnheader "Type" [ref=f77e84]
+                  - columnheader "Size" [ref=f77e85]
+                  - columnheader "Uploaded" [ref=f77e86]
+                  - columnheader "Actions" [ref=f77e87]
+              - rowgroup [ref=f77e88]:
+                - row [ref=f77e89]:
+                  - cell [ref=f77e90]:
+                    - link " test_upload.txt" [ref=f77e91] [cursor=pointer]:
+                      - /url: /uploads/attachments/8/d1abcc55b6383448.txt
+                      - generic [ref=f77e92]: 
+                      - text: test_upload.txt
+                  - cell "DESIGN REF" [ref=f77e93]
+                  - cell "17 Bytes" [ref=f77e95]
+                  - cell "Sep 02, 2026 17:20" [ref=f77e96]
+                  - cell [ref=f77e97]:
+                    - generic [ref=f77e98]:
+                      - link "" [ref=f77e99] [cursor=pointer]:
+                        - /url: /job-attachments/download/2
+                      - button "" [ref=f77e102] [cursor=pointer]
+          - generic [ref=f77e104]:
+            - strong [ref=f77e105]:
+              - generic [ref=f77e106]: 
+              - text: Activity log
+            - table [ref=f77e108]:
+              - rowgroup [ref=f77e109]:
+                - row [ref=f77e110]:
+                  - columnheader "Action" [ref=f77e111]
+                  - columnheader "Details" [ref=f77e112]
+                  - columnheader "User" [ref=f77e113]
+                  - columnheader "When" [ref=f77e114]
+              - rowgroup [ref=f77e115]:
+                - row [ref=f77e116]:
+                  - cell "Note" [ref=f77e117]
+                  - cell "Digitizer started working on this job" [ref=f77e119]
+                  - cell "System" [ref=f77e120]
+                  - cell "Sep 02, 17:30" [ref=f77e121]
+                - row [ref=f77e122]:
+                  - cell "Submitted For Qc" [ref=f77e123]
+                  - cell "EMB file submitted for QC review." [ref=f77e125]
+                  - cell "System" [ref=f77e126]
+                  - cell "Sep 02, 17:31" [ref=f77e127]
+                - row [ref=f77e128]:
+                  - cell "Note" [ref=f77e129]
+                  - cell "QC reviewed the job - looks good" [ref=f77e131]
+                  - cell "System" [ref=f77e132]
+                  - cell "Sep 02, 17:32" [ref=f77e133]
+                - row [ref=f77e134]:
+                  - cell "Approved" [ref=f77e135]
+                  - cell "Approved by QC" [ref=f77e137]
+                  - cell "System" [ref=f77e138]
+                  - cell "Sep 02, 17:33" [ref=f77e139]
+          - generic [ref=f77e140]:
+            - heading " Add note" [level=3] [ref=f77e142]:
+              - generic [ref=f77e143]: 
+              - text: Add note
+            - generic [ref=f77e146]:
+              - generic [ref=f77e147]:
+                - generic [ref=f77e148]: Comment
+                - textbox "Add a note about this job..." [ref=f77e149]
+              - button " Save note" [ref=f77e151] [cursor=pointer]:
+                - generic [ref=f77e152]: 
+                - text: Save note
+        - generic [ref=f77e153]:
+          - generic [ref=f77e154]:
+            - generic [ref=f77e155]: 
+            - text: Production action
+          - button " Start Production" [ref=f77e157] [cursor=pointer]:
+            - generic [ref=f77e158]: 
+            - text: Start Production
+        - generic [ref=f77e159]:
+          - link " Back to jobs" [ref=f77e160] [cursor=pointer]:
+            - /url: /jobs
+            - generic [ref=f77e161]: 
+            - text: Back to jobs
+          - generic [ref=f77e162]:
+            - link " Edit" [ref=f77e163] [cursor=pointer]:
+              - /url: /jobs/edit/8
+              - generic [ref=f77e164]: 
+              - text: Edit
+            - button " Delete" [ref=f77e166] [cursor=pointer]:
+              - generic [ref=f77e167]: 
+              - text: Delete
+  - contentinfo [ref=f77e168]:
+    - generic [ref=f77e170]:
+      - generic [ref=f77e171]:
+        - strong [ref=f77e172]: Embroidery System
+        - generic [ref=f77e173]: · Production workflow
+      - generic [ref=f77e174]:
+        - generic [ref=f77e175]:
+          - generic [ref=f77e176]: 
+          - generic [ref=f77e177]: v1.0.0
+        - button " Automatic testing" [ref=f77e178] [cursor=pointer]:
+          - generic [ref=f77e179]: 
+          - generic [ref=f77e180]: Automatic testing
