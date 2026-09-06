@@ -93,13 +93,19 @@ class UsersController extends AppController
             return $response;
         }
         $user = $this->Users->newEmptyEntity();
+        $organizations = $this->Users->Organizations->find('list', limit: 200)->all();
+        $roles = $this->fetchTable('Roles')->find()
+            ->where(['is_active' => true])
+            ->orderBy(['sort_order' => 'ASC', 'label' => 'ASC'])
+            ->all()
+            ->combine('name', 'label')
+            ->toArray();
+
         if ($this->request->is('post')) {
             $data = $this->request->getData();
             if (($data['password'] ?? '') !== ($data['password_confirm'] ?? '')) {
                 $this->Flash->error(__('Password confirmation does not match.'));
-                $this->set(compact('user'));
-                $organizations = $this->Users->Organizations->find('list', limit: 200)->all();
-                $this->set(compact('organizations'));
+                $this->set(compact('user', 'organizations', 'roles'));
                 return null;
             }
             $currentUser = $this->getCurrentUser();
@@ -114,8 +120,7 @@ class UsersController extends AppController
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
-        $organizations = $this->Users->Organizations->find('list', limit: 200)->all();
-        $this->set(compact('user', 'organizations'));
+        $this->set(compact('user', 'organizations', 'roles'));
     }
 
     /**
@@ -132,6 +137,12 @@ class UsersController extends AppController
         }
         $user = $this->Users->get($id, contain: []);
         $organizations = $this->Users->Organizations->find('list', limit: 200)->all();
+        $roles = $this->fetchTable('Roles')->find()
+            ->where(['is_active' => true])
+            ->orderBy(['sort_order' => 'ASC', 'label' => 'ASC'])
+            ->all()
+            ->combine('name', 'label')
+            ->toArray();
         
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
@@ -140,25 +151,27 @@ class UsersController extends AppController
             if (!empty($data['password'])) {
                 if (empty($data['password_confirm'])) {
                     $this->Flash->error(__('Please confirm the new password.'));
-                    $this->set(compact('user', 'organizations'));
+                    $this->set(compact('user', 'organizations', 'roles'));
                     return;
                 }
                 if ($data['password'] !== $data['password_confirm']) {
                     $this->Flash->error(__('Password and confirmation do not match.'));
-                    $this->set(compact('user', 'organizations'));
+                    $this->set(compact('user', 'organizations', 'roles'));
                     return;
                 }
                 if (strlen($data['password']) < 6) {
                     $this->Flash->error(__('Password must be at least 6 characters.'));
-                    $this->set(compact('user', 'organizations'));
+                    $this->set(compact('user', 'organizations', 'roles'));
                     return;
                 }
             }
             
+            // Clear password fields if password is empty (keep existing password)
             if (empty($data['password'])) {
                 unset($data['password']);
             }
             unset($data['password_confirm']);
+            
             $user = $this->Users->patchEntity($user, $data);
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
@@ -167,7 +180,7 @@ class UsersController extends AppController
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
-        $this->set(compact('user', 'organizations'));
+        $this->set(compact('user', 'organizations', 'roles'));
     }
 
     public function resetPassword($id = null)

@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200" width="600" height="200" role="img" aria-label="TrackBridge">
+  <defs>
+    <linearGradient id="bgGradH" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d6efd"/>
+      <stop offset="55%" stop-color="#0a58ca"/>
+      <stop offset="100%" stop-color="#084298"/>
+    </linearGradient>
+    <linearGradient id="arcGradH" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="50%" stop-color="#0dcaf0"/>
+      <stop offset="100%" stop-color="#0d6efd"/>
+    </linearGradient>
+    <linearGradient id="trackGradH" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="10" y="10" width="180" height="180" rx="40" fill="url(#bgGradH)"/>
+
+  <circle cx="160" cy="40" r="50" fill="rgba(255,255,255,0.10)"/>
+  <circle cx="40" cy="170" r="60" fill="rgba(34,211,238,0.18)"/>
+
+  <g stroke-linecap="round" fill="none">
+    <path d="M 40 130 Q 100 60 160 130" stroke="url(#arcGradH)" stroke-width="6"/>
+    <path d="M 40 130 Q 100 70 160 130" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+  </g>
+
+  <g fill="#ffffff">
+    <rect x="42" y="128" width="9" height="36" rx="2"/>
+    <rect x="149" y="128" width="9" height="36" rx="2"/>
+  </g>
+
+  <g>
+    <rect x="35" y="144" width="130" height="7" rx="3.5" fill="#ffffff"/>
+    <rect x="35" y="144" width="130" height="7" rx="3.5" fill="url(#trackGradH)" opacity="0.35"/>
+    <g fill="#0a58ca">
+      <rect x="48"  y="153" width="2.5" height="6" rx="1.25"/>
+      <rect x="64"  y="153" width="2.5" height="6" rx="1.25"/>
+      <rect x="80"  y="153" width="2.5" height="6" rx="1.25"/>
+      <rect x="96"  y="153" width="2.5" height="6" rx="1.25"/>
+      <rect x="112" y="153" width="2.5" height="6" rx="1.25"/>
+      <rect x="128" y="153" width="2.5" height="6" rx="1.25"/>
+      <rect x="144" y="153" width="2.5" height="6" rx="1.25"/>
+    </g>
+  </g>
+
+  <g stroke="rgba(255,255,255,0.55)" stroke-width="1.2" fill="none">
+    <line x1="40"  y1="130" x2="100" y2="100"/>
+    <line x1="100" y1="100" x2="160" y2="130"/>
+  </g>
+
+  <g>
+    <circle cx="100" cy="135" r="6" fill="#ffffff"/>
+    <circle cx="100" cy="135" r="6" fill="none" stroke="#22d3ee" stroke-width="1.5" opacity="0.6"/>
+    <circle cx="100" cy="135" r="2.5" fill="#0a58ca"/>
+  </g>
+
+  <g font-family="'Segoe UI', Roboto, system-ui, sans-serif" fill="#0f172a">
+    <text x="220" y="115" font-size="56" font-weight="800" letter-spacing="2">TrackBridge</text>
+    <text x="222" y="148" font-size="14" font-weight="500" letter-spacing="6" fill="#0d6efd">SCHEDULE &#8226; WORK &#8226; QC</text>
+  </g>
+</svg>

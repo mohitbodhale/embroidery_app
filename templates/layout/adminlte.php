@@ -78,7 +78,6 @@ $isAuthPage = ($controller === 'Users' && in_array($action, ['login','register',
         /* Slim body for auth pages — removes body padding, hides scrollbar */
         body.auth-page {
             overflow: hidden;
-            background: linear-gradient(135deg, #eef3fb 0%, #f4f6f9 60%, #e7eef9 100%);
         }
     </style>
 </head>
@@ -98,7 +97,8 @@ $isAuthPage = ($controller === 'Users' && in_array($action, ['login','register',
             </li>
             <li class="nav-item d-none d-sm-inline-block">
                 <a href="<?= $this->Url->build(['controller' => 'Jobs', 'action' => 'index']) ?>" class="nav-link brand-text-nav">
-                    Embroidery System
+                    <strong>TrackBridge</strong>
+                    <span class="text-muted small ms-1">Job &middot; Workflow &middot; QC</span>
                 </a>
             </li>
         </ul>
@@ -135,10 +135,11 @@ $isAuthPage = ($controller === 'Users' && in_array($action, ['login','register',
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="<?= $this->Url->build(['controller' => 'Jobs', 'action' => 'index']) ?>" class="brand-link d-flex align-items-center">
-                <div class="brand-image" style="width: 50px; height: 50px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
-                    <i class="fas fa-stitches fa-2x" style="color: white;"></i>
-                </div>
-                <span class="brand-text fw-light">Embroidery</span>
+                <img src="<?= $this->Url->build('/img/brand-logo.svg') ?>" alt="TrackBridge" class="brand-image brand-image-logo" />
+                <span class="brand-text fw-light">
+                    TrackBridge
+                    <small class="d-block brand-slogan">Job &middot; Workflow &middot; QC</small>
+                </span>
             </a>
 
             <!-- Sidebar -->
@@ -276,23 +277,19 @@ $isAuthPage = ($controller === 'Users' && in_array($action, ['login','register',
             <!-- Content Header (Page header) -->
             <div class="content-header">
                 <div class="container-fluid">
-                    <div class="row align-items-center">
-                        <div class="col-sm-6">
-                            <h1 class="page-title m-0">
-                                <i class="fas fa-home me-2"></i><?= $this->fetch('title') ?: 'Dashboard' ?>
-                            </h1>
-                        </div>
-                        <div class="col-sm-6">
-                            <?php
-                                $homeTarget = ($role === 'admin')
-                                    ? ['controller' => 'Pages', 'action' => 'adminDashboard']
-                                    : ['controller' => 'Jobs', 'action' => 'index'];
-                            ?>
-                            <ol class="breadcrumb float-sm-end mb-0">
-                                <li class="breadcrumb-item"><a href="<?= $this->Url->build($homeTarget) ?>"><i class="fas fa-home"></i></a></li>
-                                <li class="breadcrumb-item active"><?= h($this->fetch('title') ?: 'Dashboard') ?></li>
-                            </ol>
-                        </div>
+                    <div class="d-flex align-items-center justify-content-end">
+                        <?php
+                            $homeTarget = ($role === 'admin')
+                                ? ['controller' => 'Pages', 'action' => 'adminDashboard']
+                                : ['controller' => 'Jobs', 'action' => 'index'];
+                            $pageIcon = $this->fetch('page_icon') ?: 'fas fa-home';
+                        ?>
+                        <ol class="breadcrumb float-sm-end mb-0">
+                            <li class="breadcrumb-item"><a href="<?= $this->Url->build($homeTarget) ?>"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item active">
+                                <i class="<?= h($pageIcon) ?> me-1"></i><?= h($this->fetch('title') ?: 'Dashboard') ?>
+                            </li>
+                        </ol>
                     </div>
                 </div>
             </div>
@@ -318,9 +315,8 @@ $isAuthPage = ($controller === 'Users' && in_array($action, ['login','register',
         <div class="container-fluid">
             <div class="footer-row">
                 <div class="footer-brand">
-                    <i class="fas fa-stitches me-2 text-primary"></i>
-                    <strong>Embroidery System</strong>
-                    <span class="d-none d-md-inline ms-1">&middot; Production workflow</span>
+                    <img src="<?= $this->Url->build('/img/brand-logo.svg') ?>" alt="TrackBridge" class="footer-brand-logo" />
+                    <span><strong>TrackBridge</strong> &middot; <span class="text-muted">From job upload to QC sign-off — one workflow.</span></span>
                 </div>
                 <div class="footer-actions">
                     <span class="version-badge d-none d-sm-inline-flex">

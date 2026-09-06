@@ -1,109 +1,125 @@
 <?php /** @var \App\View\AppView $this */ $this->assign('title', 'Create account'); ?>
-<div class="auth-page">
-    <aside class="auth-aside">
-        <div class="auth-aside-inner">
-            <a href="<?= $this->Url->build('/') ?>" class="auth-aside-brand">
-                <span class="auth-aside-logo"><i class="fas fa-stitches"></i></span>
-                <span>Embroidery</span>
-            </a>
-            <h2 class="auth-aside-title">Join your production team.</h2>
-            <p class="auth-aside-text">
-                Create your account and an administrator will assign the role that matches your work — scheduler, digitizer, QC or production.
-            </p>
-            <ul class="auth-aside-features">
-                <li><i class="fas fa-shield-alt"></i> Secure password hashing</li>
-                <li><i class="fas fa-user-check"></i> Admin-approved role assignment</li>
-                <li><i class="fas fa-bolt"></i> Instant access after approval</li>
-            </ul>
-            <div class="auth-aside-foot">
-                <span>&copy; <?= date('Y') ?> Embroidery System</span>
-                <span>v1.0.0</span>
-            </div>
+<div class="auth-page auth-page-centered auth-page-fit">
+    <!-- 3D floating elements -->
+    <div class="auth-3d-elements" aria-hidden="true">
+        <div class="auth-3d-cube">
+            <div class="cube-face face-1"></div>
+            <div class="cube-face face-2"></div>
+            <div class="cube-face face-3"></div>
+            <div class="cube-face face-4"></div>
         </div>
-    </aside>
+        <div class="auth-3d-prism">
+            <div class="prism-face f1"></div>
+            <div class="prism-face f2"></div>
+            <div class="prism-face f3"></div>
+        </div>
+        <div class="auth-3d-dots">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
 
-    <main class="auth-main">
-        <div class="auth-form-wrap">
-            <a href="<?= $this->Url->build('/') ?>" class="auth-mobile-brand">
-                <span class="auth-aside-logo"><i class="fas fa-stitches"></i></span>
-                <strong>Embroidery</strong>
-            </a>
+    <main class="auth-main auth-main-centered">
+        <div class="auth-card auth-card-narrow auth-card-elevated auth-card-center">
+            <div class="auth-card-brand">
+                <img src="<?= $this->Url->build('/img/brand-logo.svg') ?>" alt="TrackBridge" class="auth-brand-logo" />
+                <div class="auth-brand-text">
+                    <strong>TrackBridge</strong>
+                    <span class="auth-slogan">Job &middot; Workflow &middot; QC</span>
+                </div>
+            </div>
 
-            <h1 class="auth-title">Create your account</h1>
-            <p class="auth-sub">Fill in your details — an admin will assign your role.</p>
-
-            <?= $this->Flash->render() ?>
-            <?= $this->Form->create($user, ['class' => 'auth-form']) ?>
-
-                <div class="auth-field">
-                    <label>Full name</label>
-                    <div class="input-group">
-                        <?= $this->Form->control('name', [
-                            'class' => 'form-control',
-                            'placeholder' => 'Jane Doe',
-                            'required' => true,
-                            'label' => false,
-                            'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
-                        ]) ?>
-                        <span class="input-group-text"><i class="fas fa-user"></i></span>
-                    </div>
+            <div class="auth-card-body">
+                <div class="auth-icon-wrap">
+                    <i class="fas fa-user-plus"></i>
                 </div>
 
-                <div class="auth-field">
-                    <label>Email address</label>
-                    <div class="input-group">
-                        <?= $this->Form->control('email', [
-                            'class' => 'form-control',
-                            'type' => 'email',
-                            'placeholder' => 'you@example.com',
-                            'required' => true,
-                            'label' => false,
-                            'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
-                        ]) ?>
-                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                    </div>
-                </div>
+                <h1 class="auth-title">Create your account</h1>
+                <p class="auth-sub">Join TrackBridge — an admin will assign your role.</p>
 
-                <div class="row g-2">
-                    <div class="col-md-6 auth-field mb-0">
-                        <label>Password</label>
-                        <div class="input-group">
-                            <?= $this->Form->control('password', [
-                                'class' => 'form-control',
-                                'type' => 'password',
-                                'placeholder' => 'Min 6 characters',
+                <?= $this->Flash->render() ?>
+
+                <?= $this->Form->create($user ?? null, ['class' => 'auth-form']) ?>
+
+                    <div class="auth-field">
+                        <label class="auth-label" for="name">Full name</label>
+                        <div class="input-group auth-input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <?= $this->Form->control('name', [
+                                'class' => 'form-control auth-input',
+                                'placeholder' => 'Jane Doe',
                                 'required' => true,
                                 'label' => false,
                                 'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
                             ]) ?>
-                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
                         </div>
                     </div>
-                    <div class="col-md-6 auth-field mb-0">
-                        <label>Confirm password</label>
-                        <div class="input-group">
-                            <?= $this->Form->control('password_confirm', [
-                                'class' => 'form-control',
-                                'type' => 'password',
-                                'placeholder' => 'Repeat password',
+
+                    <div class="auth-field">
+                        <label class="auth-label" for="email">Email address</label>
+                        <div class="input-group auth-input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <?= $this->Form->control('email', [
+                                'class' => 'form-control auth-input',
+                                'type' => 'email',
+                                'placeholder' => 'you@example.com',
                                 'required' => true,
                                 'label' => false,
                                 'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
                             ]) ?>
-                            <span class="input-group-text"><i class="fas fa-shield-alt"></i></span>
                         </div>
                     </div>
+
+                    <div class="row g-2">
+                        <div class="col-md-6 auth-field mb-0">
+                            <label class="auth-label" for="password">Password</label>
+                            <div class="input-group auth-input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <?= $this->Form->control('password', [
+                                    'class' => 'form-control auth-input',
+                                    'type' => 'password',
+                                    'placeholder' => 'Min 6 characters',
+                                    'required' => true,
+                                    'label' => false,
+                                    'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
+                                ]) ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6 auth-field mb-0">
+                            <label class="auth-label" for="password_confirm">Confirm password</label>
+                            <div class="input-group auth-input-group">
+                                <span class="input-group-text"><i class="fas fa-shield-alt"></i></span>
+                                <?= $this->Form->control('password_confirm', [
+                                    'class' => 'form-control auth-input',
+                                    'type' => 'password',
+                                    'placeholder' => 'Repeat password',
+                                    'required' => true,
+                                    'label' => false,
+                                    'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
+                                ]) ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="auth-foot mt-3">
+                        <button class="btn btn-primary w-100 btn-auth" type="submit">
+                            <i class="fas fa-paper-plane me-2"></i>Create account
+                        </button>
+                    </div>
+                <?= $this->Form->end() ?>
+
+                <div class="auth-divider"><span>or</span></div>
+
+                <div class="auth-foot mt-2">
+                    <?= $this->Html->link('<i class="fas fa-arrow-left me-1"></i> Already have an account? Sign in', ['action' => 'login'], ['escape' => false]) ?>
                 </div>
+            </div>
 
-                <?= $this->Form->button('<i class="fas fa-paper-plane me-2"></i>Create account', [
-                    'class' => 'btn btn-primary w-100 btn-auth mt-4',
-                    'type' => 'submit',
-                    'escapeTitle' => false,
-                ]) ?>
-            <?= $this->Form->end() ?>
-
-            <div class="auth-foot">
-                <?= $this->Html->link('<i class="fas fa-arrow-left me-1"></i> Already have an account? Sign in', ['action' => 'login'], ['escape' => false]) ?>
+            <div class="auth-card-footer">
+                <span class="auth-copy">&copy; <?= date('Y') ?> TrackBridge</span>
+                <span class="auth-divider-inline">·</span>
+                <span class="auth-slogan">Job &middot; Workflow &middot; QC</span>
+                <span class="auth-divider-inline">·</span>
+                <?= $this->Html->link('<i class="fas fa-house me-1"></i> Home', ['controller' => 'Pages', 'action' => 'welcome'], ['escape' => false, 'class' => 'auth-home-link']) ?>
             </div>
         </div>
     </main>

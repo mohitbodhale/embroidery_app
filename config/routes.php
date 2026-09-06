@@ -55,8 +55,11 @@ return function (RouteBuilder $routes): void {
          * its action called 'display', and we pass a param to select the view file
          * to use (in this case, templates/Pages/home.php)...
          */
-        // Default root: role-aware dashboard for the signed-in user
+        // Default root: role-aware dashboard for the signed-in user,
+        // and the public TrackBridge welcome page otherwise.
         $builder->connect('/', ['controller' => 'Pages', 'action' => 'dashboard']);
+        $builder->connect('/welcome', ['controller' => 'Pages', 'action' => 'welcome']);
+        $builder->connect('/pages/welcome', ['controller' => 'Pages', 'action' => 'welcome']);
         $builder->connect('/pages/admin-dashboard', ['controller' => 'Pages', 'action' => 'adminDashboard']);
 
         /*

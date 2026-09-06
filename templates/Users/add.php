@@ -64,7 +64,7 @@ $this->assign('title', 'Create user');
         <div class="mb-4">
             <label>Role</label>
             <?= $this->Form->control('role', [
-                'options' => [
+                'options' => $roles ?? [
                     'scheduler' => 'Scheduler',
                     'digitizer' => 'Digitizer',
                     'quality_checker' => 'Quality Checker (QC)',

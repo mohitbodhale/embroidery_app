@@ -3,6 +3,7 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\User $user
  * @var string[]|\Cake\Collection\CollectionInterface $organizations
+ * @var string[]|\Cake\Collection\CollectionInterface $roles
  */
 $this->assign('title', 'Edit user ' . $user->name);
 ?>
@@ -59,7 +60,7 @@ $this->assign('title', 'Edit user ' . $user->name);
             <div class="col-md-6 mb-3">
                 <label>Role</label>
                 <?= $this->Form->control('role', [
-                    'options' => [
+                    'options' => $roles ?? [
                         'pending' => 'Pending — no access',
                         'scheduler' => 'Scheduler',
                         'digitizer' => 'Digitizer',

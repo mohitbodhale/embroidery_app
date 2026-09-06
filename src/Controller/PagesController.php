@@ -72,14 +72,15 @@ class PagesController extends AppController
     }
 
     /**
-     * Role-aware landing page shown at "/".
-     * Shows a different dashboard per role (admin / scheduler / digitizer / QC / production).
+     * Public landing page shown at "/".
+     * Logged-out visitors see the TrackBridge welcome page.
+     * Logged-in users are routed to their role-aware dashboard.
      */
     public function dashboard()
     {
         $user = $this->getCurrentUser();
         if (!$user) {
-            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+            return $this->redirect(['action' => 'welcome']);
         }
         $role = strtolower((string)($user->role ?? ''));
         if ($role === 'admin') {
@@ -117,6 +118,21 @@ class PagesController extends AppController
             ->all();
 
         $this->set(compact('role', 'counts', 'myCount', 'recent', 'user'));
+    }
+
+    /**
+     * Public welcome / landing page. Renders the marketing/home view
+     * (templates/Pages/home.php) using a standalone layout so it does
+     * not include the dashboard chrome.
+     */
+    public function welcome()
+    {
+        $this->viewBuilder()->setLayout('welcome_public');
+        $this->viewBuilder()->setTemplate('home');
+
+        $currentUser = $this->getCurrentUser();
+        $this->set('currentUser', $currentUser);
+        $this->set('loggedIn', (bool) $currentUser);
     }
 
     /**

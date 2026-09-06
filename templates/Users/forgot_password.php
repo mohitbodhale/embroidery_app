@@ -4,44 +4,89 @@
  */
 $this->assign('title', 'Forgot Password');
 ?>
-<div class="auth-page auth-page-fit">
-    <aside class="auth-aside">
-        <div class="auth-aside-inner">
-            <a href="<?= $this->Url->build('/') ?>" class="auth-aside-brand">
-                <span class="auth-aside-logo"><i class="fas fa-stitches"></i></span>
-                <strong>Embroidery</strong>
-            </a>
+<div class="auth-page auth-page-centered">
+    <!-- 3D floating elements -->
+    <div class="auth-3d-elements" aria-hidden="true">
+        <div class="auth-3d-cube">
+            <div class="cube-face face-1"></div>
+            <div class="cube-face face-2"></div>
+            <div class="cube-face face-3"></div>
+            <div class="cube-face face-4"></div>
         </div>
-    </aside>
-    <main class="auth-main">
-        <div class="auth-card">
-            <div class="auth-card-header">
-                <h1 class="auth-title">Forgot password?</h1>
-                <p class="auth-sub">Enter your email and we'll send you a reset link.</p>
+        <div class="auth-3d-prism">
+            <div class="prism-face f1"></div>
+            <div class="prism-face f2"></div>
+            <div class="prism-face f3"></div>
+        </div>
+        <div class="auth-3d-dots">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+
+    <main class="auth-main auth-main-centered">
+        <div class="auth-card auth-card-narrow auth-card-elevated">
+            <div class="auth-card-brand">
+                <img src="<?= $this->Url->build('/img/brand-logo.svg') ?>" alt="TrackBridge" class="auth-brand-logo" />
+                <div class="auth-brand-text">
+                    <strong>TrackBridge</strong>
+                    <span class="auth-slogan">Job &middot; Workflow &middot; QC</span>
+                </div>
             </div>
 
-            <?= $this->Flash->render() ?>
-
-            <?= $this->Form->create(null, ['class' => 'auth-form']) ?>
-                <div class="auth-field">
-                    <label class="auth-label" for="email">Email</label>
-                    <?= $this->Form->control('email', [
-                        'class' => 'auth-input',
-                        'label' => false,
-                        'placeholder' => 'you@example.com',
-                        'required' => true,
-                    ]) ?>
+            <div class="auth-card-body">
+                <div class="auth-icon-wrap">
+                    <i class="fas fa-lock"></i>
                 </div>
+
+                <h1 class="auth-title">Forgot your password?</h1>
+                <p class="auth-sub">Enter the email address associated with your account and we'll send you a secure link to reset your password.</p>
+
+                <?= $this->Flash->render() ?>
+
+                <?= $this->Form->create(null, ['class' => 'auth-form']) ?>
+                    <div class="auth-field">
+                        <label class="auth-label" for="email">Email address</label>
+                        <div class="input-group auth-input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <?= $this->Form->control('email', [
+                                'class' => 'form-control auth-input',
+                                'placeholder' => 'you@example.com',
+                                'required' => true,
+                                'autofocus' => true,
+                                'label' => false,
+                                'templates' => [
+                                    'inputContainer' => '{{content}}',
+                                    'inputContainerError' => '{{content}}{{error}}',
+                                ],
+                            ]) ?>
+                        </div>
+                    </div>
+
+                    <div class="auth-foot">
+                        <button class="btn btn-primary w-100 btn-auth" type="submit">
+                            <i class="fas fa-paper-plane me-2"></i>Send Reset Link
+                        </button>
+                    </div>
+                <?= $this->Form->end() ?>
+
+                <div class="auth-divider"><span>or</span></div>
 
                 <div class="auth-foot">
-                    <button class="btn btn-primary w-100 btn-auth" type="submit">
-                        <i class="fas fa-paper-plane me-2"></i>Send Reset Link
-                    </button>
+                    <?= $this->Html->link('<i class="fas fa-arrow-left me-1"></i> Back to sign in', ['action' => 'login'], ['escape' => false]) ?>
                 </div>
-            <?= $this->Form->end() ?>
 
-            <div class="auth-foot" style="margin-top: 20px;">
-                <?= $this->Html->link('<i class="fas fa-arrow-left me-1"></i> Back to login', ['action' => 'login'], ['escape' => false]) ?>
+                <div class="auth-help">
+                    <i class="fas fa-shield-halved me-1"></i>
+                    Reset links expire after 1 hour for security.
+                </div>
+            </div>
+
+            <div class="auth-card-footer">
+                <span class="auth-copy">&copy; <?= date('Y') ?> TrackBridge</span>
+                <span class="auth-divider-inline">·</span>
+                <span class="auth-slogan">Job &middot; Workflow &middot; QC</span>
+                <span class="auth-divider-inline">·</span>
+                <?= $this->Html->link('<i class="fas fa-house me-1"></i> Home', ['controller' => 'Pages', 'action' => 'welcome'], ['escape' => false, 'class' => 'auth-home-link']) ?>
             </div>
         </div>
     </main>
