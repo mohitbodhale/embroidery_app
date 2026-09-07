@@ -568,7 +568,7 @@ class UsersController extends AppController
             }
             
             $this->Flash->success(__('If an account exists with that email, a password reset link has been sent.'));
-            return $this->redirect(['action' => 'login']);
+            return $this->redirect(['action' => 'resetWithToken']);
         }
     }
 

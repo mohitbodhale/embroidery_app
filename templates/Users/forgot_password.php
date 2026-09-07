@@ -5,24 +5,6 @@
 $this->assign('title', 'Forgot Password');
 ?>
 <div class="auth-page auth-page-centered">
-    <!-- 3D floating elements -->
-    <div class="auth-3d-elements" aria-hidden="true">
-        <div class="auth-3d-cube">
-            <div class="cube-face face-1"></div>
-            <div class="cube-face face-2"></div>
-            <div class="cube-face face-3"></div>
-            <div class="cube-face face-4"></div>
-        </div>
-        <div class="auth-3d-prism">
-            <div class="prism-face f1"></div>
-            <div class="prism-face f2"></div>
-            <div class="prism-face f3"></div>
-        </div>
-        <div class="auth-3d-dots">
-            <span></span><span></span><span></span>
-        </div>
-    </div>
-
     <main class="auth-main auth-main-centered">
         <div class="auth-card auth-card-narrow auth-card-elevated">
             <div class="auth-card-brand">
@@ -67,26 +49,28 @@ $this->assign('title', 'Forgot Password');
                             <i class="fas fa-paper-plane me-2"></i>Send Reset Link
                         </button>
                     </div>
+
+                    <div class="auth-divider"><span>or</span></div>
+
+                    <div class="auth-foot">
+                        <a href="<?= $this->Url->build(['action' => 'login']) ?>" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Back to Sign In
+                        </a>
+                    </div>
+
+                    <div class="auth-help">
+                        <i class="fas fa-shield-halved me-1"></i>
+                        Reset links expire after 1 hour for security.
+                    </div>
                 <?= $this->Form->end() ?>
 
-                <div class="auth-divider"><span>or</span></div>
-
-                <div class="auth-foot">
-                    <?= $this->Html->link('<i class="fas fa-arrow-left me-1"></i> Back to sign in', ['action' => 'login'], ['escape' => false]) ?>
+                <div class="auth-card-footer">
+                    <span class="auth-copy">© <?= date('Y') ?> TrackBridge</span>
+                    <span class="auth-divider-inline">·</span>
+                    <span class="auth-slogan">Job &middot; Workflow &middot; QC</span>
+                    <span class="auth-divider-inline">·</span>
+                    <a href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'welcome']) ?>" class="auth-home-link">Home</a>
                 </div>
-
-                <div class="auth-help">
-                    <i class="fas fa-shield-halved me-1"></i>
-                    Reset links expire after 1 hour for security.
-                </div>
-            </div>
-
-            <div class="auth-card-footer">
-                <span class="auth-copy">&copy; <?= date('Y') ?> TrackBridge</span>
-                <span class="auth-divider-inline">·</span>
-                <span class="auth-slogan">Job &middot; Workflow &middot; QC</span>
-                <span class="auth-divider-inline">·</span>
-                <?= $this->Html->link('<i class="fas fa-house me-1"></i> Home', ['controller' => 'Pages', 'action' => 'welcome'], ['escape' => false, 'class' => 'auth-home-link']) ?>
             </div>
         </div>
     </main>

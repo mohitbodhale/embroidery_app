@@ -27,9 +27,9 @@ class JobsController extends AppController
 
         $role = $this->normalizedRole($user);
         $userId = $user->id ?? null;
-        // if (!in_array($role, ['admin', 'scheduler', 'digitizer', 'quality_checker', 'production'], true)) {
-        //     return $this->redirect(['controller' => 'Users', 'action' => 'awaitingApproval']);
-        // }
+        if (!in_array($role, ['admin', 'scheduler', 'digitizer', 'quality_checker', 'production'], true)) {
+            return $this->redirect(['controller' => 'Users', 'action' => 'awaitingApproval']);
+        }
 
         $query = $this->Jobs->find('all', contain: ['Digitizers', 'Qcs', 'Organizations']);
 
