@@ -6,7 +6,7 @@
 $roleColors = [
     'admin' => 'danger',
     'scheduler' => 'primary',
-    'digitizer' => 'info',
+    'operator' => 'info',
     'quality_checker' => 'warning',
     'production' => 'success',
     'pending' => 'secondary',
@@ -68,6 +68,14 @@ $this->assign('title', $user->name);
                                     <span class="badge bg-<?= $cls ?>"><?= h(ucwords(str_replace('_', ' ', $user->role))) ?></span>
                                 </div>
                             </div>
+                            <?php if (!empty($user->user_detail->work_type_id)): ?>
+                            <div class="info-item">
+                                <div class="info-label">Work type</div>
+                                <div class="info-value">
+                                    <?= h($user->user_detail->work_type->label ?? '—') ?>
+                                </div>
+                            </div>
+                            <?php endif; ?>
                             <div class="info-item">
                                 <div class="info-label">Organization</div>
                                 <div class="info-value"><?= $user->hasValue('organization') ? h($user->organization->name) : '—' ?></div>

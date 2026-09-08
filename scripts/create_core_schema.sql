@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS jobs (
     instructions TEXT,
     status VARCHAR(32) NOT NULL DEFAULT 'draft',
     created_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
-    digitizer_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+    operator_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
     qc_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
     scheduled_date TIMESTAMP WITHOUT TIME ZONE,
     status_id INTEGER REFERENCES job_statuses(id) ON DELETE SET NULL,

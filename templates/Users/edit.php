@@ -57,13 +57,13 @@ $this->assign('title', 'Edit user ' . $user->name);
         </div>
 
         <div class="row">
-            <div class="col-md-6 mb-3">
+            <div class="col-md-4 mb-3">
                 <label>Role</label>
                 <?= $this->Form->control('role', [
                     'options' => $roles ?? [
                         'pending' => 'Pending — no access',
                         'scheduler' => 'Scheduler',
-                        'digitizer' => 'Digitizer',
+                        'operator' => 'Operator',
                         'quality_checker' => 'Quality Checker (QC)',
                         'production' => 'Production',
                         'admin' => 'Admin',
@@ -73,7 +73,7 @@ $this->assign('title', 'Edit user ' . $user->name);
                     'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
                 ]) ?>
             </div>
-            <div class="col-md-6 mb-3">
+            <div class="col-md-4 mb-3">
                 <label>Organization</label>
                 <?= $this->Form->control('organization_id', [
                     'options' => $organizations,

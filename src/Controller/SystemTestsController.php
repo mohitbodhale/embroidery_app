@@ -128,7 +128,7 @@ HTML;
         // 3. Test users exist with correct roles
         $check('Test users seeded', function () {
             $users = TableRegistry::getTableLocator()->get('Users');
-            $expected = ['admin','scheduler','digitizer','quality_checker','production'];
+            $expected = ['admin','scheduler','operator','quality_checker','production'];
             $found = $users->find()->all()->extract('role')->toList();
             $missing = array_diff($expected, $found);
             if ($missing) {
@@ -181,7 +181,7 @@ HTML;
         $roles = [
             'admin'          => ['Operations Dashboard','Create Job','Attachments','Activity Logs','Users','Create User'],
             'scheduler'      => ['Scheduling Board','Create Job','Attachments','Activity Logs'],
-            'digitizer'      => ['My Digitizing Queue'],
+            'operator'      => ['My Queue'],
             'quality_checker'=> ['QC Review Queue','Activity Logs'],
             'production'     => ['Production Queue'],
         ];
@@ -256,13 +256,13 @@ HTML;
     private function shouldShowLabel(string $role, string $label): bool
     {
         $map = [
-            'Operations Dashboard' => ['admin','scheduler','digitizer','quality_checker','production'],
+            'Operations Dashboard' => ['admin','scheduler','operator','quality_checker','production'],
             'Scheduling Board'     => ['scheduler'],
-            'My Digitizing Queue'  => ['digitizer'],
+            'My Queue'  => ['operator'],
             'QC Review Queue'      => ['quality_checker'],
             'Production Queue'     => ['production'],
             'Create Job'           => ['admin','scheduler'],
-            'Attachments'          => ['admin','scheduler','digitizer','production'],
+            'Attachments'          => ['admin','scheduler','operator','production'],
             'Activity Logs'        => ['admin','quality_checker','scheduler'],
             'Users'                => ['admin'],
             'Create User'          => ['admin'],

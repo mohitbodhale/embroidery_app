@@ -159,9 +159,9 @@ $isAuthPage = ($controller === 'Users' && in_array($action, ['login','register',
             $workspaceLabel = [
                 'admin' => 'Operations Dashboard',
                 'scheduler' => 'Scheduling Board',
-                'digitizer' => 'My Digitizing Queue',
-                'quality_checker' => 'QC Review Queue',
-                'production' => 'Production Queue',
+                'operator' => 'Jobs',
+                'quality_checker' => 'Jobs',
+                'production' => 'Jobs',
             ][$role] ?? 'Jobs';
             ?>
             <div class="sidebar">

@@ -2,7 +2,7 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Job $job
- * @var string[]|\Cake\Collection\CollectionInterface $digitizers
+ * @var string[]|\Cake\Collection\CollectionInterface $operators
  * @var string[]|\Cake\Collection\CollectionInterface $qcs
  * @var string[]|\Cake\Collection\CollectionInterface $organizations
  * @var string[]|\Cake\Collection\CollectionInterface $statuses
@@ -64,9 +64,9 @@ $this->assign('title', 'Edit job ' . $job->job_number);
                 ]) ?>
             </div>
             <div class="col-md-4 mb-3">
-                <label>Digitizer</label>
-                <?= $this->Form->control('digitizer_id', [
-                    'options' => $digitizers,
+                <label>Operator</label>
+                <?= $this->Form->control('operator_id', [
+                    'options' => $operators,
                     'empty' => 'Unassigned',
                     'class' => 'form-select',
                     'label' => false,
@@ -139,14 +139,14 @@ $this->assign('title', 'Edit job ' . $job->job_number);
                             <div class="row-actions">
                                 <a href="<?= $this->Url->build(['controller' => 'JobAttachments', 'action' => 'download', $att->id]) ?>" class="btn btn-icon btn-outline-info" title="Download"><i class="fas fa-download"></i></a>
                                 <?php if ($currentUser): ?>
-                                    <?php $canDelete = false; ?>
+                                    <?php $canDeleteAtt = false; ?>
                                     <?php $userRole = strtolower((string)($currentUser->role ?? '')); ?>
                                     <?php if (in_array($userRole, ['admin', 'scheduler'], true)): ?>
-                                        <?php $canDelete = true; ?>
+                                        <?php $canDeleteAtt = true; ?>
                                     <?php elseif ($att->uploaded_by == $currentUser->id): ?>
-                                        <?php $canDelete = true; ?>
+                                        <?php $canDeleteAtt = true; ?>
                                     <?php endif; ?>
-                                    <?php if ($canDelete): ?>
+                                    <?php if ($canDeleteAtt): ?>
                                         <form method="post" action="<?= $this->Url->build(['controller' => 'JobAttachments', 'action' => 'delete', $att->id]) ?>" style="display:inline" onsubmit="return confirm('Delete this file?')">
                                             <input type="hidden" name="_csrfToken" value="<?= h($this->request->getAttribute('csrfToken')) ?>">
                                             <button class="btn btn-icon btn-outline-danger" type="submit" title="Delete"><i class="fas fa-trash"></i></button>
@@ -162,6 +162,7 @@ $this->assign('title', 'Edit job ' . $job->job_number);
         </div>
         <?php endif; ?>
 
+        <?php if ($canAddAttachment): ?>
         <div class="row g-3">
             <div class="col-md-6">
                 <label>Add more files</label>
@@ -177,17 +178,20 @@ $this->assign('title', 'Edit job ' . $job->job_number);
                 <?= $this->Form->control('attachment_comments', ['class' => 'form-control', 'placeholder' => 'Any notes', 'label' => false, 'templates' => ['inputContainer' => '{{content}}']]) ?>
             </div>
         </div>
+        <?php endif; ?>
 
         <?= $this->Form->hidden('created_by') ?>
 
         <div class="form-actions">
             <?= $this->Html->link('<i class="fas fa-arrow-left me-1"></i>Back', ['action' => 'index'], ['class' => 'btn btn-outline-secondary', 'escape' => false]) ?>
             <div class="d-flex gap-2">
-                <?= $this->Form->postLink('<i class="fas fa-trash me-1"></i>Delete', ['action' => 'delete', $job->id], [
-                    'confirm' => __('Delete job # {0}?', $job->id),
-                    'class' => 'btn btn-outline-danger',
-                    'escape' => false,
-                ]) ?>
+                <?php if ($canDelete): ?>
+                    <?= $this->Form->postLink('<i class="fas fa-trash me-1"></i>Delete', ['action' => 'delete', $job->id], [
+                        'confirm' => __('Delete job # {0}?', $job->id),
+                        'class' => 'btn btn-outline-danger',
+                        'escape' => false,
+                    ]) ?>
+                <?php endif; ?>
                 <?= $this->Form->button('<i class="fas fa-save me-2"></i>Save changes', [
                     'class' => 'btn btn-primary',
                     'type' => 'submit',

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -54,6 +56,32 @@ class UsersTable extends Table
         }
     }
 
+    public function beforeDelete(\Cake\Event\EventInterface $event, \Cake\Datasource\EntityInterface $entity, \ArrayObject $options): void
+    {
+        $userId = $entity->id;
+        if (!$userId) {
+            return;
+        }
+
+        $connection = $this->getConnection();
+        $connection->transactional(function () use ($connection, $userId) {
+            $connection->execute('UPDATE jobs SET created_by = NULL WHERE created_by = :id', ['id' => $userId])->execute();
+            $connection->execute('UPDATE jobs SET operator_id = NULL WHERE operator_id = :id', ['id' => $userId])->execute();
+            $connection->execute('UPDATE jobs SET qc_id = NULL WHERE qc_id = :id', ['id' => $userId])->execute();
+            $connection->execute('UPDATE jobs SET assigned_to = NULL WHERE assigned_to = :id', ['id' => $userId])->execute();
+            $connection->execute('UPDATE jobs SET assigned_by = NULL WHERE assigned_by = :id', ['id' => $userId])->execute();
+
+            $connection->execute('UPDATE job_attachments SET uploaded_by = NULL WHERE uploaded_by = :id', ['id' => $userId])->execute();
+            $connection->execute('UPDATE job_logs SET user_id = NULL WHERE user_id = :id', ['id' => $userId])->execute();
+
+            $connection->execute('UPDATE job_assignments SET assigned_to = NULL WHERE assigned_to = :id', ['id' => $userId])->execute();
+            $connection->execute('UPDATE job_assignments SET assigned_by = NULL WHERE assigned_by = :id', ['id' => $userId])->execute();
+
+            $connection->execute('UPDATE job_qc_reviews SET qc_user_id = NULL WHERE qc_user_id = :id', ['id' => $userId])->execute();
+            $connection->execute('UPDATE job_qc_reviews SET assigned_to_user_id = NULL WHERE assigned_to_user_id = :id', ['id' => $userId])->execute();
+        });
+    }
+
     public function validationDefault(Validator $validator): Validator
     {
         $validator
@@ -77,7 +105,15 @@ class UsersTable extends Table
             ->scalar('role')
             ->requirePresence('role', 'create')
             ->notEmptyString('role')
-            ->inList('role', ['pending', 'admin', 'scheduler', 'digitizer', 'quality_checker', 'production']);
+            ->add('role', 'validRole', [
+                'rule' => function ($value) {
+                    if (empty($value)) {
+                        return false;
+                    }
+                    return $this->Roles->exists(['name' => (string)$value]);
+                },
+                'message' => 'The provided value must be a valid role.',
+            ]);
 
         $validator
             ->integer('organization_id')

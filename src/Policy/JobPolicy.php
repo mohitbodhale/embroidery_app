@@ -31,14 +31,16 @@ class JobPolicy
             return true;
         }
 
-        if ($role === 'digitizer') {
-            // Digitizer can edit only if assigned to job
-            return !empty($job) && ($job->digitizer_id == $userId);
+        if ($role === 'operator') {
+            return !empty($job) && ($job->operator_id == $userId) && in_array($job->status, ['in_digitizing', 'qc_rejected'], true);
         }
 
         if ($role === 'quality_checker') {
-            // QC can edit only if assigned to job (for adding attachments/notes)
-            return !empty($job) && ($job->qc_id == $userId);
+            return !empty($job) && ($job->qc_id == $userId) && ($job->status === 'digitized');
+        }
+
+        if ($role === 'production') {
+            return !empty($job) && ($job->status === 'in_production');
         }
 
         return false;
@@ -50,7 +52,17 @@ class JobPolicy
             return false;
         }
         $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
-        return $role === 'admin';
+        $userId = $user->id ?? ($user['id'] ?? null);
+
+        if ($role === 'admin') {
+            return true;
+        }
+
+        if ($role === 'scheduler') {
+            return !empty($job) && ($job->created_by == $userId);
+        }
+
+        return false;
     }
 
     public function canAssign($user, $job): bool
@@ -59,7 +71,7 @@ class JobPolicy
             return false;
         }
         $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
-        // Admins and schedulers can assign digitizers/qc
+        // Admins and schedulers can assign operators/qc
         return in_array($role, ['admin', 'scheduler'], true);
     }
 
@@ -81,7 +93,7 @@ class JobPolicy
         $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
         $userId = $user->id ?? ($user['id'] ?? null);
 
-        return $role === 'digitizer' && $job->digitizer_id == $userId;
+        return $role === 'operator' && $job->operator_id == $userId;
     }
 
     public function canProduce($user, $job): bool
@@ -104,8 +116,8 @@ class JobPolicy
         if (in_array($role, ['admin', 'scheduler', 'production'], true)) {
             return true;
         }
-        if ($role === 'digitizer') {
-            return $job->digitizer_id == $userId;
+        if ($role === 'operator') {
+            return $job->operator_id == $userId;
         }
         if ($role === 'quality_checker') {
             return $job->qc_id == $userId;

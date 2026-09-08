@@ -100,7 +100,7 @@ final class CreateCoreSchema extends BaseMigration
                 ->addColumn('instructions', 'text', ['null' => true])
                 ->addColumn('status', 'string', ['limit' => 32, 'null' => false, 'default' => 'draft'])
                 ->addColumn('created_by', 'integer', ['null' => true])
-                ->addColumn('digitizer_id', 'integer', ['null' => true])
+                ->addColumn('operator_id', 'integer', ['null' => true])
                 ->addColumn('qc_id', 'integer', ['null' => true])
                 ->addColumn('scheduled_date', 'datetime', ['null' => true])
                 ->addColumn('status_id', 'integer', ['null' => true])
@@ -116,7 +116,7 @@ final class CreateCoreSchema extends BaseMigration
             $this->table('jobs')
                 ->addForeignKey('organization_id', 'organizations', 'id', ['delete' => 'CASCADE', 'update' => 'NO_ACTION'])
                 ->addForeignKey('created_by', 'users', 'id', ['delete' => 'SET_NULL', 'update' => 'NO_ACTION'])
-                ->addForeignKey('digitizer_id', 'users', 'id', ['delete' => 'SET_NULL', 'update' => 'NO_ACTION'])
+                ->addForeignKey('operator_id', 'users', 'id', ['delete' => 'SET_NULL', 'update' => 'NO_ACTION'])
                 ->addForeignKey('qc_id', 'users', 'id', ['delete' => 'SET_NULL', 'update' => 'NO_ACTION'])
                 ->addForeignKey('status_id', 'job_statuses', 'id', ['delete' => 'SET_NULL', 'update' => 'NO_ACTION'])
                 ->update();

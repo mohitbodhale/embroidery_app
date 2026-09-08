@@ -78,7 +78,7 @@ class UsersController extends AppController
         if ($response = $this->requireAdmin()) {
             return $response;
         }
-        $user = $this->Users->get($id, contain: ['Organizations', 'JobLogs']);
+        $user = $this->Users->get($id, contain: ['Organizations', 'JobLogs', 'UserDetails.WorkTypes']);
         $this->set(compact('user'));
     }
 
@@ -95,7 +95,6 @@ class UsersController extends AppController
         $user = $this->Users->newEmptyEntity();
         $organizations = $this->Users->Organizations->find('list', limit: 200)->all();
         $roles = $this->fetchTable('Roles')->find()
-            ->where(['is_active' => true])
             ->orderBy(['sort_order' => 'ASC', 'label' => 'ASC'])
             ->all()
             ->combine('name', 'label')
@@ -106,7 +105,7 @@ class UsersController extends AppController
             if (($data['password'] ?? '') !== ($data['password_confirm'] ?? '')) {
                 $this->Flash->error(__('Password confirmation does not match.'));
                 $this->set(compact('user', 'organizations', 'roles'));
-                return null;
+                return;
             }
             $currentUser = $this->getCurrentUser();
             // New staff belong to the administrator's organization.
@@ -138,7 +137,6 @@ class UsersController extends AppController
         $user = $this->Users->get($id, contain: []);
         $organizations = $this->Users->Organizations->find('list', limit: 200)->all();
         $roles = $this->fetchTable('Roles')->find()
-            ->where(['is_active' => true])
             ->orderBy(['sort_order' => 'ASC', 'label' => 'ASC'])
             ->all()
             ->combine('name', 'label')
@@ -150,20 +148,20 @@ class UsersController extends AppController
             // Password confirmation validation
             if (!empty($data['password'])) {
                 if (empty($data['password_confirm'])) {
-                    $this->Flash->error(__('Please confirm the new password.'));
-                    $this->set(compact('user', 'organizations', 'roles'));
-                    return;
-                }
-                if ($data['password'] !== $data['password_confirm']) {
-                    $this->Flash->error(__('Password and confirmation do not match.'));
-                    $this->set(compact('user', 'organizations', 'roles'));
-                    return;
-                }
-                if (strlen($data['password']) < 6) {
-                    $this->Flash->error(__('Password must be at least 6 characters.'));
-                    $this->set(compact('user', 'organizations', 'roles'));
-                    return;
-                }
+                $this->Flash->error(__('Please confirm the new password.'));
+                $this->set(compact('user', 'organizations', 'roles'));
+                return;
+            }
+            if ($data['password'] !== $data['password_confirm']) {
+                $this->Flash->error(__('Password and confirmation do not match.'));
+                $this->set(compact('user', 'organizations', 'roles'));
+                return;
+            }
+            if (strlen($data['password']) < 6) {
+                $this->Flash->error(__('Password must be at least 6 characters.'));
+                $this->set(compact('user', 'organizations', 'roles'));
+                return;
+            }
             }
             
             // Clear password fields if password is empty (keep existing password)
@@ -283,6 +281,7 @@ class UsersController extends AppController
                 'bio' => $data['bio'] ?? null,
                 'website' => $data['website'] ?? null,
                 'location' => $data['location'] ?? null,
+                'work_type_id' => $data['work_type_id'] ?? null,
             ];
             
             if (!empty($data['avatar']) && $data['avatar'] instanceof \Laminas\Diactoros\UploadedFile) {
@@ -387,6 +386,7 @@ class UsersController extends AppController
     
     public function login()
     {
+        $this->viewBuilder()->disableAutoLayout();
         $this->request->allowMethod(['get', 'post']);
         $authentication = $this->request->getAttribute('authentication');
         $result = $authentication->getResult();
@@ -428,6 +428,7 @@ class UsersController extends AppController
      */
     public function awaitingApproval()
     {
+        $this->viewBuilder()->disableAutoLayout();
         $user = $this->getCurrentUser();
         if (!$user) {
             return $this->redirect(['action' => 'login']);
@@ -449,6 +450,7 @@ class UsersController extends AppController
      */
     public function register()
     {
+        $this->viewBuilder()->disableAutoLayout();
         $user = $this->Users->newEmptyEntity();
         if ($this->request->is('post')) {
             $data = $this->request->getData();
@@ -523,10 +525,7 @@ class UsersController extends AppController
             $this->Flash->error(__('Could not update user role. Please try again.'));
         }
 
-        // Pull roles from the master table (active only) so the form stays
-        // in sync with what admin can manage under Roles → index.
         $roles = $this->fetchTable('Roles')->find()
-            ->where(['is_active' => true])
             ->orderBy(['sort_order' => 'ASC', 'label' => 'ASC'])
             ->all()
             ->combine('name', 'label')
@@ -537,6 +536,7 @@ class UsersController extends AppController
 
     public function forgotPassword()
     {
+        $this->viewBuilder()->disableAutoLayout();
         if ($this->request->is('post')) {
             $email = trim((string)$this->request->getData('email'));
             
@@ -574,6 +574,7 @@ class UsersController extends AppController
 
     public function resetWithToken(string $token = null)
     {
+        $this->viewBuilder()->disableAutoLayout();
         if (!$token) {
             return $this->redirect(['action' => 'forgotPassword']);
         }

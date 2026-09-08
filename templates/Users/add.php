@@ -66,7 +66,7 @@ $this->assign('title', 'Create user');
             <?= $this->Form->control('role', [
                 'options' => $roles ?? [
                     'scheduler' => 'Scheduler',
-                    'digitizer' => 'Digitizer',
+                    'operator' => 'Operator',
                     'quality_checker' => 'Quality Checker (QC)',
                     'production' => 'Production',
                     'admin' => 'Admin',

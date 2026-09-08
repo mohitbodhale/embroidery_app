@@ -32,8 +32,8 @@ class JobAttachmentsController extends AppController
             $query->where(['JobAttachments.job_id' => (int)$jobId]);
         }
 
-        if ($role === 'digitizer' && $user) {
-            $query->where(['Jobs.digitizer_id' => $user->id]);
+        if ($role === 'operator' && $user) {
+            $query->where(['Jobs.operator_id' => $user->id]);
         } elseif ($role === 'quality_checker' && $user) {
             $query->where(['Jobs.qc_id' => $user->id]);
         } elseif ($role === 'production' && $user) {
@@ -60,7 +60,8 @@ class JobAttachmentsController extends AppController
         if ($jobId) {
             $job = $this->JobAttachments->Jobs->get($jobId);
         }
-        if (!$this->authorizeAction($job, 'add')) {
+        $policy = new \App\Policy\JobAttachmentPolicy();
+        if (!$policy->canAdd($this->getCurrentUser(), $job)) {
             throw new \Cake\Http\Exception\ForbiddenException(__('You are not authorized to add attachments.'));
         }
 

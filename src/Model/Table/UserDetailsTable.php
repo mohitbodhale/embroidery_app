@@ -17,6 +17,10 @@ class UserDetailsTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
         ]);
+        $this->belongsTo('WorkTypes', [
+            'foreignKey' => 'work_type_id',
+            'joinType' => 'LEFT',
+        ]);
     }
 
     public function validationDefault(Validator $validator): Validator
@@ -45,6 +49,10 @@ class UserDetailsTable extends Table
         $validator
             ->maxLength('location', 100)
             ->allowEmptyString('location');
+
+        $validator
+            ->integer('work_type_id')
+            ->allowEmptyString('work_type_id');
 
         return $validator;
     }

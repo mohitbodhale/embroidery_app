@@ -14,7 +14,7 @@ class JobAttachmentPolicy
             return false;
         }
         $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
-        if (in_array($role, ['admin', 'scheduler'], true)) {
+        if (in_array($role, ['admin', 'scheduler', 'operator', 'quality_checker', 'production'], true)) {
             return true;
         }
         return false;
@@ -31,8 +31,8 @@ class JobAttachmentPolicy
         if (in_array($role, ['admin', 'scheduler'], true)) {
             return true;
         }
-        if ($role === 'digitizer') {
-            return $job->digitizer_id == ($user->id ?? null);
+        if ($role === 'operator') {
+            return $job->operator_id == ($user->id ?? null);
         }
         if ($role === 'quality_checker') {
             return $job->qc_id == ($user->id ?? null);
@@ -53,7 +53,7 @@ class JobAttachmentPolicy
         if (in_array($role, ['admin', 'scheduler'], true)) {
             return true;
         }
-        if ($role === 'digitizer' && $job && $job->digitizer_id == ($user->id ?? null)) {
+        if ($role === 'operator' && $job && $job->operator_id == ($user->id ?? null)) {
             return true;
         }
         if ($role === 'quality_checker' && $job && $job->qc_id == ($user->id ?? null)) {

@@ -13,8 +13,8 @@ use App\Model\Entity\Job;
  * 
  * User Roles:
  * - admin: Full system access
- * - scheduler: Can create jobs, upload images, assign to digitizers
- * - digitizer: Can download assigned jobs, upload EMB files
+ * - scheduler: Can create jobs, upload images, assign to operators
+ * - operator: Can download assigned jobs, upload EMB files
  * - qc: Can review submitted EMB files, approve/reject
  * - production: Can download approved EMB files
  */
@@ -24,7 +24,7 @@ class AuthorizationService
         'admin' => 100,
         'qc' => 40,
         'production' => 30,
-        'digitizer' => 20,
+        'operator' => 20,
         'scheduler' => 10,
     ];
 
@@ -40,7 +40,7 @@ class AuthorizationService
             'jobs.uploadImage', 'jobs.assign', 'jobs.downloadFile',
             'jobs.viewHistory', 'jobAttachments.index', 'jobAttachments.view'
         ],
-        'digitizer' => [
+        'operator' => [
             'jobs.index', 'jobs.view', 'jobs.viewAssigned',
             'jobs.downloadFile', 'jobs.uploadEMB', 'jobs.submitForReview',
             'jobAttachments.view', 'jobAttachments.index', 'jobAttachments.download'
@@ -113,12 +113,12 @@ class AuthorizationService
 
         // Scheduler can access jobs they created or any unassigned job
         if ($user->role === 'scheduler') {
-            return $user->id === $job->created_by || $job->digitizer_id === null;
+            return $user->id === $job->created_by || $job->operator_id === null;
         }
 
         // Digitizer can access jobs assigned to them
-        if ($user->role === 'digitizer') {
-            return $user->id === $job->digitizer_id;
+        if ($user->role === 'operator') {
+            return $user->id === $job->operator_id;
         }
 
         // QC can access jobs in review status
@@ -158,16 +158,16 @@ class AuthorizationService
 
             case 'downloadFile':
                 // Digitizer, QC, and Production can download
-                return in_array($user->role, ['scheduler', 'digitizer', 'qc', 'production'], true);
+                return in_array($user->role, ['scheduler', 'operator', 'qc', 'production'], true);
 
             case 'uploadEMB':
-                // Only assigned digitizer can upload EMB files
-                return $user->role === 'digitizer' && $user->id === $job->digitizer_id 
+                // Only assigned operator can upload EMB files
+                return $user->role === 'operator' && $user->id === $job->operator_id 
                     && $job->status === 'assigned';
 
             case 'submitForReview':
-                // Only digitizer can submit for review
-                return $user->role === 'digitizer' && $user->id === $job->digitizer_id 
+                // Only operator can submit for review
+                return $user->role === 'operator' && $user->id === $job->operator_id 
                     && $job->status === 'in_progress';
 
             case 'approveEMB':

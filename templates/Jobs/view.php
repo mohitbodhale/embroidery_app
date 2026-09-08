@@ -24,9 +24,9 @@ $this->assign('title', $job->job_number . ' · ' . $job->title);
             <dt class="col-sm-3">Title</dt>
             <dd class="col-sm-9"><?= h($job->title) ?></dd>
 
-            <dt class="col-sm-3">Digitizer</dt>
+            <dt class="col-sm-3">Operator</dt>
             <dd class="col-sm-9">
-                <?= $job->hasValue('digitizer') ? '<i class="fas fa-user me-1 text-muted"></i>' . h($job->digitizer->name) : '<span class="text-muted">—</span>' ?>
+                <?= $job->hasValue('operator') ? '<i class="fas fa-user me-1 text-muted"></i>' . h($job->operator->name) : '<span class="text-muted">—</span>' ?>
             </dd>
 
             <dt class="col-sm-3">Quality checker</dt>
@@ -58,7 +58,13 @@ $this->assign('title', $job->job_number . ' · ' . $job->title);
         <div class="mt-4">
             <div class="d-flex align-items-center justify-content-between mb-2">
                 <strong class="section-label mb-0"><i class="fas fa-paperclip me-1"></i>Attachments</strong>
-                <?= $this->Html->link('<i class="fas fa-plus me-1"></i>Add file', ['controller' => 'JobAttachments', 'action' => 'add', '?' => ['job_id' => $job->id, 'redirect' => '/jobs/view/' . $job->id]], ['class' => 'btn btn-outline-primary btn-sm', 'escape' => false]) ?>
+                <?php
+                    $addPolicy = new \App\Policy\JobAttachmentPolicy();
+                    $canAddAttachment = $addPolicy->canAdd($currentUser, $job);
+                ?>
+                <?php if ($canAddAttachment): ?>
+                    <?= $this->Html->link('<i class="fas fa-plus me-1"></i>Add file', ['controller' => 'JobAttachments', 'action' => 'add', '?' => ['job_id' => $job->id, 'redirect' => '/jobs/view/' . $job->id]], ['class' => 'btn btn-outline-primary btn-sm', 'escape' => false]) ?>
+                <?php endif; ?>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0 data-table">
@@ -82,15 +88,26 @@ $this->assign('title', $job->job_number . ' · ' . $job->title);
                              <td><span class="badge bg-light text-dark border"><?= h(strtoupper($att->file_type)) ?></span></td>
                              <td class="text-muted small"><?= $att->file_size ? $this->Number->toReadableSize($att->file_size) : '—' ?></td>
                              <td class="text-muted small"><?= $att->created_at ? h($att->created_at->format('M d, Y H:i')) : '—' ?></td>
-                             <td class="text-end">
-                                 <div class="row-actions">
-                                      <a href="<?= $this->Url->build(['controller' => 'JobAttachments', 'action' => 'download', $att->id]) ?>" class="btn btn-icon btn-outline-info" title="Download"><i class="fas fa-download"></i></a>
-                                     <form method="post" action="<?= $this->Url->build(['controller' => 'JobAttachments', 'action' => 'delete', $att->id]) ?>" style="display:inline" onsubmit="return confirm('Delete this file?')">
-                                        <input type="hidden" name="_csrfToken" value="<?= h($this->request->getAttribute('csrfToken')) ?>">
-                                        <button class="btn btn-icon btn-outline-danger" type="submit" title="Delete"><i class="fas fa-trash"></i></button>
-                                    </form>
-                                </div>
-                            </td>
+                              <td class="text-end">
+                                  <div class="row-actions">
+                                       <a href="<?= $this->Url->build(['controller' => 'JobAttachments', 'action' => 'download', $att->id]) ?>" class="btn btn-icon btn-outline-info" title="Download"><i class="fas fa-download"></i></a>
+                                      <?php if ($currentUser): ?>
+                                          <?php $canDeleteAtt = false; ?>
+                                          <?php $userRole = strtolower((string)$currentUser->role ?? ''); ?>
+                                          <?php if (in_array($userRole, ['admin', 'scheduler'], true)): ?>
+                                              <?php $canDeleteAtt = true; ?>
+                                          <?php elseif ($att->uploaded_by == $currentUser->id): ?>
+                                              <?php $canDeleteAtt = true; ?>
+                                          <?php endif; ?>
+                                          <?php if ($canDeleteAtt): ?>
+                                              <form method="post" action="<?= $this->Url->build(['controller' => 'JobAttachments', 'action' => 'delete', $att->id]) ?>" style="display:inline" onsubmit="return confirm('Delete this file?')">
+                                                 <input type="hidden" name="_csrfToken" value="<?= h($this->request->getAttribute('csrfToken')) ?>">
+                                                 <button class="btn btn-icon btn-outline-danger" type="submit" title="Delete"><i class="fas fa-trash"></i></button>
+                                             </form>
+                                          <?php endif; ?>
+                                      <?php endif; ?>
+                                  </div>
+                              </td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -100,7 +117,13 @@ $this->assign('title', $job->job_number . ' · ' . $job->title);
         <?php else: ?>
         <div class="mt-3 d-flex align-items-center justify-content-between">
             <span class="text-muted small">No attachments yet.</span>
-            <?= $this->Html->link('<i class="fas fa-plus me-1"></i>Add file', ['controller' => 'JobAttachments', 'action' => 'add', '?' => ['job_id' => $job->id, 'redirect' => '/jobs/view/' . $job->id]], ['class' => 'btn btn-outline-primary btn-sm', 'escape' => false]) ?>
+            <?php
+                $addPolicy = new \App\Policy\JobAttachmentPolicy();
+                $canAddAttachment = $addPolicy->canAdd($currentUser, $job);
+            ?>
+            <?php if ($canAddAttachment): ?>
+                <?= $this->Html->link('<i class="fas fa-plus me-1"></i>Add file', ['controller' => 'JobAttachments', 'action' => 'add', '?' => ['job_id' => $job->id, 'redirect' => '/jobs/view/' . $job->id]], ['class' => 'btn btn-outline-primary btn-sm', 'escape' => false]) ?>
+            <?php endif; ?>
         </div>
         <?php endif; ?>
 
@@ -150,7 +173,7 @@ $this->assign('title', $job->job_number . ' · ' . $job->title);
         </div>
         <?php endif; ?>
 
-        <?php if (!empty($currentRole) && in_array($currentRole, ['admin','scheduler','digitizer','quality_checker','production'], true)): ?>
+        <?php if (!empty($currentRole) && in_array($currentRole, ['admin','scheduler','operator','quality_checker','production'], true)): ?>
         <div class="page-card card mt-3">
             <div class="card-header">
                 <h3 class="card-title m-0"><i class="fas fa-plus-circle me-2"></i>Add note</h3>
@@ -182,9 +205,9 @@ $this->assign('title', $job->job_number . ' · ' . $job->title);
             <input type="hidden" name="_csrfToken" value="<?= h($this->request->getAttribute('csrfToken')) ?>">
             <div class="row">
                 <div class="col-md-5 mb-3">
-                    <label>Digitizer</label>
-                    <?= $this->Form->select('digitizer_id', $digitizers, [
-                        'empty' => 'Select Digitizer', 'class' => 'form-select',
+                    <label>Operator</label>
+                     <?= $this->Form->select('operator_id', $operators, [
+                        'empty' => 'Select Operator', 'class' => 'form-select',
                     ]) ?>
                 </div>
                 <div class="col-md-5 mb-3">
@@ -202,7 +225,7 @@ $this->assign('title', $job->job_number . ' · ' . $job->title);
 </div>
 <?php endif; ?>
 
-<?php if (!empty($currentRole) && $currentRole === 'digitizer' && in_array($job->status, ['in_digitizing', 'qc_rejected'], true)): ?>
+<?php if (!empty($currentRole) && $currentRole === 'operator' && in_array($job->status, ['in_digitizing', 'qc_rejected'], true)): ?>
 <div class="alert-card info mt-3">
     <div><i class="fas fa-paper-plane me-2"></i>When finished, submit the file for QC review.</div>
     <form method="post" action="<?= $this->Url->build(['action' => 'submit', $job->id]) ?>" style="display:inline">

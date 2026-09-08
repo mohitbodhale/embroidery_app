@@ -7,8 +7,8 @@ use Migrations\BaseMigration;
  * Workflow:
  *   1. Scheduler creates a job
  *   2. Scheduler (or admin) assigns a user to complete the job.
- *      The assigned user can be any role (digitizer, programmer, accountant)
- *      depending on the type of work needed.
+ *      The assigned user has role `operator` and a work_type such as
+ *      digitizing, programming, or data_entry.
  *   3. Scheduler assigns a QC user to check the work.
  *   4. QC reviews the output and either:
  *        - approves the job -> it proceeds to production, or
@@ -17,8 +17,6 @@ use Migrations\BaseMigration;
  *
  * This migration:
  *   - Adds `assigned_to` (the user who has to do the work) on jobs.
- *   - Renames the concept of `digitizer_id` -> `assigned_to` to keep things
- *     flexible (any operator can be assigned, not only digitizers).
  *   - Adds `assigned_by` (the user who assigned the work — usually a scheduler).
  *   - Adds `assigned_at` timestamp.
  *   - Adds `qc_review_notes` for the QC return reason.
@@ -31,37 +29,28 @@ use Migrations\BaseMigration;
  *   - Adds a `job_assignments` table to log every assignment / reassignment
  *     event (assigned_to, assigned_by, status, timestamps).
  *
- * Roles `programmer` and `accountant` are added so schedulers can pick from
- * a realistic pool of operators. We do NOT add per-role columns to jobs;
- * a single `assigned_to` field is enough.
+ * A single `operator` role is used for all operator types. The operator
+ * subtype is stored in `users.work_type` as digitizing, programming, or
+ * data_entry. We do NOT add per-role columns to jobs; a single `assigned_to`
+ * field is enough.
  */
 final class RefactorJobsForGenericAssignmentAndQcCycle extends BaseMigration
 {
     public function change(): void
     {
         // -----------------------------------------------------------------
-        // 1) Add programmer + accountant roles (if missing)
+        // 1) Add operator role (if missing)
         // -----------------------------------------------------------------
         if ($this->table('roles')->exists()) {
             $existing = array_column($this->fetchAll('SELECT name FROM roles'), 'name');
 
             $toInsert = [];
-            if (!in_array('programmer', $existing, true)) {
+            if (!in_array('operator', $existing, true)) {
                 $toInsert[] = [
-                    'name'        => 'programmer',
-                    'label'       => 'Programmer',
-                    'description' => 'Writes machine programs and stitch paths from digitized designs.',
+                    'name'        => 'operator',
+                    'label'       => 'Operator',
+                    'description' => 'General operator role. Use work_type to define specialty: digitizing, programming, or data_entry.',
                     'sort_order'  => 35,
-                    'is_active'   => true,
-                    'created_at'  => date('Y-m-d H:i:s'),
-                ];
-            }
-            if (!in_array('accountant', $existing, true)) {
-                $toInsert[] = [
-                    'name'        => 'accountant',
-                    'label'       => 'Accountant',
-                    'description' => 'Handles pricing, invoicing, and customer billing for jobs.',
-                    'sort_order'  => 45,
                     'is_active'   => true,
                     'created_at'  => date('Y-m-d H:i:s'),
                 ];

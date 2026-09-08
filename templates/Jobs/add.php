@@ -2,7 +2,7 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Job $job
- * @var \Cake\Collection\CollectionInterface|string[] $digitizers
+ * @var \Cake\Collection\CollectionInterface|string[] $operators
  * @var \Cake\Collection\CollectionInterface|string[] $qcs
  * @var \Cake\Collection\CollectionInterface|string[] $organizations
  */
@@ -70,10 +70,10 @@ $this->assign('title', 'Create job');
 
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label>Assign digitizer</label>
-                <?= $this->Form->control('digitizer_id', [
-                    'options' => $digitizers,
-                    'empty' => 'Select digitizer',
+                <label>Assign operator</label>
+                <?= $this->Form->control('operator_id', [
+                    'options' => $operators,
+                    'empty' => 'Select operator',
                     'class' => 'form-select',
                     'label' => false,
                     'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],

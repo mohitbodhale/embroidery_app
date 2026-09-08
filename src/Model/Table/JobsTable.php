@@ -17,7 +17,7 @@ use Cake\Datasource\EntityInterface; // ADD THIS IMPORT
 /**
  * Jobs Model
  *
- * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Digitizers
+ * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Operators
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Qcs
  * @property \App\Model\Table\OrganizationsTable&\Cake\ORM\Association\BelongsTo $Organizations
  * @property \App\Model\Table\JobAttachmentsTable&\Cake\ORM\Association\HasMany $JobAttachments
@@ -53,10 +53,10 @@ class JobsTable extends Table
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
-        $this->belongsTo('Digitizers', [
-            'foreignKey' => 'digitizer_id',
+        $this->belongsTo('Operators', [
+            'foreignKey' => 'operator_id',
             'className' => 'Users',
-            'propertyName' => 'digitizer',
+            'propertyName' => 'operator',
         ]);
         $this->belongsTo('Qcs', [
             'foreignKey' => 'qc_id',
@@ -115,8 +115,8 @@ class JobsTable extends Table
             ->allowEmptyString('created_by');
 
         $validator
-            ->integer('digitizer_id')
-            ->allowEmptyString('digitizer_id');
+            ->integer('operator_id')
+            ->allowEmptyString('operator_id');
 
         $validator
             ->integer('qc_id')
@@ -151,7 +151,7 @@ class JobsTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         // $rules->add($rules->isUnique(['job_number']), ['errorField' => 'job_number', 'message' => __('This job number already exists')]);
-        // $rules->add($rules->existsIn(['digitizer_id'], 'Digitizers'), ['errorField' => 'digitizer_id']);
+        // $rules->add($rules->existsIn(['operator_id'], 'Operators'), ['errorField' => 'operator_id']);
         // $rules->add($rules->existsIn(['qc_id'], 'Qcs'), ['errorField' => 'qc_id']);
         // $rules->add($rules->existsIn(['status_id'], 'JobStatuses'), ['errorField' => 'status_id']);
 
@@ -203,9 +203,9 @@ public function beforeFind(EventInterface $event, SelectQuery $query, ArrayObjec
     }
 
     switch ($role) {
-        case 'digitizer':
+        case 'operator':
             if (!empty($userId)) {
-                $query->where(['Jobs.digitizer_id' => $userId]);
+                 $query->where(['Jobs.operator_id' => $userId]);
             }
             break;
         case 'quality_checker':
@@ -218,9 +218,8 @@ public function beforeFind(EventInterface $event, SelectQuery $query, ArrayObjec
             $query->where(['Jobs.status IN' => ['qc_approved', 'in_production']]);
             break;
         case 'scheduler':
-            // Scheduler sees all jobs in their organization.
-            if (!empty($orgId)) {
-                $query->where(['Jobs.organization_id' => $orgId]);
+            if (!empty($userId)) {
+                $query->where(['Jobs.created_by' => $userId]);
             }
             break;
         default:

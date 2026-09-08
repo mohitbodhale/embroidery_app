@@ -7,7 +7,7 @@ $this->assign('title', 'Users');
 $roleColors = [
     'admin' => 'danger',
     'scheduler' => 'primary',
-    'digitizer' => 'info',
+    'operator' => 'info',
     'quality_checker' => 'warning',
     'production' => 'success',
     'pending' => 'secondary',
@@ -25,14 +25,14 @@ $roleColors = [
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0 data-table">
                 <thead>
-                    <tr>
-                        <th><?= $this->Paginator->sort('name') ?></th>
-                        <th><?= $this->Paginator->sort('email') ?></th>
-                        <th><?= $this->Paginator->sort('role') ?></th>
-                        <th><?= $this->Paginator->sort('created_at', 'Joined') ?></th>
-                        <th>Organization</th>
-                        <th class="text-end">Actions</th>
-                    </tr>
+                        <tr>
+                            <th><?= $this->Paginator->sort('name') ?></th>
+                            <th><?= $this->Paginator->sort('email') ?></th>
+                            <th><?= $this->Paginator->sort('role') ?></th>
+                            <th><?= $this->Paginator->sort('created_at', 'Joined') ?></th>
+                            <th>Organization</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($users as $user): ?>
@@ -55,7 +55,7 @@ $roleColors = [
                             <?php $cls = $roleColors[$user->role] ?? 'secondary'; ?>
                             <span class="badge bg-<?= $cls ?>"><?= h(ucwords(str_replace('_', ' ', $user->role))) ?></span>
                         </td>
-                        <td><?= $user->created_at ? h($user->created_at->format('M d, Y')) : '—' ?></td>
+                        <td class="text-muted small"><?= h($user->created_at ? $user->created_at->format('M d, Y') : '—') ?></td>
                         <td><?= $user->hasValue('organization') ? h($user->organization->name) : '—' ?></td>
                         <td class="text-end">
                             <div class="row-actions">

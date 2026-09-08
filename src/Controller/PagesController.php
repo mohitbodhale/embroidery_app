@@ -99,10 +99,10 @@ class PagesController extends AppController
             'production' => $Jobs->find()->where(['Jobs.status IN' => ['qc_approved','in_production']])->count(),
             'completed'  => $Jobs->find()->where(['Jobs.status' => 'completed'])->count(),
         ];
-
         $myCount = 0;
-        if ($role === 'digitizer') {
-            $myCount = $Jobs->find()->where(['Jobs.digitizer_id' => $user->id, 'Jobs.status' => 'in_digitizing'])->count();
+
+        if ($role === 'operator') {
+            $myCount = $Jobs->find()->where(['Jobs.operator_id' => $user->id, 'Jobs.status' => 'in_digitizing'])->count();
         } elseif ($role === 'quality_checker') {
             $myCount = $Jobs->find()->where(['Jobs.status IN' => ['digitized','qc_rejected']])->count();
         } elseif ($role === 'production') {
@@ -194,17 +194,16 @@ class PagesController extends AppController
             ->all()
             ->toList();
 
-        // --- Per-user workload (jobs created, jobs assigned as digitizer/qc) ---
+        // --- Per-user workload (jobs created, jobs assigned as operator/qc) ---
         $conn = \Cake\Datasource\ConnectionManager::get('default');
         $workload = $conn->execute("
             SELECT u.id, u.name, u.email, r.name AS role_name, r.label AS role_label, r.color AS role_color,
                    ud.avatar,
                    (SELECT COUNT(*) FROM jobs WHERE created_by = u.id) AS jobs_created,
-                   (SELECT COUNT(*) FROM jobs WHERE digitizer_id = u.id) AS jobs_digitizing,
-                   (SELECT COUNT(*) FROM jobs WHERE qc_id = u.id) AS jobs_qc,
+                   (SELECT COUNT(*) FROM jobs WHERE operator_id = u.id) AS jobs_operator,
                    (SELECT COUNT(*) FROM job_logs WHERE user_id = u.id) AS log_entries,
                    ((SELECT COUNT(*) FROM jobs WHERE created_by = u.id) +
-                    (SELECT COUNT(*) FROM jobs WHERE digitizer_id = u.id) +
+                    (SELECT COUNT(*) FROM jobs WHERE operator_id = u.id) +
                     (SELECT COUNT(*) FROM jobs WHERE qc_id = u.id)) AS total_workload
             FROM users u
             LEFT JOIN roles r ON r.id = u.role_id

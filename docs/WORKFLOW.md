@@ -14,10 +14,15 @@ TrackBridge is an embroidery job management system with role-based access contro
 |------|-------|----------|-------------|
 | Admin | admin@stitchcraft.com | Password123! | Full system access, user/role management |
 | Scheduler | scheduler@stitchcraft.com | Password123! | Creates and assigns jobs |
-| Digitizer | digitizer1@stitchcraft.com | Password123! | Performs digitization work |
+| Operator | operator1@stitchcraft.com | Password123! | Performs embroidery work |
 | Quality Checker (QC) | qc1@stitchcraft.com | Password123! | Reviews and approves/rejects work |
 | Production | production@stitchcraft.com | Password123! | Moves approved jobs through production |
 | Pending | (new registrations) | — | Awaiting role assignment by admin |
+
+**Work types** (for operator roles such as digitizer/programmer/data-entry staff):
+- `digitizing` — performs embroidery digitizing
+- `programming` — writes machine programs/stitch paths
+- `data_entry` — handles pricing/invoicing/billing data entry
 
 ---
 
@@ -41,10 +46,10 @@ TrackBridge is an embroidery job management system with role-based access contro
 | Status | Description | Action |
 |--------|-------------|--------|
 | `draft` | Job created by scheduler, not started | Edit/Assign |
-| `in_digitizing` | Assigned to digitizer, work in progress | Upload EMB |
+| `in_digitizing` | Assigned to operator, work in progress | Upload EMB |
 | `digitized` | EMB file uploaded, awaiting QC | QC Review |
 | `qc_approved` | QC passed, ready for production | Start Production |
-| `qc_rejected` | QC failed, returned to digitizer | Resubmit |
+| `qc_rejected` | QC failed, returned to operator | Resubmit |
 | `in_production` | Production has started | Complete |
 | `completed` | Job finished | — |
 
@@ -81,27 +86,29 @@ TrackBridge is an embroidery job management system with role-based access contro
 - **Activity Logs** (`/job-logs`) — View all system activity
 
 ### Scheduler
-- **Jobs** (`/jobs`) — View all organization jobs
+- **Jobs** (`/jobs`) — View own jobs only
 - **Create Job** (`/jobs/add`) — Post new jobs with files and instructions
 - **Edit Job** (`/jobs/edit/{id}`) — Edit draft jobs
-- **Assign Job** (`/jobs/assign/{id}`) — Assign digitizers and QC
+- **Assign Job** (`/jobs/assign/{id}`) — Assign operator and QC
+- **Delete Job** (`/jobs/delete/{id}`) — Delete own jobs only
 
-### Digitizer
-- **My Digitizing Queue** (`/jobs`) — Jobs assigned to this digitizer
+### Operator (Digitizer / Programmer / Data Entry)
+- **Jobs** (`/jobs`) — View assigned jobs only, with status filters: In Progress, Sent for QC, Done
 - **View Job** (`/jobs/view/{id}`) — View assigned job details
+- **Edit Job** (`/jobs/edit/{id}`) — Edit only in-progress assigned jobs
 - **Download Files** — Download reference images/artwork
-- **Upload EMB** — Upload completed digitizing file
+- **Upload Files** — Upload work output files when editing in-progress jobs
 - **Submit for QC** — Mark job ready for quality review
 
 ### Quality Checker (QC)
-- **QC Review Queue** (`/jobs`) — Jobs with `digitized` status assigned to this QC
+- **Jobs** (`/jobs`) — View assigned jobs only, with status filters: In Progress, Done
 - **View Job** (`/jobs/view/{id}`) — View job details
-- **Download EMB** — Download EMB files for review
+- **Download Files** — Download work output files for review
 - **Approve** (`/jobs/approve/{id}`) — Approve and move to production
-- **Reject** (`/jobs/reject/{id}`) — Reject with required comment (returns to digitizer)
+- **Reject** (`/jobs/reject/{id}`) — Reject with required comment (returns to operator)
 
 ### Production
-- **Production Queue** (`/jobs`) — Jobs with `qc_approved` or `in_production` status
+- **Jobs** (`/jobs`) — View jobs with `qc_approved` or `in_production` status, with status filters: In Progress, Done
 - **Start Production** (`/jobs/start-production/{id}`) — Move `qc_approved` to `in_production`
 - **Complete** (`/jobs/complete/{id}`) — Mark `in_production` as `completed`
 
@@ -120,7 +127,7 @@ TrackBridge is an embroidery job management system with role-based access contro
 
 ### 2. Job Assignment (Scheduler)
 1. Scheduler assigns job at `/jobs/assign/{id}`
-2. Selects digitizer and QC from dropdown
+2. Selects operator and QC from dropdown
 3. Status changes to `in_digitizing`
 
 ### 3. Digitization (Digitizer)
@@ -163,7 +170,7 @@ The system normalizes roles as follows:
 |--------------|-----------------|
 | `admin` | `admin` |
 | `scheduler` | `scheduler` |
-| `digitizer` | `digitizer` |
+| `operator` | `operator` |
 | `quality_checker` | `quality_checker` |
 | `production` | `production` |
 | `pending` | `pending` |
@@ -201,19 +208,37 @@ The system normalizes roles as follows:
 ## Database Schema
 
 ### Users Table
-- `id`, `name`, `email`, `password`, `role`, `organization_id`, `created_at`
+- `id`, `name`, `email`, `password`, `role`, `organization_id`, `role_id`, `created_at`
 
 ### Jobs Table
-- `id`, `title`, `instructions`, `status`, `digitizer_id`, `qc_id`, `organization_id`, `created_at`
+- `id`, `title`, `instructions`, `status`, `operator_id`, `qc_id`, `organization_id`, `created_by`, `assigned_to`, `assigned_by`, `assigned_at`, `qc_status`, `qc_review_notes`, `qc_reviewed_at`, `revision_count`, `created_at`
 
 ### Roles Table
-- `id`, `name`, `label`, `sort_order`, `hierarchy`
+- `id`, `name`, `label`, `description`, `color`, `sort_order`, `is_active`, `created_at`
 
 ### Job Statuses Table
-- `id`, `name`, `label`, `color`, `is_terminal`, `sort_order`
+- `id`, `name`, `label`, `description`, `color`, `sort_order`, `is_active`, `is_terminal`, `created_at`
 
 ### Organizations Table
 - `id`, `name`, `domain_or_slug`, `status`, `created_at`
+
+### Job Attachments Table
+- `id`, `job_id`, `file_name`, `file_path`, `file_type`, `file_size`, `mime_type`, `uploaded_by`, `created_at`
+
+### Job Logs Table
+- `id`, `job_id`, `user_id`, `action`, `comments`, `created_at`
+
+### Job Assignments Table
+- `id`, `job_id`, `assigned_to`, `assigned_by`, `assigned_at`, `completed_at`, `note`, `created_at`
+
+### Job QC Reviews Table
+- `id`, `job_id`, `qc_user_id`, `assigned_to_user_id`, `decision`, `notes`, `reviewed_at`, `created_at`
+
+### Password Reset Tokens Table
+- `id`, `user_id`, `token`, `expires_at`, `used`, `created_at`
+
+### User Details Table
+- `id`, `user_id`, `avatar`, `phone`, `location`, `website`, `bio`, `work_type_id`, `created_at`
 
 ---
 
@@ -236,7 +261,7 @@ CakePHP's CSRF middleware blocks automated form submissions. For testing, ensure
 Default test users are created via `config/Seeds/InitialUsersSeed.php`:
 - Admin: admin@stitchcraft.com
 - Scheduler: scheduler@stitchcraft.com
-- Digitizer: digitizer1@stitchcraft.com
+- Operator: operator1@stitchcraft.com
 - QC: qc1@stitchcraft.com
 - Production: production@stitchcraft.com
 
@@ -278,3 +303,63 @@ templates/
     ├── register.php            # Registration form
     └── awaiting-approval.php   # Pending user page
 ```
+
+please check all code , like there is gettng some issue , like operator not able to assign attachment  for job , also shedular not able to delete job , so check all privelege , 
+
+admin have access 
+- manage  all operations 
+- when updating user details then not able to assign other role , check any role can update if admin want to change 
+
+shedular 
+- shedular can able to delete any job created by him 
+- cant see other shedular job , privacy for shedular to his job so other shedular not able to access other shedular data 
+
+operator 
+- operator not able to upload image or add file in job edit 
+
+and please check all other point
+
+in operator login 
+sidebar showing options like 
+- my digitizing queue
+- logout 
+
+so operator is not only digitizer so make like the operator can be any type so  show sidebar options like 
+
+- Jobs (in proress , send for qc, done )
+and only in progress job can be edit option
+
+Attachments also have some access rule ,
+like the file attached by any user is not able to delete by other user , so he can only delete attchments uploaded by own
+
+and operator is role , but work types of operators is differents like 
+- operator do digitizing job 
+- operator do programming job
+- operator do data entry job
+
+---
+
+## Current Implementation Status
+
+### Completed
+- Role-based auth and policies (`src/Policy/JobPolicy.php`, `src/Policy/JobAttachmentPolicy.php`)
+- Scheduler privacy: sees only own jobs; can delete only own jobs
+- Operator sidebar: generic "Jobs" label with status filters (In Progress / Sent for QC / Done)
+- Operator edit restriction: only in-progress assigned jobs are editable
+- Attachment rules: upload allowed per `JobAttachmentPolicy::canAdd`; delete allowed only for owner/admin/scheduler
+- Dynamic role validation: accepts any role present in the `roles` table
+- Operator `work_type` field added to users via migration `config/Migrations/20260907190000_add_operator_work_type_to_users.php`
+
+### Pending DB Migration
+Run the following SQL when MySQL is available to add the `work_type` column to `users`:
+
+```sql
+ALTER TABLE users ADD COLUMN work_type VARCHAR(64) NULL AFTER role_id;
+```
+ so that many type of job operator can do 
+
+so shedular is assigned the operator to any job according to what type of job is and which operator can do that type of job 
+
+so basically roles are 
+admin , shedular , operator , qc, production so operatos have multiple work type so check all database schema and ui is workin on that way,
+if needed then modified the database also

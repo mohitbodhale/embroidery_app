@@ -27,33 +27,46 @@ class JobsController extends AppController
 
         $role = $this->normalizedRole($user);
         $userId = $user->id ?? null;
-        if (!in_array($role, ['admin', 'scheduler', 'digitizer', 'quality_checker', 'production'], true)) {
+        if (!in_array($role, ['admin', 'scheduler', 'operator', 'quality_checker', 'production'], true)) {
             return $this->redirect(['controller' => 'Users', 'action' => 'awaitingApproval']);
         }
 
-        $query = $this->Jobs->find('all', contain: ['Digitizers', 'Qcs', 'Organizations']);
+        $query = $this->Jobs->find('all', contain: ['Operators', 'Qcs', 'Organizations']);
 
-        // Role-specific status visibility (prefix with Jobs. to avoid ambiguity with organizations.status)
-        if ($role === 'digitizer') {
-            $query->where([
-                'Jobs.digitizer_id' => $userId,
-                'Jobs.status IN' => ['in_digitizing', 'qc_rejected']
-            ]);
+        if ($role === 'operator') {
+            $query->where(['Jobs.operator_id' => $userId]);
         } elseif ($role === 'quality_checker') {
-            $query->where([
-                'Jobs.qc_id' => $userId,
-                'Jobs.status IN' => ['digitized'],
-            ]);
+            $query->where(['Jobs.qc_id' => $userId]);
         } elseif ($role === 'production') {
             $query->where(['Jobs.status IN' => ['qc_approved', 'in_production']]);
+        } elseif ($role === 'scheduler') {
+            $query->where(['Jobs.created_by' => $userId]);
         }
-        // Admin & Scheduler see all organization jobs by default
+
+        $statusFilter = $this->request->getQuery('status');
+        if ($statusFilter) {
+            if ($statusFilter === 'in_progress') {
+                if ($role === 'operator') {
+                    $query->where(['Jobs.status IN' => ['in_digitizing', 'qc_rejected']]);
+                } elseif ($role === 'quality_checker') {
+                    $query->where(['Jobs.status' => 'digitized']);
+                } elseif ($role === 'production') {
+                    $query->where(['Jobs.status' => 'in_production']);
+                }
+            } elseif ($statusFilter === 'sent_for_qc') {
+                if ($role === 'operator') {
+                    $query->where(['Jobs.status' => 'digitized']);
+                }
+            } elseif ($statusFilter === 'done') {
+                $query->where(['Jobs.status IN' => ['qc_approved', 'in_production', 'completed']]);
+            }
+        }
 
         $jobs = $this->paginate($query);
         $statusMeta = $this->fetchTable('JobStatuses')->find('list', keyField: 'name', valueField: function ($e) {
             return ['color' => $e->color, 'label' => $e->label, 'is_terminal' => $e->is_terminal];
         })->all()->toArray();
-        $this->set(compact('jobs', 'role', 'statusMeta'));
+        $this->set(compact('jobs', 'role', 'statusMeta', 'statusFilter'));
     }
 
     /**
@@ -65,22 +78,22 @@ class JobsController extends AppController
      */
     public function view($id = null)
     {
-        $job = $this->Jobs->get($id, contain: ['Digitizers', 'Qcs', 'Organizations', 'JobAttachments', 'JobLogs']);
+        $job = $this->Jobs->get($id, contain: ['Operators', 'Qcs', 'Organizations', 'JobAttachments', 'JobLogs']);
 
         // Authorization: ensure current user may view
         if (!$this->authorizeAction($job, 'view')) {
             throw new \Cake\Http\Exception\ForbiddenException(__('You are not authorized to view this job.'));
         }
 
-        $digitizers = $this->Jobs->Digitizers->find('list', limit: 200)
-            ->where(['role' => 'digitizer'])->all();
+        $operators = $this->Jobs->Operators->find('list', limit: 200)
+            ->where(['role' => 'operator'])->all();
         $qcs = $this->Jobs->Qcs->find('list', limit: 200)
             ->where(['role' => 'quality_checker'])->all();
         $statusMeta = $this->fetchTable('JobStatuses')->find('list', keyField: 'name', valueField: function ($e) {
             return ['color' => $e->color, 'label' => $e->label, 'is_terminal' => $e->is_terminal];
         })->all()->toArray();
 
-        $this->set(compact('job', 'digitizers', 'qcs', 'statusMeta'));
+        $this->set(compact('job', 'operators', 'qcs', 'statusMeta'));
     }
 
     /**
@@ -121,7 +134,7 @@ class JobsController extends AppController
                 $data['organization_id'] = $currentUser->organization_id ?? 1;
             }
 
-            if (!empty($data['digitizer_id']) && ($data['status'] ?? 'draft') === 'draft') {
+            if (!empty($data['operator_id']) && ($data['status'] ?? 'draft') === 'draft') {
                 $data['status'] = 'in_digitizing';
             }
 
@@ -167,12 +180,12 @@ class JobsController extends AppController
             }
             $this->Flash->error(__('The job could not be saved. Please, try again.'));
         }
-        $digitizers = $this->Jobs->Digitizers->find('list', limit: 200)
-            ->where(['role' => 'digitizer'])->all();
+        $operators = $this->Jobs->Operators->find('list', limit: 200)
+            ->where(['role' => 'operator'])->all();
         $qcs = $this->Jobs->Qcs->find('list', limit: 200)
             ->where(['role' => 'quality_checker'])->all();
         $organizations = $this->Jobs->Organizations->find('list', limit: 200)->all();
-        $this->set(compact('job', 'digitizers', 'qcs', 'organizations'));
+        $this->set(compact('job', 'operators', 'qcs', 'organizations'));
     }
 
     /**
@@ -191,6 +204,9 @@ class JobsController extends AppController
             throw new \Cake\Http\Exception\ForbiddenException(__('You are not allowed to edit this job.'));
         }
 
+        $policy = new \App\Policy\JobAttachmentPolicy();
+        $canAddAttachment = $policy->canAdd($this->getCurrentUser(), $job);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
             if (empty($data['status'])) {
@@ -200,37 +216,39 @@ class JobsController extends AppController
             if ($this->Jobs->save($job)) {
                 $this->Flash->success(__('The job has been saved.'));
 
-                $this->JobAttachments = $this->getTableLocator()->get('JobAttachments');
-                $files = $this->normalizeFiles($_FILES['files'] ?? null);
-                if (!empty($files)) {
-                    $uploadedBy = $this->getCurrentUser()?->id;
-                    $fileType = $this->request->getData('attachment_file_type') ?? '';
-                    $comments = $this->request->getData('attachment_comments') ?? '';
-                    $saved = 0;
-                    foreach ($files as $file) {
-                        $meta = $this->saveUploadedFile($file, $job->id);
-                        if ($meta === false) {
-                            continue;
+                if ($canAddAttachment) {
+                    $this->JobAttachments = $this->getTableLocator()->get('JobAttachments');
+                    $files = $this->normalizeFiles($_FILES['files'] ?? null);
+                    if (!empty($files)) {
+                        $uploadedBy = $this->getCurrentUser()?->id;
+                        $fileType = $this->request->getData('attachment_file_type') ?? '';
+                        $comments = $this->request->getData('attachment_comments') ?? '';
+                        $saved = 0;
+                        foreach ($files as $file) {
+                            $meta = $this->saveUploadedFile($file, $job->id);
+                            if ($meta === false) {
+                                continue;
+                            }
+                            $entity = $this->JobAttachments->newEmptyEntity();
+                            $entity->job_id = (int)$job->id;
+                            $entity->uploaded_by = $uploadedBy;
+                            $entity->file_name = $meta['name'];
+                            $entity->file_path = $meta['path'];
+                            $entity->file_type = $meta['type'];
+                            $entity->file_size = $meta['size'];
+                            $entity->mime_type = $meta['mime'];
+                            if (!empty($fileType)) {
+                                $entity->file_type = $fileType;
+                            }
+                            if (!empty($comments)) {
+                                $entity->comments = $comments;
+                            }
+                            $this->JobAttachments->save($entity);
+                            $saved++;
                         }
-                        $entity = $this->JobAttachments->newEmptyEntity();
-                        $entity->job_id = (int)$job->id;
-                        $entity->uploaded_by = $uploadedBy;
-                        $entity->file_name = $meta['name'];
-                        $entity->file_path = $meta['path'];
-                        $entity->file_type = $meta['type'];
-                        $entity->file_size = $meta['size'];
-                        $entity->mime_type = $meta['mime'];
-                        if (!empty($fileType)) {
-                            $entity->file_type = $fileType;
+                        if ($saved > 0) {
+                            $this->Flash->success(__('{0} file(s) attached to this job.', $saved));
                         }
-                        if (!empty($comments)) {
-                            $entity->comments = $comments;
-                        }
-                        $this->JobAttachments->save($entity);
-                        $saved++;
-                    }
-                    if ($saved > 0) {
-                        $this->Flash->success(__('{0} file(s) attached to this job.', $saved));
                     }
                 }
 
@@ -238,7 +256,7 @@ class JobsController extends AppController
             }
             $this->Flash->error(__('The job could not be saved. Please, try again.'));
         }
-        $digitizers = $this->Jobs->Digitizers->find('list', limit: 200)->all();
+        $operators = $this->Jobs->Operators->find('list', limit: 200)->all();
         $qcs = $this->Jobs->Qcs->find('list', limit: 200)->all();
         $organizations = $this->Jobs->Organizations->find('list', limit: 200)->all();
         // Statuses from the master table so admin changes (color/label/active)
@@ -250,7 +268,8 @@ class JobsController extends AppController
         $statusMeta = $this->fetchTable('JobStatuses')->find('list', keyField: 'name', valueField: function ($e) {
             return ['color' => $e->color, 'label' => $e->label, 'is_terminal' => $e->is_terminal];
         })->all()->toArray();
-        $this->set(compact('job', 'digitizers', 'qcs', 'organizations', 'statuses', 'statusMeta'));
+        $canDelete = $this->authorizeAction($job, 'delete');
+        $this->set(compact('job', 'operators', 'qcs', 'organizations', 'statuses', 'statusMeta', 'canDelete', 'canAddAttachment'));
     }
 
     /**
@@ -278,7 +297,7 @@ class JobsController extends AppController
     }
 
     /**
-     * Assign a digitizer or QC to a job. POST only.
+     * Assign an operator or QC to a job. POST only.
      */
     public function assign($id = null)
     {
@@ -290,14 +309,14 @@ class JobsController extends AppController
 
         $data = $this->request->getData();
         $patch = [];
-        if (isset($data['digitizer_id'])) {
-            $patch['digitizer_id'] = $data['digitizer_id'];
+        if (isset($data['operator_id'])) {
+            $patch['operator_id'] = $data['operator_id'];
         }
         if (isset($data['qc_id'])) {
             $patch['qc_id'] = $data['qc_id'];
         }
 
-        if (!empty($patch['digitizer_id']) && in_array($job->status, ['draft', 'pending_approval'], true)) {
+        if (!empty($patch['operator_id']) && in_array($job->status, ['draft', 'pending_approval'], true)) {
             $patch['status'] = 'in_digitizing';
         }
 
@@ -364,7 +383,7 @@ class JobsController extends AppController
         }
         $job->status = 'qc_rejected';
         if ($this->saveWithLog($job, 'rejected', $comment)) {
-            $this->Flash->success(__('Job rejected and digitizer notified.'));
+            $this->Flash->success(__('Job rejected and operator notified.'));
         } else {
             $this->Flash->error(__('Failed to reject job.'));
         }

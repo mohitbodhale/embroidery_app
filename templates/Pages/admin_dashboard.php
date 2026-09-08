@@ -142,7 +142,7 @@ foreach ($jobsByStatus as $s) { $maxStatusCount = max($maxStatusCount, (int)($s[
                                         <span class="badge" style="background-color: <?= h($w['role_color'] ?? '#6c757d') ?>"><?= h($w['role_label'] ?? $w['role_name'] ?? '—') ?></span>
                                     </td>
                                     <td class="text-end"><?= h($w['jobs_created']) ?></td>
-                                    <td class="text-end"><?= h($w['jobs_digitizing']) ?></td>
+                                    <td class="text-end">                                    <?= h($w['jobs_operator']) ?></td>
                                     <td class="text-end"><?= h($w['jobs_qc']) ?></td>
                                     <td class="text-end"><?= h($w['log_entries']) ?></td>
                                 </tr>

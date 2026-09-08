@@ -11,7 +11,7 @@ $this->assign('title', 'Dashboard');
 
 $roleLabel = ucwords(str_replace('_', ' ', $role));
 $roleColor = [
-    'admin' => 'danger', 'scheduler' => 'primary', 'digitizer' => 'info',
+    'admin' => 'danger', 'scheduler' => 'primary', 'operator' => 'info',
     'quality_checker' => 'warning', 'production' => 'success', 'pending' => 'secondary',
 ][$role] ?? 'secondary';
 
@@ -50,7 +50,7 @@ $statusColor = [
             ['In Production',  $counts['production'],'fas fa-industry',      'info',    'Production'],
             ['Completed',      $counts['completed'], 'fas fa-check-double',  'success', 'Completed'],
         ],
-        'digitizer' => [
+        'operator' => [
             ['My queue',       $myCount,             'fas fa-pen-fancy',     'info',    'In digitizing'],
             ['Awaiting QC',    $counts['qc'],        'fas fa-clipboard-check','warning','Digitized'],
             ['Approved',       $counts['production'],'fas fa-thumbs-up',     'success', 'QC approved'],
