@@ -21,13 +21,20 @@ class JobPolicy
 
     public function canEdit($user, $job): bool
     {
+        \Cake\Log\Log::write('debug', 'JobPolicy::canEdit called');
+        \Cake\Log\Log::write('debug', 'User: ' . print_r($user, true));
+        \Cake\Log\Log::write('debug', 'Job: ' . print_r($job ? $job->getVisibleProperties() : 'null', true));
+
         if (!$user) {
+            \Cake\Log\Log::write('debug', 'User is null/false');
             return false;
         }
         $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
         $userId = $user->id ?? ($user['id'] ?? null);
+        \Cake\Log\Log::write('debug', "Role: '$role', UserId: $userId");
 
         if (in_array($role, ['admin', 'scheduler'], true)) {
+            \Cake\Log\Log::write('debug', 'Returning true for admin/scheduler');
             return true;
         }
 

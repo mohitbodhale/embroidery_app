@@ -80,13 +80,18 @@ class AppController extends Controller
      */
     protected function getCurrentUser(): ?object
     {
+        \Cake\Log\Log::write('debug', 'getCurrentUser called');
         $identity = $this->request->getAttribute('identity');
+        \Cake\Log\Log::write('debug', 'Identity attribute: ' . ($identity ? get_class($identity) : 'null'));
         if ($identity) {
             if (is_object($identity) && method_exists($identity, 'getOriginalData')) {
+                \Cake\Log\Log::write('debug', 'Identity has getOriginalData');
                 $data = $identity->getOriginalData();
+                \Cake\Log\Log::write('debug', 'Original data: ' . print_r($data, true));
                 return $this->refreshCurrentUser(is_object($data) ? $data : (object)$data);
             }
             if (is_object($identity) && method_exists($identity, 'get')) {
+                \Cake\Log\Log::write('debug', 'Identity has get method');
                 return $this->refreshCurrentUser((object)[
                     'id' => method_exists($identity, 'getIdentifier') ? $identity->getIdentifier() : $identity->get('id'),
                     'name' => $identity->get('name'),
@@ -94,6 +99,7 @@ class AppController extends Controller
                     'organization_id' => $identity->get('organization_id'),
                 ]);
             }
+            \Cake\Log\Log::write('debug', 'Identity is object, using directly');
             return $this->refreshCurrentUser(is_object($identity) ? $identity : (object)$identity);
         }
 
@@ -102,8 +108,10 @@ class AppController extends Controller
         // legacy/manual writes used 'Auth.user_id' / 'Auth.role' / 'Auth.organization_id'.
         // Handle both shapes.
         $sessionAuth = $this->request->getSession()->read('Auth');
+        \Cake\Log\Log::write('debug', 'Session Auth: ' . print_r($sessionAuth, true));
         if (!empty($sessionAuth)) {
             if (is_array($sessionAuth) && (isset($sessionAuth['user_id']) || isset($sessionAuth['role']) || isset($sessionAuth['id']))) {
+                \Cake\Log\Log::write('debug', 'Session Auth is array with user_id/role/id');
                 return $this->refreshCurrentUser((object)[
                     'id' => $sessionAuth['id'] ?? $sessionAuth['user_id'] ?? null,
                     'role' => $sessionAuth['role'] ?? null,
@@ -111,6 +119,7 @@ class AppController extends Controller
                 ]);
             }
             if (is_object($sessionAuth)) {
+                \Cake\Log\Log::write('debug', 'Session Auth is object: ' . get_class($sessionAuth));
                 $id = $sessionAuth->id ?? null;
                 if ($id === null) {
                     // Try to refresh from session-stored id via getIdentifier()
@@ -128,6 +137,7 @@ class AppController extends Controller
             }
         }
 
+        \Cake\Log\Log::write('debug', 'No identity or session auth found');
         return null;
     }
 

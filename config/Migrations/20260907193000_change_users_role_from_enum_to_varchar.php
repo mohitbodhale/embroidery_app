@@ -15,11 +15,9 @@ final class ChangeUsersRoleFromEnumToVarchar extends BaseMigration
             return;
         }
 
-        $connection = $this->getConnection();
-
         // Drop the old enum constraint if it exists
         try {
-            $connection->execute("ALTER TABLE users ALTER COLUMN role TYPE VARCHAR(50) USING role::text");
+            $this->execute("ALTER TABLE users ALTER COLUMN role TYPE VARCHAR(50) USING role::text");
         } catch (\Throwable $e) {
             // If it fails because the constraint/type is different, ignore
         }
@@ -31,7 +29,7 @@ final class ChangeUsersRoleFromEnumToVarchar extends BaseMigration
         ");
         if ($row) {
             try {
-                $connection->execute("ALTER TABLE users DROP CONSTRAINT user_role");
+                $this->execute("ALTER TABLE users DROP CONSTRAINT user_role");
             } catch (\Throwable $e) {
                 // Constraint may not exist or have a different name
             }

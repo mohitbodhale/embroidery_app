@@ -1,0 +1,2 @@
+UPDATE users SET password = '$2y$10$pIiug48CXEfWOT4vTUIdoOvh.KaeOaxye.wJ.1FOc9.X689TmgG6K' 
+WHERE email IN ('admin@stitchcraft.com', 'scheduler@stitchcraft.com', 'operator@stitchcraft.com', 'qc1@stitchcraft.com', 'production@stitchcraft.com');

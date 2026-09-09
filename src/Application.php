@@ -23,6 +23,7 @@ use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
+
 use Cake\Http\MiddlewareQueue;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
@@ -96,6 +97,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
 
+            
             // Add routing middleware.
             // If you have a large number of routes connected, turning on routes
             // caching in production could improve performance.

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Migrations\BaseMigration;
 
-final class RenameDigitizerIdToOperatorId extends BaseMigration
+final class RenameDigitizerIdToOperatorIdAndMoveWorkType extends BaseMigration
 {
     public function change(): void
     {

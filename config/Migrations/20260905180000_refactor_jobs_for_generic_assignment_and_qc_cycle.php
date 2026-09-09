@@ -138,8 +138,8 @@ final class RefactorJobsForGenericAssignmentAndQcCycle extends BaseMigration
             // Indexes
             $indexExists = function (string $name): bool {
                 $row = $this->fetchRow(
-                    "SELECT 1 FROM information_schema.statistics
-                     WHERE table_name = 'jobs' AND index_name = '{$name}'"
+                    "SELECT 1 FROM pg_indexes
+                     WHERE tablename = 'jobs' AND indexname = '{$name}'"
                 );
                 return (bool) $row;
             };
