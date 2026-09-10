@@ -23,7 +23,7 @@ class JobPolicy
     {
         \Cake\Log\Log::write('debug', 'JobPolicy::canEdit called');
         \Cake\Log\Log::write('debug', 'User: ' . print_r($user, true));
-        \Cake\Log\Log::write('debug', 'Job: ' . print_r($job ? $job->getVisibleProperties() : 'null', true));
+        \Cake\Log\Log::write('debug', 'Job: ' . print_r($job ? $job->toArray() : 'null', true));
 
         if (!$user) {
             \Cake\Log\Log::write('debug', 'User is null/false');

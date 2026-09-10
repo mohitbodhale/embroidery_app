@@ -1,3 +1,8 @@
 {
-  "$schema": "https://app.kilo.ai/config.json"
+  "$schema": "https://app.kilo.ai/config.json",
+  "indexing": {
+    "enabled": true,
+    "provider": "kilo",
+    "model": "sentence-transformers/all-minilm-l12-v2"
+  }
 }
