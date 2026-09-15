@@ -201,6 +201,7 @@ class PagesController extends AppController
                    ud.avatar,
                    (SELECT COUNT(*) FROM jobs WHERE created_by = u.id) AS jobs_created,
                    (SELECT COUNT(*) FROM jobs WHERE operator_id = u.id) AS jobs_operator,
+                   (SELECT COUNT(*) FROM jobs WHERE qc_id = u.id) AS jobs_qc,
                    (SELECT COUNT(*) FROM job_logs WHERE user_id = u.id) AS log_entries,
                    ((SELECT COUNT(*) FROM jobs WHERE created_by = u.id) +
                     (SELECT COUNT(*) FROM jobs WHERE operator_id = u.id) +

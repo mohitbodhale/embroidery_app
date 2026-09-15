@@ -113,15 +113,18 @@ class JobPolicy
         return $role === 'production';
     }
 
-    public function canView($user, $job): bool
+public function canView($user, $job): bool
     {
         if (!$user || !$job) {
             return false;
         }
         $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
         $userId = $user->id ?? ($user['id'] ?? null);
-        if (in_array($role, ['admin', 'scheduler', 'production'], true)) {
+        if (in_array($role, ['admin', 'production'], true)) {
             return true;
+        }
+        if ($role === 'scheduler') {
+            return $job->created_by == $userId;
         }
         if ($role === 'operator') {
             return $job->operator_id == $userId;
