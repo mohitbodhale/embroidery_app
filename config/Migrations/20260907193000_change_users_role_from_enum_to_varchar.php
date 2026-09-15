@@ -15,24 +15,26 @@ final class ChangeUsersRoleFromEnumToVarchar extends BaseMigration
             return;
         }
 
-        // Drop the old enum constraint if it exists
-        try {
-            $this->execute("ALTER TABLE users ALTER COLUMN role TYPE VARCHAR(50) USING role::text");
-        } catch (\Throwable $e) {
-            // If it fails because the constraint/type is different, ignore
+        $row = $this->fetchRow("SELECT data_type FROM information_schema.columns WHERE table_name = 'users' AND column_name = 'role'");
+        if ($row && $row['data_type'] === 'USER-DEFINED') {
+            try {
+                $this->execute("ALTER TABLE users ALTER COLUMN role TYPE VARCHAR(50) USING role::text");
+            } catch (\Throwable $e) {
+            }
         }
 
-        // Try to drop the enum constraint by name if it exists
-        $row = $this->fetchRow("
-            SELECT 1 FROM information_schema.constraint_column_usage
-            WHERE table_name = 'users' AND column_name = 'role'
-        ");
-        if ($row) {
-            try {
-                $this->execute("ALTER TABLE users DROP CONSTRAINT user_role");
-            } catch (\Throwable $e) {
-                // Constraint may not exist or have a different name
+        try {
+            $row = $this->fetchRow("
+                SELECT 1 FROM information_schema.constraint_column_usage
+                WHERE table_name = 'users' AND column_name = 'role'
+            ");
+            if ($row) {
+                try {
+                    $this->execute("ALTER TABLE users DROP CONSTRAINT user_role");
+                } catch (\Throwable $e) {
+                }
             }
+        } catch (\Throwable $e) {
         }
     }
 }

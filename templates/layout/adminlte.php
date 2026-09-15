@@ -209,6 +209,12 @@ $isAuthPage = ($controller === 'Users' && in_array($action, ['login','register',
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="<?= $this->Url->build(['controller' => 'WorkTypes', 'action' => 'index']) ?>" class="nav-link <?= ($this->request->getParam('controller') === 'WorkTypes') ? 'active' : '' ?>">
+                                <i class="nav-icon fas fa-tools"></i>
+                                <p>Work Types</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="<?= $this->Url->build(['controller' => 'JobStatuses', 'action' => 'index']) ?>" class="nav-link <?= ($this->request->getParam('controller') === 'JobStatuses') ? 'active' : '' ?>">
                                 <i class="nav-icon fas fa-tags"></i>
                                 <p>Job Statuses</p>

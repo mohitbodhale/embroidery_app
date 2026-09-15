@@ -3,10 +3,15 @@ declare(strict_types=1);
 
 use Migrations\BaseMigration;
 
-final class RenameDigitizingStatuses extends BaseMigration
+final class RenameStatuses extends BaseMigration
 {
     public function change(): void
     {
+        // Add missing enum values before any data updates
+        $this->execute("ALTER TYPE job_status ADD VALUE IF NOT EXISTS 'in_progress'");
+        $this->execute("ALTER TYPE job_status ADD VALUE IF NOT EXISTS 'ready_for_qc'");
+        $this->execute("ALTER TYPE job_status ADD VALUE IF NOT EXISTS 'cancelled'");
+
         // Rename digitizer-specific statuses to generic, work-type-agnostic names
         $this->table('job_statuses')
             ->changeColumn('name', 'string', ['limit' => 64]);
