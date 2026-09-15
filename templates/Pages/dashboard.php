@@ -19,8 +19,8 @@ $statusLabel = function ($s) {
     return h(ucwords(str_replace('_', ' ', (string)$s)));
 };
 $statusColor = [
-    'draft' => 'secondary', 'pending_approval' => 'warning', 'in_digitizing' => 'info',
-    'digitized' => 'primary', 'qc_rejected' => 'danger', 'qc_approved' => 'success',
+    'draft' => 'secondary', 'pending_approval' => 'warning', 'in_progress' => 'info',
+    'ready_for_qc' => 'primary', 'qc_rejected' => 'danger', 'qc_approved' => 'success',
     'in_production' => 'info', 'completed' => 'success',
 ];
 ?>
@@ -40,7 +40,7 @@ $statusColor = [
     $boxes = match ($role) {
         'admin' => [
             ['Users',          $counts['total'],     'fas fa-users',         'info',    'Total users'],
-            ['Digitizing',     $counts['digitizing'],'fas fa-pen-fancy',     'info',    'In digitizing'],
+            ['In Progress',     $counts['in_progress'],'fas fa-pen-fancy',     'info',    'In Progress'],
             ['Awaiting QC',    $counts['qc'],        'fas fa-clipboard-check','warning','Digitized'],
             ['Completed',      $counts['completed'], 'fas fa-check-double',  'success', 'Completed jobs'],
         ],
@@ -51,7 +51,7 @@ $statusColor = [
             ['Completed',      $counts['completed'], 'fas fa-check-double',  'success', 'Completed'],
         ],
         'operator' => [
-            ['My queue',       $myCount,             'fas fa-pen-fancy',     'info',    'In digitizing'],
+            ['My queue',       $myCount,             'fas fa-pen-fancy',     'info',    'In Progress'],
             ['Awaiting QC',    $counts['qc'],        'fas fa-clipboard-check','warning','Digitized'],
             ['Approved',       $counts['production'],'fas fa-thumbs-up',     'success', 'QC approved'],
             ['Completed',      $counts['completed'], 'fas fa-check-double',  'success', 'Completed'],

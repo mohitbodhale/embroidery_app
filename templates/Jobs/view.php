@@ -225,7 +225,7 @@ $this->assign('title', $job->job_number . ' · ' . $job->title);
 </div>
 <?php endif; ?>
 
-<?php if (!empty($currentRole) && $currentRole === 'operator' && in_array($job->status, ['in_digitizing', 'qc_rejected'], true)): ?>
+<?php if (!empty($currentRole) && $currentRole === 'operator' && in_array($job->status, ['in_progress', 'qc_rejected'], true)): ?>
 <div class="alert-card info mt-3">
     <div><i class="fas fa-paper-plane me-2"></i>When finished, submit the file for QC review.</div>
     <form method="post" action="<?= $this->Url->build(['action' => 'submit', $job->id]) ?>" style="display:inline">
@@ -235,7 +235,7 @@ $this->assign('title', $job->job_number . ' · ' . $job->title);
 </div>
 <?php endif; ?>
 
-<?php if (!empty($currentRole) && $currentRole === 'quality_checker' && $job->status === 'digitized'): ?>
+<?php if (!empty($currentRole) && $currentRole === 'quality_checker' && $job->status === 'ready_for_qc'): ?>
 <div class="page-card card mt-3">
     <div class="card-header"><h3 class="card-title"><i class="fas fa-clipboard-check me-2"></i>QC Review</h3></div>
     <div class="card-body">

@@ -88,7 +88,7 @@ echo "Programming Operator (not owner): " . ($policy->canView($otherOperator, $j
 echo "\n--- canEdit ---\n";
 echo "Admin: " . ($policy->canEdit($adminUser, $job) ? 'YES' : 'NO') . "\n";
 echo "Scheduler: " . ($policy->canEdit($schedulerUser, $job) ? 'YES' : 'NO') . "\n";
-echo "Digitizing Operator (owner, in_digitizing): " . ($policy->canEdit($operatorUser, $job) ? 'YES' : 'NO') . "\n";
+echo "Digitizing Operator (owner, in_progress): " . ($policy->canEdit($operatorUser, $job) ? 'YES' : 'NO') . "\n";
 echo "Programming Operator (not owner): " . ($policy->canEdit($otherOperator, $job) ? 'YES' : 'NO') . "\n";
 
 echo "\n--- canSubmit ---\n";
@@ -106,8 +106,8 @@ echo "Operator: " . ($policy->canProduce($operatorUser, $job) ? 'YES' : 'NO') . 
 // Test workflow: submit job
 echo "\n=== Workflow Test: Submit Job ===\n";
 if ($policy->canSubmit($operatorUser, $job)) {
-    echo "Operator CAN submit - changing status to 'digitized'\n";
-    $job->status = 'digitized';
+    echo "Operator CAN submit - changing status to 'ready_for_qc'\n";
+    $job->status = 'ready_for_qc';
     $jobsTable->save($job);
     echo "Job status changed to: {$job->status}\n";
 } else {
@@ -151,9 +151,9 @@ if ($policy->canProduce($productionUser, $job)) {
 }
 
 // Test reject workflow
-echo "\n=== Workflow Test: Reject Job (from digitized) ===\n";
+echo "\n=== Workflow Test: Reject Job (from ready_for_qc) ===\n";
 $job = $jobsTable->find()->where(['job_number' => 'JOB-001'])->first();
-$job->status = 'digitized';
+$job->status = 'ready_for_qc';
 $jobsTable->save($job);
 if ($policy->canApprove($qcUser, $job)) {
     echo "QC CAN reject - changing status to 'qc_rejected'\n";

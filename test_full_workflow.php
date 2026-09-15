@@ -133,7 +133,7 @@ foreach ($createdJobs as $job) {
             $operatorDetails = $userDetailsTable->find()->where(['user_id' => $operator->id])->first();
             $opWt = $operatorDetails && $operatorDetails->work_type_id ? 
                 $workTypesTable->find()->where(['id' => $operatorDetails->work_type_id])->first()->name : 'unknown';
-            echo "✅ Assigned {$job->job_number} to {$operator->name} (Work Type: {$opWt}) - Status: in_digitizing\n";
+            echo "✅ Assigned {$job->job_number} to {$operator->name} (Work Type: {$opWt}) - Status: in_progress\n";
         }
     }
 }
@@ -152,11 +152,11 @@ foreach ($operators as $operator) {
         $workTypesTable->find()->where(['id' => $details->work_type_id])->first()->name : 'none';
     
     $assignedJobs = $jobsTable->find()
-        ->where(['operator_id' => $operator->id, 'status IN' => ['in_digitizing', 'qc_rejected']])
+        ->where(['operator_id' => $operator->id, 'status IN' => ['in_progress', 'qc_rejected']])
         ->all();
     
     echo "\n👤 Operator: {$operator->name} ({$operator->email}) - Work Type: {$wt}\n";
-    echo "   Assigned Jobs (in_digitizing/qc_rejected):\n";
+    echo "   Assigned Jobs (in_progress/qc_rejected):\n";
     foreach ($assignedJobs as $j) {
         echo "   - {$j->job_number}: {$j->title} [{$j->status}]\n";
     }
@@ -179,7 +179,7 @@ echo "-------------------------------------------\n";
 $operators = $usersTable->find()->where(['role' => 'operator'])->all();
 foreach ($operators as $operator) {
     $assignedJobs = $jobsTable->find()
-        ->where(['operator_id' => $operator->id, 'status' => 'in_digitizing'])
+        ->where(['operator_id' => $operator->id, 'status' => 'in_progress'])
         ->all();
     
     foreach ($assignedJobs as $job) {
@@ -214,7 +214,7 @@ echo "--------------------------\n";
 $qc = $usersTable->find()->where(['role' => 'quality_checker'])->first();
 echo "👤 QC: {$qc->name} ({$qc->email})\n\n";
 
-$digitizedJobs = $jobsTable->find()->where(['status' => 'digitized'])->all();
+        $digitizedJobs = $jobsTable->find()->where(['status' => 'ready_for_qc'])->all();
 foreach ($digitizedJobs as $job) {
     echo "   Reviewing: {$job->job_number} - {$job->title}\n";
     echo "   Assigned QC: {$qc->id} (job qc_id: {$job->qc_id})\n";
@@ -260,7 +260,7 @@ foreach ($operators as $operator) {
         if ($policy->canEdit($operator, $job) && $policy->canSubmit($operator, $job)) {
             echo "   🔧 Making revisions...\n";
             $job->instructions .= "\n\n[Revision] Fixed QC issues - adjusted stitch density.";
-            $job->status = 'in_digitizing'; // Back to work
+            $job->status = 'in_progress'; // Back to work
             $job->updated_at = new DateTime();
             $jobsTable->save($job);
             echo "   Status reverted to: {$job->status}\n";
@@ -283,7 +283,7 @@ echo "STEP 7: QC RE-REVIEWS REVISED JOBS\n";
 echo "-------------------------------------\n";
 
 $qc = $usersTable->find()->where(['role' => 'quality_checker'])->first();
-$digitizedJobs = $jobsTable->find()->where(['status' => 'digitized'])->all();
+$digitizedJobs = $jobsTable->find()->where(['status' => 'ready_for_qc'])->all();
 foreach ($digitizedJobs as $job) {
     if ($policy->canApprove($qc, $job)) {
         echo "   ✅ APPROVING revised job: {$job->job_number}\n";

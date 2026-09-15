@@ -21,8 +21,8 @@ ON CONFLICT (name) DO NOTHING;
 -- Insert job statuses (safe to re-run)
 INSERT INTO job_statuses (name, label, color, sort_order, is_active, is_terminal) VALUES
     ('draft',           'Draft',           '#6c757d', 10, true, false),
-    ('in_digitizing',   'In Digitizing',   '#0d6efd', 20, true, false),
-    ('digitized',       'Digitized',       '#6610f2', 30, true, false),
+    ('in_progress',     'In Progress',     '#0d6efd', 20, true, false),
+    ('ready_for_qc',     'Ready for QC',     '#6610f2', 30, true, false),
     ('qc_approved',     'QC Approved',     '#198754', 40, true, false),
     ('qc_rejected',     'QC Rejected',     '#dc3545', 50, true, false),
     ('in_production',   'In Production',   '#fd7e14', 60, true, false),

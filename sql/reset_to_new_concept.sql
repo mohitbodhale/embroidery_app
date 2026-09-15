@@ -58,7 +58,7 @@ WHERE u.email = 'operator@stitchcraft.com';
 
 -- 11) Seed sample job for testing
 INSERT INTO jobs (title, instructions, status, operator_id, qc_id, organization_id, created_by, created_at) VALUES
-  ('Sample Embroidery Job', 'Complete digitizing and submit for QC', 'in_digitizing', 
+  ('Sample Embroidery Job', 'Complete digitizing and submit for QC', 'in_progress', 
    (SELECT id FROM users WHERE email = 'operator@stitchcraft.com'),
    (SELECT id FROM users WHERE email = 'qc1@stitchcraft.com'),
    1,

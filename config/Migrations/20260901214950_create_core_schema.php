@@ -69,7 +69,6 @@ final class CreateCoreSchema extends BaseMigration
         if (!$this->table('job_statuses')->exists()) {
             $this->table('job_statuses')
                 ->addColumn('name', 'string', ['limit' => 64, 'null' => false])
-                ->addColumn('label', 'string', ['limit' => 128, 'null' => false])
                 ->addColumn('description', 'text', ['null' => true])
                 ->addColumn('color', 'string', ['limit' => 16, 'null' => true])
                 ->addColumn('sort_order', 'integer', ['null' => true])
@@ -82,8 +81,8 @@ final class CreateCoreSchema extends BaseMigration
             // Seed workflow statuses
             $this->table('job_statuses')->insert([
                 ['name' => 'draft',           'label' => 'Draft',            'color' => '#6c757d', 'sort_order' => 10, 'is_active' => true, 'is_terminal' => false],
-                ['name' => 'in_digitizing',   'label' => 'In Digitizing',    'color' => '#0d6efd', 'sort_order' => 20, 'is_active' => true, 'is_terminal' => false],
-                ['name' => 'digitized',       'label' => 'Digitized',        'color' => '#6610f2', 'sort_order' => 30, 'is_active' => true, 'is_terminal' => false],
+                ['name' => 'in_progress',     'label' => 'In Progress',    'color' => '#0d6efd', 'sort_order' => 20, 'is_active' => true, 'is_terminal' => false],
+                ['name' => 'ready_for_qc',     'label' => 'Ready for QC',    'color' => '#6610f2', 'sort_order' => 30, 'is_active' => true, 'is_terminal' => false],
                 ['name' => 'qc_approved',     'label' => 'QC Approved',      'color' => '#198754', 'sort_order' => 40, 'is_active' => true, 'is_terminal' => false],
                 ['name' => 'qc_rejected',     'label' => 'QC Rejected',      'color' => '#dc3545', 'sort_order' => 50, 'is_active' => true, 'is_terminal' => false],
                 ['name' => 'in_production',   'label' => 'In Production',    'color' => '#fd7e14', 'sort_order' => 60, 'is_active' => true, 'is_terminal' => false],

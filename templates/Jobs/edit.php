@@ -109,74 +109,112 @@ $this->assign('title', 'Edit job ' . $job->job_number);
 
         <hr>
 
-        <h4 class="mb-3"><i class="fas fa-paperclip me-2"></i>Attachments</h4>
-        <?php if (!empty($job->job_attachments)): ?>
-        <div class="table-responsive mb-3">
-            <table class="table table-hover align-middle mb-0 data-table">
-                <thead>
-                    <tr>
-                        <th>File</th>
-                        <th>Type</th>
-                        <th>Size</th>
-                        <th>Uploaded by</th>
-                        <th>When</th>
-                        <th class="text-end">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($job->job_attachments as $att): ?>
-                    <tr>
-                        <td>
-                            <a href="<?= $this->Url->webroot(ltrim((string)$att->file_path, '/')) ?>" target="_blank" rel="noopener" class="job-link">
-                                <i class="fas fa-file me-1 text-muted"></i><?= h($att->file_name) ?>
-                            </a>
-                        </td>
-                        <td><span class="badge bg-light text-dark border"><?= h(strtoupper($att->file_type)) ?></span></td>
-                        <td class="text-muted small"><?= $att->file_size ? $this->Number->toReadableSize($att->file_size) : '—' ?></td>
-                        <td class="text-muted small"><?= $att->hasValue('uploaded_by_user') ? h($att->uploaded_by_user->name) : 'System' ?></td>
-                        <td class="text-muted small"><?= $att->created_at ? h($att->created_at->format('M d, Y H:i')) : '—' ?></td>
-                        <td class="text-end">
-                            <div class="row-actions">
-                                <a href="<?= $this->Url->build(['controller' => 'JobAttachments', 'action' => 'download', $att->id]) ?>" class="btn btn-icon btn-outline-info" title="Download"><i class="fas fa-download"></i></a>
-                                <?php if ($currentUser): ?>
-                                    <?php $canDeleteAtt = false; ?>
-                                    <?php $userRole = strtolower((string)($currentUser->role ?? '')); ?>
-                                    <?php if (in_array($userRole, ['admin', 'scheduler'], true)): ?>
-                                        <?php $canDeleteAtt = true; ?>
-                                    <?php elseif ($att->uploaded_by == $currentUser->id): ?>
-                                        <?php $canDeleteAtt = true; ?>
+        <?php if ($canAddAttachment || !empty($job->job_attachments)): ?>
+        <div class="attachment-section mb-4">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h4 class="mb-0"><i class="fas fa-paperclip me-2"></i>Attachments</h4>
+                <?php if ($canAddAttachment): ?>
+                    <span class="badge bg-primary-subtle text-primary fw-semibold"><i class="fas fa-plus-circle me-1"></i>Upload</span>
+                <?php endif; ?>
+            </div>
+            <?php if (!empty($job->job_attachments)): ?>
+            <div class="table-responsive mb-3">
+                <table class="table table-hover align-middle mb-0 data-table">
+                    <thead>
+                        <tr>
+                            <th>File</th>
+                            <th>Type</th>
+                            <th>Size</th>
+                            <th>Uploaded by</th>
+                            <th>When</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($job->job_attachments as $att): ?>
+                        <tr>
+                            <td>
+                                <a href="<?= $this->Url->webroot(ltrim((string)$att->file_path, '/')) ?>" target="_blank" rel="noopener" class="job-link">
+                                    <i class="fas fa-file me-1 text-muted"></i><?= h($att->file_name) ?>
+                                </a>
+                            </td>
+                            <td><span class="badge bg-light text-dark border"><?= h(strtoupper($att->file_type)) ?></span></td>
+                            <td class="text-muted small"><?= $att->file_size ? $this->Number->toReadableSize($att->file_size) : '—' ?></td>
+                            <td class="text-muted small"><?= $att->hasValue('uploaded_by_user') ? h($att->uploaded_by_user->name) : 'System' ?></td>
+                            <td class="text-muted small"><?= $att->created_at ? h($att->created_at->format('M d, Y H:i')) : '—' ?></td>
+                            <td class="text-end">
+                                <div class="row-actions">
+                                    <a href="<?= $this->Url->build(['controller' => 'JobAttachments', 'action' => 'download', $att->id]) ?>" class="btn btn-icon btn-outline-info" title="Download"><i class="fas fa-download"></i></a>
+                                    <?php if ($currentUser): ?>
+                                        <?php $canDeleteAtt = false; ?>
+                                        <?php $userRole = strtolower((string)($currentUser->role ?? '')); ?>
+                                        <?php if (in_array($userRole, ['admin', 'scheduler'], true)): ?>
+                                            <?php $canDeleteAtt = true; ?>
+                                        <?php elseif ($att->uploaded_by == $currentUser->id): ?>
+                                            <?php $canDeleteAtt = true; ?>
+                                        <?php endif; ?>
+                                        <?php if ($canDeleteAtt): ?>
+                                            <form method="post" action="<?= $this->Url->build(['controller' => 'JobAttachments', 'action' => 'delete', $att->id]) ?>" style="display:inline" onsubmit="return confirm('Delete this file?')">
+                                                <input type="hidden" name="_csrfToken" value="<?= h($this->request->getAttribute('csrfToken')) ?>">
+                                                <button class="btn btn-icon btn-outline-danger" type="submit" title="Delete"><i class="fas fa-trash"></i></button>
+                                            </form>
+                                        <?php endif; ?>
                                     <?php endif; ?>
-                                    <?php if ($canDeleteAtt): ?>
-                                        <form method="post" action="<?= $this->Url->build(['controller' => 'JobAttachments', 'action' => 'delete', $att->id]) ?>" style="display:inline" onsubmit="return confirm('Delete this file?')">
-                                            <input type="hidden" name="_csrfToken" value="<?= h($this->request->getAttribute('csrfToken')) ?>">
-                                            <button class="btn btn-icon btn-outline-danger" type="submit" title="Delete"><i class="fas fa-trash"></i></button>
-                                        </form>
-                                    <?php endif; ?>
-                                <?php endif; ?>
-                            </div>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-        <?php endif; ?>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php endif; ?>
 
-        <?php if ($canAddAttachment): ?>
-        <div class="row g-3">
-            <div class="col-md-6">
-                <label>Add more files</label>
-                <?= $this->Form->file('files[]', ['class' => 'form-control', 'multiple' => true, 'label' => false, 'templates' => ['inputContainer' => '{{content}}'], 'accept' => '.pdf,.jpg,.jpeg,.png,.gif,.zip,.rar,.emb,.dst,.pes,.jef,.vp3,.xxx,.svg,.ai,.cdr,.eps,.tiff,.bmp']) ?>
-                <div class="form-text">PDF, images, archives, embroidery formats (max 20 MB each)</div>
+            <?php if ($canAddAttachment): ?>
+            <div class="card border-primary border-2 opacity-75">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-cloud-upload-alt text-primary me-2 fs-4"></i>
+                        <h5 class="card-title mb-0 text-primary">Upload Files</h5>
+                    </div>
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-5">
+                            <label class="form-label fw-semibold">Add more files</label>
+                            <?= $this->Form->file('files[]', [
+                                'class' => 'form-control form-control-lg',
+                                'multiple' => true,
+                                'label' => false,
+                                'templates' => ['inputContainer' => '{{content}}'],
+                                'accept' => '.pdf,.jpg,.jpeg,.png,.gif,.zip,.rar,.emb,.dst,.pes,.jef,.vp3,.xxx,.svg,.ai,.cdr,.eps,.tiff,.bmp',
+                            ]) ?>
+                            <div class="form-text">PDF, images, archives, embroidery formats (max 20 MB each)</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Attachment type</label>
+                            <?= $this->Form->control('attachment_file_type', [
+                                'class' => 'form-control',
+                                'placeholder' => 'e.g. Design file',
+                                'label' => false,
+                                'templates' => ['inputContainer' => '{{content}}'],
+                            ]) ?>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Notes</label>
+                            <?= $this->Form->control('attachment_comments', [
+                                'class' => 'form-control',
+                                'placeholder' => 'Any notes',
+                                'label' => false,
+                                'templates' => ['inputContainer' => '{{content}}'],
+                            ]) ?>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-primary w-100" style="height:48px;">
+                                <i class="fas fa-upload me-1"></i>Upload
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-3">
-                <label>Attachment type (optional)</label>
-                <?= $this->Form->control('attachment_file_type', ['class' => 'form-control', 'placeholder' => 'e.g. Design file', 'label' => false, 'templates' => ['inputContainer' => '{{content}}']]) ?>
-            </div>
-            <div class="col-md-3">
-                <label>Notes (optional)</label>
-                <?= $this->Form->control('attachment_comments', ['class' => 'form-control', 'placeholder' => 'Any notes', 'label' => false, 'templates' => ['inputContainer' => '{{content}}']]) ?>
-            </div>
+            <?php endif; ?>
         </div>
         <?php endif; ?>
 

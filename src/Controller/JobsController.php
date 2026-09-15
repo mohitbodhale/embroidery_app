@@ -45,19 +45,19 @@ class JobsController extends AppController
 
         $statusFilter = $this->request->getQuery('status');
         if ($statusFilter) {
-            if ($statusFilter === 'in_progress') {
-                if ($role === 'operator') {
-                    $query->where(['Jobs.status IN' => ['in_digitizing', 'qc_rejected']]);
-                } elseif ($role === 'quality_checker') {
-                    $query->where(['Jobs.status' => 'digitized']);
-                } elseif ($role === 'production') {
-                    $query->where(['Jobs.status' => 'in_production']);
-                }
-            } elseif ($statusFilter === 'sent_for_qc') {
-                if ($role === 'operator') {
-                    $query->where(['Jobs.status' => 'digitized']);
-                }
-            } elseif ($statusFilter === 'done') {
+                if ($statusFilter === 'in_progress') {
+                    if ($role === 'operator') {
+                        $query->where(['Jobs.status IN' => ['in_progress', 'qc_rejected']]);
+                    } elseif ($role === 'quality_checker') {
+                        $query->where(['Jobs.status' => 'ready_for_qc']);
+                    } elseif ($role === 'production') {
+                        $query->where(['Jobs.status' => 'in_production']);
+                    }
+                } elseif ($statusFilter === 'sent_for_qc') {
+                    if ($role === 'operator') {
+                        $query->where(['Jobs.status' => 'ready_for_qc']);
+                    }
+                } elseif ($statusFilter === 'done') {
                 $query->where(['Jobs.status IN' => ['qc_approved', 'in_production', 'completed']]);
             }
         }
@@ -135,7 +135,7 @@ class JobsController extends AppController
             }
 
             if (!empty($data['operator_id']) && ($data['status'] ?? 'draft') === 'draft') {
-                $data['status'] = 'in_digitizing';
+                $data['status'] = 'in_progress';
             }
 
             $job = $this->Jobs->patchEntity($job, $data);
@@ -204,9 +204,7 @@ class JobsController extends AppController
         //     throw new \Cake\Http\Exception\ForbiddenException(__('You are not allowed to edit this job.'));
         // }
 
-        $policy = new \App\Policy\JobAttachmentPolicy();
-        // Re-evaluate canAddAttachment after patch in case operator_id/qc_id changed
-        $canAddAttachment = false;
+        $canAddAttachment = (new \App\Policy\JobAttachmentPolicy())->canAdd($this->getCurrentUser(), $job);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
@@ -214,57 +212,54 @@ class JobsController extends AppController
                 $data['status'] = $job->status ?? 'draft';
             }
             $job = $this->Jobs->patchEntity($job, $data);
-            if ($this->Jobs->save($job)) {
+            $jobSaved = $this->Jobs->save($job);
+            if ($jobSaved) {
                 $this->Flash->success(__('The job has been saved.'));
+            } else {
+                $this->Flash->error(__('The job could not be saved. Please, try again.'));
+            }
 
-                // Re-evaluate attachment permission with updated job data
-                $canAddAttachment = $policy->canAdd($this->getCurrentUser(), $job);
-
-                if ($canAddAttachment) {
-                    $this->JobAttachments = $this->getTableLocator()->get('JobAttachments');
-                    $files = $this->normalizeFiles($_FILES['files'] ?? null);
-                    if (!empty($files)) {
-                        $uploadedBy = $this->getCurrentUser()?->id;
-                        $fileType = $this->request->getData('attachment_file_type') ?? '';
-                        $comments = $this->request->getData('attachment_comments') ?? '';
-                        $saved = 0;
-                        foreach ($files as $file) {
-                            $meta = $this->saveUploadedFile($file, $job->id);
-                            if ($meta === false) {
-                                continue;
-                            }
-                            $entity = $this->JobAttachments->newEmptyEntity();
-                            $entity->job_id = (int)$job->id;
-                            $entity->uploaded_by = $uploadedBy;
-                            $entity->file_name = $meta['name'];
-                            $entity->file_path = $meta['path'];
-                            $entity->file_type = $meta['type'];
-                            $entity->file_size = $meta['size'];
-                            $entity->mime_type = $meta['mime'];
-                            if (!empty($fileType)) {
-                                $entity->file_type = $fileType;
-                            }
-                            if (!empty($comments)) {
-                                $entity->comments = $comments;
-                            }
-                            $this->JobAttachments->save($entity);
-                            $saved++;
+            if ($canAddAttachment) {
+                $this->JobAttachments = $this->getTableLocator()->get('JobAttachments');
+                $files = $this->normalizeFiles($_FILES['files'] ?? null);
+                if (!empty($files)) {
+                    $uploadedBy = $this->getCurrentUser()?->id;
+                    $fileType = $this->request->getData('attachment_file_type') ?? '';
+                    $comments = $this->request->getData('attachment_comments') ?? '';
+                    $saved = 0;
+                    foreach ($files as $file) {
+                        $meta = $this->saveUploadedFile($file, $job->id);
+                        if ($meta === false) {
+                            continue;
                         }
-                        if ($saved > 0) {
-                            $this->Flash->success(__('{0} file(s) attached to this job.', $saved));
+                        $entity = $this->JobAttachments->newEmptyEntity();
+                        $entity->job_id = (int)$job->id;
+                        $entity->uploaded_by = $uploadedBy;
+                        $entity->file_name = $meta['name'];
+                        $entity->file_path = $meta['path'];
+                        $entity->file_type = $meta['type'];
+                        $entity->file_size = $meta['size'];
+                        $entity->mime_type = $meta['mime'];
+                        if (!empty($fileType)) {
+                            $entity->file_type = $fileType;
                         }
+                        if (!empty($comments)) {
+                            $entity->comments = $comments;
+                        }
+                        $this->JobAttachments->save($entity);
+                        $saved++;
+                    }
+                    if ($saved > 0) {
+                        $this->Flash->success(__('{0} file(s) attached to this job.', $saved));
                     }
                 }
-
-                return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The job could not be saved. Please, try again.'));
+
+            return $this->redirect(['action' => 'index']);
         }
         $operators = $this->Jobs->Operators->find('list', limit: 200)->all();
         $qcs = $this->Jobs->Qcs->find('list', limit: 200)->all();
         $organizations = $this->Jobs->Organizations->find('list', limit: 200)->all();
-        // Statuses from the master table so admin changes (color/label/active)
-        // flow through to this dropdown automatically.
         $statuses = $this->fetchTable('JobStatuses')->find('list', limit: 200)
             ->where(['is_active' => true])
             ->orderBy(['sort_order' => 'ASC', 'label' => 'ASC'])
@@ -273,8 +268,6 @@ class JobsController extends AppController
             return ['color' => $e->color, 'label' => $e->label, 'is_terminal' => $e->is_terminal];
         })->all()->toArray();
         $canDelete = $this->authorizeAction($job, 'delete');
-        // Evaluate canAddAttachment for view (GET request) or after failed POST
-        $canAddAttachment = $policy->canAdd($this->getCurrentUser(), $job);
         $this->set(compact('job', 'operators', 'qcs', 'organizations', 'statuses', 'statusMeta', 'canDelete', 'canAddAttachment'));
     }
 
@@ -323,7 +316,7 @@ class JobsController extends AppController
         }
 
         if (!empty($patch['operator_id']) && in_array($job->status, ['draft', 'pending_approval'], true)) {
-            $patch['status'] = 'in_digitizing';
+            $patch['status'] = 'in_progress';
         }
 
     $job = $this->Jobs->patchEntity($job, $patch);
@@ -356,8 +349,8 @@ class JobsController extends AppController
             throw new \Cake\Http\Exception\ForbiddenException(__('You are not authorized to approve this job.'));
         }
 
-        if ($job->status !== 'digitized') {
-            $this->Flash->error(__('Only digitized jobs can be approved.'));
+        if ($job->status !== 'ready_for_qc') {
+            $this->Flash->error(__('Only ready-for-QC jobs can be approved.'));
             return $this->redirect(['action' => 'view', $job->id]);
         }
 
@@ -383,8 +376,8 @@ class JobsController extends AppController
         }
 
         $comment = trim((string)$this->request->getData('comment'));
-        if ($job->status !== 'digitized' || $comment === '') {
-            $this->Flash->error(__('A rejection comment is required for a digitized job.'));
+        if ($job->status !== 'ready_for_qc' || $comment === '') {
+            $this->Flash->error(__('A rejection comment is required for a ready-for-QC job.'));
             return $this->redirect(['action' => 'view', $job->id]);
         }
         $job->status = 'qc_rejected';
@@ -405,12 +398,12 @@ class JobsController extends AppController
         if (!$this->authorizeAction($job, 'submit')) {
             throw new \Cake\Http\Exception\ForbiddenException(__('You are not authorized to submit this job.'));
         }
-        if (!in_array($job->status, ['in_digitizing', 'qc_rejected'], true) || !$job->qc_id) {
+        if (!in_array($job->status, ['in_progress', 'qc_rejected'], true) || !$job->qc_id) {
             $this->Flash->error(__('Assign a QC reviewer before submitting a job for review.'));
             return $this->redirect(['action' => 'view', $job->id]);
         }
 
-    $job->status = 'digitized';
+    $job->status = 'ready_for_qc';
     if ($this->saveWithLog($job, 'submitted_for_qc', 'EMB file submitted for QC review.')) {
         $this->Flash->success(__('Job submitted for QC review.'));
     } else {

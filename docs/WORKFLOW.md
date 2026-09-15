@@ -30,7 +30,7 @@ TrackBridge is an embroidery job management system with role-based access contro
 
 ```
 ┌─────────┐     ┌──────────────┐     ┌───────────┐     ┌────────────┐     ┌────────────────┐     ┌───────────┐
-│  DRAFT  │────▶│IN_DIGITIZING │────▶│ DIGITIZED │────▶│ QC_APPROVED│────▶│IN_PRODUCTION   │────▶│ COMPLETED │
+│  DRAFT  │────▶│ IN_PROGRESS  │────▶│ READY_QC │────▶│ QC_APPROVED│────▶│IN_PRODUCTION   │────▶│ COMPLETED │
 └─────────┘     └──────┬───────┘     └─────┬──────┘     └────────────┘     └───────┬────────┘     └───────────┘
                         │                    │                                       │
                         │            ┌───────┴───────┐                               │
@@ -46,8 +46,8 @@ TrackBridge is an embroidery job management system with role-based access contro
 | Status | Description | Action |
 |--------|-------------|--------|
 | `draft` | Job created by scheduler, not started | Edit/Assign |
-| `in_digitizing` | Assigned to operator, work in progress | Upload EMB |
-| `digitized` | EMB file uploaded, awaiting QC | QC Review |
+| `in_progress` | Assigned to operator, work in progress | Upload EMB |
+| `ready_for_qc` | EMB file uploaded, awaiting QC | QC Review |
 | `qc_approved` | QC passed, ready for production | Start Production |
 | `qc_rejected` | QC failed, returned to operator | Resubmit |
 | `in_production` | Production has started | Complete |
@@ -128,23 +128,23 @@ TrackBridge is an embroidery job management system with role-based access contro
 ### 2. Job Assignment (Scheduler)
 1. Scheduler assigns job at `/jobs/assign/{id}`
 2. Selects operator and QC from dropdown
-3. Status changes to `in_digitizing`
+3. Status changes to `in_progress`
 
-### 3. Digitization (Digitizer)
-1. Digitizer sees job in "My Digitizing Queue"
+### 3. Work Completion (Operator)
+1. Operator sees job in "My Queue" (In Progress)
 2. Downloads reference files
-3. Creates EMB digitizing file
-4. Uploads EMB file via job edit
+3. Creates work output files
+4. Uploads files via job edit
 5. Submits for QC
 
 ### 4. Quality Control (QC)
-1. QC sees job in "QC Review Queue"
-2. Downloads EMB file for review
+1. QC sees job in "QC Review Queue" (Ready for QC)
+2. Downloads work file for review
 3. **Approves** → Status becomes `qc_approved`
 4. **OR Rejects** → Status becomes `qc_rejected` with comment
 
 ### 5. Rework Loop (if rejected)
-1. Digitizer sees rejected job in queue
+1. Operator sees rejected job in queue
 2. Reviews QC comment
 3. Makes corrections
 4. Resubmits for QC

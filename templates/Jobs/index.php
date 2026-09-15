@@ -77,9 +77,9 @@ $filterTabs = [];
                             $statusInfo = $statusMeta[$job->status] ?? ['color' => '#6c757d', 'label' => $job->status];
                             $isInProgress = false;
                             if ($role === 'operator') {
-                                $isInProgress = in_array($job->status, ['in_digitizing', 'qc_rejected'], true);
+                                $isInProgress = in_array($job->status, ['in_progress', 'qc_rejected'], true);
                             } elseif ($role === 'quality_checker') {
-                                $isInProgress = $job->status === 'digitized';
+                                $isInProgress = $job->status === 'ready_for_qc';
                             } elseif ($role === 'production') {
                                 $isInProgress = $job->status === 'in_production';
                             }

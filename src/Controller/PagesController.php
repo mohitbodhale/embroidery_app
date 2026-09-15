@@ -94,17 +94,17 @@ class PagesController extends AppController
         $counts = [
             'total'      => $Jobs->find()->count(),
             'draft'      => $Jobs->find()->where(['Jobs.status' => 'draft'])->count(),
-            'digitizing' => $Jobs->find()->where(['Jobs.status' => 'in_digitizing'])->count(),
-            'qc'         => $Jobs->find()->where(['Jobs.status IN' => ['digitized','qc_rejected']])->count(),
+            'digitizing' => $Jobs->find()->where(['Jobs.status' => 'in_progress'])->count(),
+            'qc'         => $Jobs->find()->where(['Jobs.status IN' => ['ready_for_qc','qc_rejected']])->count(),
             'production' => $Jobs->find()->where(['Jobs.status IN' => ['qc_approved','in_production']])->count(),
             'completed'  => $Jobs->find()->where(['Jobs.status' => 'completed'])->count(),
         ];
         $myCount = 0;
 
         if ($role === 'operator') {
-            $myCount = $Jobs->find()->where(['Jobs.operator_id' => $user->id, 'Jobs.status' => 'in_digitizing'])->count();
+            $myCount = $Jobs->find()->where(['Jobs.operator_id' => $user->id, 'Jobs.status' => 'in_progress'])->count();
         } elseif ($role === 'quality_checker') {
-            $myCount = $Jobs->find()->where(['Jobs.status IN' => ['digitized','qc_rejected']])->count();
+            $myCount = $Jobs->find()->where(['Jobs.status IN' => ['ready_for_qc','qc_rejected']])->count();
         } elseif ($role === 'production') {
             $myCount = $Jobs->find()->where(['Jobs.status IN' => ['qc_approved','in_production']])->count();
         } elseif ($role === 'scheduler') {

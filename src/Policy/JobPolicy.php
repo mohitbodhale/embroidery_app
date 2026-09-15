@@ -15,8 +15,8 @@ class JobPolicy
             return false;
         }
         $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
-        // Only schedulers create jobs (admin manages users, not job creation)
-        return in_array($role, ['scheduler'], true);
+        // Only schedulers and admins create jobs
+        return in_array($role, ['scheduler', 'admin'], true);
     }
 
     public function canEdit($user, $job): bool
@@ -39,11 +39,11 @@ class JobPolicy
         }
 
         if ($role === 'operator') {
-            return !empty($job) && ($job->operator_id == $userId) && in_array($job->status, ['in_digitizing', 'qc_rejected'], true);
+            return !empty($job) && ($job->operator_id == $userId) && in_array($job->status, ['in_progress', 'qc_rejected'], true);
         }
 
         if ($role === 'quality_checker') {
-            return !empty($job) && ($job->qc_id == $userId) && ($job->status === 'digitized');
+            return !empty($job) && ($job->qc_id == $userId) && ($job->status === 'ready_for_qc');
         }
 
         if ($role === 'production') {
