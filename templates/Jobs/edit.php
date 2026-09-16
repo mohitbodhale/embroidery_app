@@ -56,15 +56,21 @@ $this->assign('title', 'Edit job ' . $job->job_number);
         <div class="row">
             <div class="col-md-4 mb-3">
                 <label>Status</label>
+                <?php if ($currentRole !== 'operator'): ?>
                 <?= $this->Form->control('status', [
                     'options' => $statuses,
                     'class' => 'form-select',
                     'label' => false,
                     'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
                 ]) ?>
+                <?php else: ?>
+                <div class="form-control" style="background:#f8f9fa;color:#6c757d;cursor:default;"><?= h($statusMeta[$job->status]['label'] ?? $job->status) ?></div>
+                <?= $this->Form->hidden('status', ['value' => $job->status]) ?>
+                <?php endif; ?>
             </div>
             <div class="col-md-4 mb-3">
                 <label>Operator</label>
+                <?php if ($currentRole !== 'operator'): ?>
                 <?= $this->Form->control('operator_id', [
                     'options' => $operators,
                     'empty' => 'Unassigned',
@@ -72,9 +78,14 @@ $this->assign('title', 'Edit job ' . $job->job_number);
                     'label' => false,
                     'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
                 ]) ?>
+                <?php else: ?>
+                <div class="form-control" style="background:#f8f9fa;color:#6c757d;cursor:default;"><?= h($job->hasValue('operator') ? $job->operator->name : 'Unassigned') ?></div>
+                <?= $this->Form->hidden('operator_id', ['value' => $job->operator_id ?? '']) ?>
+                <?php endif; ?>
             </div>
             <div class="col-md-4 mb-3">
                 <label>Quality checker</label>
+                <?php if ($currentRole !== 'operator'): ?>
                 <?= $this->Form->control('qc_id', [
                     'options' => $qcs,
                     'empty' => 'Unassigned',
@@ -82,10 +93,15 @@ $this->assign('title', 'Edit job ' . $job->job_number);
                     'label' => false,
                     'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
                 ]) ?>
+                <?php else: ?>
+                <div class="form-control" style="background:#f8f9fa;color:#6c757d;cursor:default;"><?= h($job->hasValue('qc') ? $job->qc->name : 'Unassigned') ?></div>
+                <?= $this->Form->hidden('qc_id', ['value' => $job->qc_id ?? '']) ?>
+                <?php endif; ?>
             </div>
         </div>
 
         <div class="row">
+            <?php if ($currentRole !== 'operator'): ?>
             <div class="col-md-6 mb-3">
                 <label>Scheduled date</label>
                 <?= $this->Form->control('scheduled_date', [
@@ -105,6 +121,7 @@ $this->assign('title', 'Edit job ' . $job->job_number);
                     'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
                 ]) ?>
             </div>
+            <?php endif; ?>
         </div>
 
         <hr>
@@ -223,20 +240,30 @@ $this->assign('title', 'Edit job ' . $job->job_number);
         <div class="form-actions">
             <?= $this->Html->link('<i class="fas fa-arrow-left me-1"></i>Back', ['action' => 'index'], ['class' => 'btn btn-outline-secondary', 'escape' => false]) ?>
             <div class="d-flex gap-2">
-                <?php if ($canDelete): ?>
-                    <?= $this->Form->postLink('<i class="fas fa-trash me-1"></i>Delete', ['action' => 'delete', $job->id], [
-                        'confirm' => __('Delete job # {0}?', $job->id),
-                        'class' => 'btn btn-outline-danger',
-                        'escape' => false,
+                <?php if ($currentRole !== 'operator'): ?>
+                    <?php if ($canDelete): ?>
+                        <?= $this->Form->postLink('<i class="fas fa-trash me-1"></i>Delete', ['action' => 'delete', $job->id], [
+                            'confirm' => __('Delete job # {0}?', $job->id),
+                            'class' => 'btn btn-outline-danger',
+                            'escape' => false,
+                        ]) ?>
+                    <?php endif; ?>
+                    <?= $this->Form->button('<i class="fas fa-save me-2"></i>Save changes', [
+                        'class' => 'btn btn-primary',
+                        'type' => 'submit',
+                        'escapeTitle' => false,
                     ]) ?>
                 <?php endif; ?>
-                <?= $this->Form->button('<i class="fas fa-save me-2"></i>Save changes', [
-                    'class' => 'btn btn-primary',
-                    'type' => 'submit',
-                    'escapeTitle' => false,
-                ]) ?>
             </div>
         </div>
         <?= $this->Form->end() ?>
+        <?php if ($currentRole === 'operator'): ?>
+        <div class="form-actions">
+            <div class="d-flex gap-2">
+                <?= $this->Form->postLink('<i class="fas fa-paper-plane me-1"></i>Send to QC', ['action' => 'submit', $job->id], ['class' => 'btn btn-primary', 'escape' => false, 'confirm' => __('Submit this job for QC review?')]) ?>
+                <?= $this->Form->postLink('<i class="fas fa-undo me-1"></i>Return to Scheduler', ['action' => 'returnToScheduler', $job->id], ['class' => 'btn btn-outline-secondary', 'escape' => false, 'confirm' => __('Return this job to the scheduler?')]) ?>
+            </div>
+        </div>
+        <?php endif; ?>
     </div>
 </div>

@@ -225,16 +225,6 @@ $this->assign('title', $job->job_number . ' · ' . $job->title);
 </div>
 <?php endif; ?>
 
-<?php if (!empty($currentRole) && $currentRole === 'operator' && in_array($job->status, ['in_progress', 'qc_rejected'], true)): ?>
-<div class="alert-card info mt-3">
-    <div><i class="fas fa-paper-plane me-2"></i>When finished, submit the file for QC review.</div>
-    <form method="post" action="<?= $this->Url->build(['action' => 'submit', $job->id]) ?>" style="display:inline">
-        <input type="hidden" name="_csrfToken" value="<?= h($this->request->getAttribute('csrfToken')) ?>">
-        <button class="btn btn-primary" type="submit"><i class="fas fa-paper-plane me-1"></i>Submit EMB for QC</button>
-    </form>
-</div>
-<?php endif; ?>
-
 <?php if (!empty($currentRole) && $currentRole === 'quality_checker' && $job->status === 'ready_for_qc'): ?>
 <div class="page-card card mt-3">
     <div class="card-header"><h3 class="card-title"><i class="fas fa-clipboard-check me-2"></i>QC Review</h3></div>
@@ -279,10 +269,12 @@ $this->assign('title', $job->job_number . ' · ' . $job->title);
 <div class="form-actions mt-4">
     <?= $this->Html->link('<i class="fas fa-arrow-left me-1"></i>Back to jobs', ['action' => 'index'], ['class' => 'btn btn-outline-secondary', 'escape' => false]) ?>
     <div class="d-flex gap-2">
-        <?= $this->Html->link('<i class="fas fa-pen me-1"></i>Edit', ['action' => 'edit', $job->id], ['class' => 'btn btn-primary', 'escape' => false]) ?>
-        <form method="post" action="<?= $this->Url->build(['action' => 'delete', $job->id]) ?>" style="display:inline" onsubmit="return confirm('Delete job # <?= h($job->id) ?>?')">
-            <input type="hidden" name="_csrfToken" value="<?= h($this->request->getAttribute('csrfToken')) ?>">
-            <button class="btn btn-outline-danger" type="submit"><i class="fas fa-trash me-1"></i>Delete</button>
-        </form>
+        <?php if (!in_array($currentRole, ['operator'], true)): ?>
+            <?= $this->Html->link('<i class="fas fa-pen me-1"></i>Edit', ['action' => 'edit', $job->id], ['class' => 'btn btn-primary', 'escape' => false]) ?>
+            <form method="post" action="<?= $this->Url->build(['action' => 'delete', $job->id]) ?>" style="display:inline" onsubmit="return confirm('Delete job # <?= h($job->id) ?>?')">
+                <input type="hidden" name="_csrfToken" value="<?= h($this->request->getAttribute('csrfToken')) ?>">
+                <button class="btn btn-outline-danger" type="submit"><i class="fas fa-trash me-1"></i>Delete</button>
+            </form>
+        <?php endif; ?>
     </div>
 </div>

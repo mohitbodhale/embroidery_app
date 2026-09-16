@@ -260,7 +260,7 @@ class JobsController extends AppController
         $operators = $this->Jobs->Operators->find('list', limit: 200)->all();
         $qcs = $this->Jobs->Qcs->find('list', limit: 200)->all();
         $organizations = $this->Jobs->Organizations->find('list', limit: 200)->all();
-        $statuses = $this->fetchTable('JobStatuses')->find('list', limit: 200)
+        $statuses = $this->fetchTable('JobStatuses')->find('list', keyField: 'name', valueField: 'label', limit: 200)
             ->where(['is_active' => true])
             ->orderBy(['sort_order' => 'ASC', 'label' => 'ASC'])
             ->all();
@@ -468,16 +468,39 @@ class JobsController extends AppController
     {
         $this->request->allowMethod(['post']);
         $job = $this->Jobs->get($id);
-    $comment = trim((string)$this->request->getData('comments'));
-    if ($comment === '') {
-        $this->Flash->error(__('Comment cannot be empty.'));
+        $comment = trim((string)$this->request->getData('comments'));
+        $comment = strip_tags($comment);
+        $comment = preg_replace('/<\?.*?\?>/s', '', $comment);
+        if ($comment === '') {
+            $this->Flash->error(__('Comment cannot be empty.'));
+
+            return $this->redirect(['action' => 'view', $job->id]);
+        }
+        if ($this->saveWithLog($job, 'note', $comment)) {
+            $this->Flash->success(__('Note added.'));
+        } else {
+            $this->Flash->error(__('Failed to add note.'));
+        }
+
         return $this->redirect(['action' => 'view', $job->id]);
     }
-    if ($this->saveWithLog($job, 'note', $comment)) {
-        $this->Flash->success(__('Note added.'));
-    } else {
-        $this->Flash->error(__('Failed to add note.'));
-    }
-    return $this->redirect(['action' => 'view', $job->id]);
+
+    /** Return a job to the scheduler for reassignment. */
+    public function returnToScheduler($id = null)
+    {
+        $this->request->allowMethod(['post']);
+        $job = $this->Jobs->get($id);
+        if (!$this->authorizeAction($job, 'edit')) {
+            throw new \Cake\Http\Exception\ForbiddenException(__('You are not authorized to return this job.'));
+        }
+        $job->status = 'draft';
+        $job->operator_id = null;
+        if ($this->saveWithLog($job, 'returned_to_scheduler', 'Job returned to scheduler for reassignment.')) {
+            $this->Flash->success(__('Job returned to scheduler.'));
+        } else {
+            $this->Flash->error(__('Failed to return job to scheduler.'));
+        }
+
+        return $this->redirect(['action' => 'index']);
     }
 }
