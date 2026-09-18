@@ -197,7 +197,7 @@ class JobsController extends AppController
      */
     public function edit($id = null)
     {
-        $job = $this->Jobs->get($id, contain: ['JobAttachments.UploadedBy']);
+        $job = $this->Jobs->get($id, contain: ['JobAttachments.UploadedBy', 'JobLogs.Users']);
 
         // Authorization via policy
         // if (!$this->authorizeAction($job, 'edit')) {
@@ -469,8 +469,6 @@ class JobsController extends AppController
         $this->request->allowMethod(['post']);
         $job = $this->Jobs->get($id);
         $comment = trim((string)$this->request->getData('comments'));
-        $comment = strip_tags($comment);
-        $comment = preg_replace('/<\?.*?\?>/s', '', $comment);
         if ($comment === '') {
             $this->Flash->error(__('Comment cannot be empty.'));
 

@@ -257,6 +257,54 @@ $this->assign('title', 'Edit job ' . $job->job_number);
             </div>
         </div>
         <?= $this->Form->end() ?>
+
+        <?php if (!empty($job->job_logs)): ?>
+        <div class="mt-4">
+            <strong class="d-block mb-3 section-label"><i class="fas fa-stream me-1"></i>Activity log</strong>
+            <div class="activity-timeline">
+                <?php foreach ($job->job_logs as $log): ?>
+                    <?php
+                        $action = strtolower((string)$log->action);
+                        $icon = 'fa-circle';
+                        $color = '#6c757d';
+                        if (str_contains($action, 'note')) { $icon = 'fa-sticky-note'; $color = '#17a2b8'; }
+                        elseif (str_contains($action, 'submit')) { $icon = 'fa-paper-plane'; $color = '#0dcaf0'; }
+                        elseif (str_contains($action, 'approve')) { $icon = 'fa-check-circle'; $color = '#28a745'; }
+                        elseif (str_contains($action, 'reject')) { $icon = 'fa-times-circle'; $color = '#dc3545'; }
+                        elseif (str_contains($action, 'start')) { $icon = 'fa-play'; $color = '#ffc107'; }
+                        elseif (str_contains($action, 'complete')) { $icon = 'fa-check-double'; $color = '#20c997'; }
+                        elseif (str_contains($action, 'assign')) { $icon = 'fa-user-tag'; $color = '#6f42c1'; }
+                        elseif (str_contains($action, 'upload')) { $icon = 'fa-file-upload'; $color = '#fd7e14'; }
+                        elseif (str_contains($action, 'delete')) { $icon = 'fa-trash'; $color = '#dc3545'; }
+                        elseif (str_contains($action, 'download')) { $icon = 'fa-download'; $color = '#0dcaf0'; }
+                        elseif (str_contains($action, 'return')) { $icon = 'fa-undo'; $color = '#fd7e14'; }
+                    ?>
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background-color: <?= h($color) ?>20; color: <?= h($color) ?>;">
+                            <i class="fas <?= h($icon) ?>"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-header">
+                                <span class="badge badge-action" style="background-color: <?= h($color) ?>; color: #fff;">
+                                    <?= h(ucwords(str_replace('_', ' ', $log->action))) ?>
+                                </span>
+                                <span class="text-muted small ms-2">
+                                    <?= $log->created_at ? h($log->created_at->format('M d, Y H:i')) : '—' ?>
+                                </span>
+                            </div>
+                            <?php if (!empty($log->comments)): ?>
+                                <div class="activity-text mt-1"><?= h($log->comments) ?></div>
+                            <?php endif; ?>
+                            <div class="activity-user text-muted small mt-1">
+                                <i class="fas fa-user me-1"></i><?= $log->hasValue('user') ? h($log->user->name) : 'System' ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+
         <?php if ($currentRole === 'operator'): ?>
         <div class="form-actions">
             <div class="d-flex gap-2">
