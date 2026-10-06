@@ -10,6 +10,7 @@ use Cake\Validation\Validator;
 use Cake\Event\EventInterface;
 use ArrayObject;
 use Cake\Routing\Router;
+use Cake\ORM\TableRegistry;
 
 use Cake\Datasource\EntityInterface; // ADD THIS IMPORT
 
@@ -20,6 +21,7 @@ use Cake\Datasource\EntityInterface; // ADD THIS IMPORT
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Operators
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Qcs
  * @property \App\Model\Table\OrganizationsTable&\Cake\ORM\Association\BelongsTo $Organizations
+ * @property \App\Model\Table\LevelsTable&\Cake\ORM\Association\BelongsTo $Levels
  * @property \App\Model\Table\JobAttachmentsTable&\Cake\ORM\Association\HasMany $JobAttachments
  * @property \App\Model\Table\JobLogsTable&\Cake\ORM\Association\HasMany $JobLogs
  *
@@ -66,6 +68,9 @@ class JobsTable extends Table
         $this->belongsTo('Organizations', [
             'foreignKey' => 'organization_id',
             'joinType' => 'INNER',
+        ]);
+        $this->belongsTo('Levels', [
+            'foreignKey' => 'level_id',
         ]);
         $this->hasMany('JobAttachments', [
             'foreignKey' => 'job_id',
@@ -138,6 +143,25 @@ class JobsTable extends Table
             ->integer('organization_id')
             ->allowEmptyString('organization_id');
 
+        $validator
+            ->integer('level_id')
+            ->allowEmptyString('level_id');
+
+        // `decimal` with no place limit accepts plain integers ("500") as well as
+        // decimals; the size is bounded separately below.
+        $validator
+            ->add('level_payment', 'decimal', [
+                'rule' => 'decimal',
+                'message' => __('Payment amount must be a number.'),
+            ])
+            ->allowEmptyString('level_payment')
+            ->greaterThanOrEqual('level_payment', 0, __('Payment amount cannot be negative.'))
+            ->lessThanOrEqual(
+                'level_payment',
+                9999999999.99,
+                __('Payment amount is too large.')
+            );
+
         return $validator;
     }
 
@@ -156,6 +180,38 @@ class JobsTable extends Table
         // $rules->add($rules->existsIn(['status_id'], 'JobStatuses'), ['errorField' => 'status_id']);
 
         return $rules;
+    }
+
+    /**
+     * The amount this job earns, computed live.
+     *
+     * The payment is read from the level's payment period that
+     * covers the job's scheduled date, so it always follows the
+     * rate schedule the administrator maintains. A level without
+     * a matching period falls back to its base payment amount,
+     * and a job without a level earns nothing.
+     *
+     * @param \App\Model\Entity\Job $job Job being priced.
+     * @return string|null The payment amount, or null when unpriced.
+     */
+    public function paymentFor($job): ?string
+    {
+        if (empty($job->level_id)) {
+            return null;
+        }
+
+        $rate = TableRegistry::getTableLocator()->get('LevelRates')
+            ->rateFor((int)$job->level_id, $job->scheduled_date ?? null);
+
+        if ($rate !== null) {
+            return $rate;
+        }
+
+        $level = $job->hasValue('level')
+            ? $job->level
+            : $this->Levels->find()->where(['Levels.id' => (int)$job->level_id])->first();
+
+        return $level !== null ? $level->payment_amount : null;
     }
 
 // 1. Automatically append role-aware filter to all SELECT queries

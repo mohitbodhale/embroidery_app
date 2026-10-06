@@ -2,6 +2,8 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\JobAttachment $jobAttachment
+ * @var \App\Model\Entity\Job|null $job
+ * @var array $jobs
  */
 $this->assign('title', 'Add attachment');
 ?>
@@ -14,7 +16,12 @@ $this->assign('title', 'Add attachment');
             <div class="row g-3">
                 <div class="col-md-6">
                     <label>Job</label>
+                    <?php if (!empty($job)): ?>
+                    <div class="form-control" style="background:#f8f9fa;color:#6c757d;cursor:default;"><?= h($job->job_number) ?> &mdash; <?= h($job->title) ?></div>
+                    <?= $this->Form->hidden('job_id', ['value' => $job->id]) ?>
+                    <?php else: ?>
                     <?= $this->Form->control('job_id', ['options' => $jobs, 'empty' => 'Select job', 'class' => 'form-select', 'label' => false, 'templates' => ['inputContainer' => '{{content}}']]) ?>
+                    <?php endif; ?>
                 </div>
                 <div class="col-md-6">
                     <label>Files <span class="text-muted small">(select one or more)</span></label>
@@ -31,7 +38,11 @@ $this->assign('title', 'Add attachment');
                 </div>
             </div>
             <div class="form-actions">
+                <?php if (!empty($job)): ?>
+                <?= $this->Html->link('<i class="fas fa-arrow-left me-1"></i>Back to job', ['controller' => 'Jobs', 'action' => 'view', $job->id], ['class' => 'btn btn-outline-secondary', 'escape' => false]) ?>
+                <?php else: ?>
                 <?= $this->Html->link('<i class="fas fa-arrow-left me-1"></i>Cancel', ['action' => 'index'], ['class' => 'btn btn-outline-secondary', 'escape' => false]) ?>
+                <?php endif; ?>
                 <?= $this->Form->button('<i class="fas fa-upload me-2"></i>Upload files', ['type' => 'submit', 'class' => 'btn btn-primary', 'escapeTitle' => false]) ?>
             </div>
         <?= $this->Form->end() ?>

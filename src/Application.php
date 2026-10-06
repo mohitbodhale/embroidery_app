@@ -32,6 +32,7 @@ use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Middleware\AuthenticationMiddleware;
+use Laminas\Diactoros\Response\RedirectResponse;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -195,31 +196,100 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
 class ProtectedAuthenticationMiddleware implements MiddlewareInterface
 {
     private AuthenticationMiddleware $authMiddleware;
+    private AuthenticationServiceProviderInterface $provider;
+
+    /**
+     * Public actions, keyed by lowercased controller name (dot prefixed when the
+     * controller belongs to a plugin) with lowercased action names.
+     */
     private array $unauthenticatedActions = [
-        'Users' => ['login', 'logout', 'register', 'resetAdminPassword', 'awaitingApproval'],
-        'SystemTests' => ['panel', 'run'],
-        'Pages' => ['admin_demo'],
+        'users' => [
+            'login',
+            'logout',
+            'register',
+            'resetadminpassword',
+            'forgotpassword',
+            'resetwithtoken',
+            'awaitingapproval',
+        ],
+        'systemtests' => ['panel', 'run'],
+        // '/' (Pages::dashboard) and the TrackBridge landing page are public;
+        // dashboard() redirects to welcome() when nobody is signed in.
+        'pages' => ['admin_demo', 'dashboard', 'welcome', 'display'],
     ];
 
     public function __construct(AuthenticationServiceProviderInterface $provider)
     {
+        $this->provider = $provider;
         $this->authMiddleware = new AuthenticationMiddleware($provider);
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        // Get the controller and action from the request
-        $controller = $request->getAttribute('controller');
-        $action = $request->getAttribute('action');
-
-        // Check if this action should be accessible without authentication
-        if (isset($this->unauthenticatedActions[$controller]) && 
-            in_array($action, $this->unauthenticatedActions[$controller])) {
-            // Skip authentication for this action
-            return $handler->handle($request);
+        // RoutingMiddleware only sets the 'params' attribute; controller/action
+        // request attributes are not populated yet at this point in the queue.
+        $params = (array)$request->getAttribute('params');
+        $plugin = (string)($params['plugin'] ?? '');
+        $controller = strtolower((string)($params['controller'] ?? $request->getAttribute('controller') ?? ''));
+        $action = strtolower((string)($params['action'] ?? $request->getAttribute('action') ?? ''));
+        if ($plugin !== '') {
+            $controller = strtolower($plugin) . '.' . $controller;
         }
 
-        // Otherwise, apply authentication middleware
-        return $this->authMiddleware->process($request, $handler);
+        // Check if this action should be accessible without authentication
+        $isPublic = $this->isToolingRequest($request)
+            || (isset($this->unauthenticatedActions[$controller]) &&
+                in_array($action, $this->unauthenticatedActions[$controller], true));
+
+        // Authentication plugin 3.x always sets the identity attribute (null when
+        // nobody is signed in) and leaves enforcement to the application. Without
+        // this guard an expired/absent session reaches every policy with a null
+        // user and surfaces as a raw ForbiddenException instead of a login prompt.
+        // AuthenticationMiddleware itself must still run for public actions: the
+        // Form authenticator handles the login POST and controllers read the
+        // 'authentication' request attribute.
+        $guard = new class ($handler, $this->provider->getAuthenticationService($request), $isPublic) implements RequestHandlerInterface {
+            public function __construct(
+                private RequestHandlerInterface $handler,
+                private AuthenticationServiceInterface $service,
+                private bool $isPublic,
+            ) {
+            }
+
+            public function handle(ServerRequestInterface $request): ResponseInterface
+            {
+                if (
+                    !$this->isPublic &&
+                    $request->getAttribute($this->service->getIdentityAttribute()) === null
+                ) {
+                    $url = $this->service->getUnauthenticatedRedirectUrl($request);
+                    if ($url !== null) {
+                        return new RedirectResponse($url);
+                    }
+                }
+
+                return $this->handler->handle($request);
+            }
+        };
+
+        return $this->authMiddleware->process($request, $guard);
+    }
+
+    /**
+     * Requests made by development tooling (the DebugKit toolbar) are not user
+     * navigation and must not be bounced to the login screen, otherwise the
+     * toolbar requests a login page, which then builds another toolbar panel
+     * and burns memory in a loop.
+     */
+    private function isToolingRequest(ServerRequestInterface $request): bool
+    {
+        $path = $request->getUri()->getPath();
+        $webroot = rtrim(WWW_ROOT, '\\/');
+        $base = basename($webroot);
+        if ($base !== '' && str_starts_with($path, '/' . $base)) {
+            $path = substr($path, strlen($base) + 1);
+        }
+
+        return str_starts_with($path, '/debug-kit/');
     }
 }

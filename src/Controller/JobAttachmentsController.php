@@ -55,10 +55,11 @@ class JobAttachmentsController extends AppController
 
     public function add()
     {
-        $jobId = $this->request->getQuery('job_id');
+        $jobId = $this->request->getQuery('job_id') ?: $this->request->getData('job_id');
         $job = null;
         if ($jobId) {
-            $job = $this->JobAttachments->Jobs->get($jobId);
+            $job = $this->JobAttachments->Jobs->get((int)$jobId);
+            $jobId = (int)$jobId;
         }
         $policy = new \App\Policy\JobAttachmentPolicy();
         if (!$policy->canAdd($this->getCurrentUser(), $job)) {
@@ -66,6 +67,9 @@ class JobAttachmentsController extends AppController
         }
 
         $jobAttachment = $this->JobAttachments->newEmptyEntity();
+        if ($job) {
+            $jobAttachment->job_id = $job->id;
+        }
         if ($this->request->is('post')) {
             $data = $this->request->getData();
             $uploadedBy = $this->getCurrentUser()?->id;
@@ -115,11 +119,11 @@ class JobAttachmentsController extends AppController
                 $this->Flash->error(__('Could not save any files.'));
             }
         }
-        $jobs = $this->JobAttachments->Jobs->find('list', limit: 200);
-        if ($jobId) {
-            $jobs = $jobs->where(['Jobs.id' => $jobId]);
+        $jobs = [];
+        if (!$job) {
+            $jobs = $this->JobAttachments->Jobs->find('list', limit: 200)->all();
         }
-        $this->set(compact('jobAttachment', 'jobs'));
+        $this->set(compact('jobAttachment', 'jobs', 'job'));
     }
 
     public function edit($id = null)

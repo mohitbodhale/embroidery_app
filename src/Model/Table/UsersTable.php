@@ -39,6 +39,10 @@ class UsersTable extends Table
             'foreignKey' => 'user_id',
             'dependent' => true,
         ]);
+        // Wallet rows cascade on user delete at the database level.
+        $this->hasOne('OperatorWallets', [
+            'foreignKey' => 'user_id',
+        ]);
     }
 
     public function beforeSave(\Cake\Event\EventInterface $event, \Cake\Datasource\EntityInterface $entity, \ArrayObject $options): void

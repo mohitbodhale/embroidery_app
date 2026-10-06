@@ -78,7 +78,7 @@ class JobsController extends AppController
      */
     public function view($id = null)
     {
-        $job = $this->Jobs->get($id, contain: ['Operators', 'Qcs', 'Organizations', 'JobAttachments', 'JobLogs']);
+        $job = $this->Jobs->get($id, contain: ['Operators', 'Qcs', 'Organizations', 'Levels', 'JobAttachments', 'JobLogs']);
 
         // Authorization: ensure current user may view
         // if (!$this->authorizeAction($job, 'view')) {
@@ -93,7 +93,7 @@ class JobsController extends AppController
             return ['color' => $e->color, 'label' => $e->label, 'is_terminal' => $e->is_terminal];
         })->all()->toArray();
 
-        $this->set(compact('job', 'operators', 'qcs', 'statusMeta'));
+        $this->set(compact('job', 'operators', 'qcs', 'statusMeta', 'jobPayment'));
     }
 
     /**
@@ -138,6 +138,9 @@ class JobsController extends AppController
                 $data['status'] = 'in_progress';
             }
 
+            // The level comes from the posted level_id; the
+            // payment is computed live from the rate schedule,
+            // so nothing is stored on the job.
             $job = $this->Jobs->patchEntity($job, $data);
             if ($this->Jobs->save($job)) {
                 $this->Flash->success(__('The job has been saved.'));
@@ -185,7 +188,9 @@ class JobsController extends AppController
         $qcs = $this->Jobs->Qcs->find('list', limit: 200)
             ->where(['role' => 'quality_checker'])->all();
         $organizations = $this->Jobs->Organizations->find('list', limit: 200)->all();
-        $this->set(compact('job', 'operators', 'qcs', 'organizations'));
+        $levels = $this->fetchTable('Levels')->selectOptions();
+        $rateSchedule = $this->fetchTable('Levels')->rateSchedule();
+        $this->set(compact('job', 'operators', 'qcs', 'organizations', 'levels', 'rateSchedule'));
     }
 
     /**
@@ -197,7 +202,10 @@ class JobsController extends AppController
      */
     public function edit($id = null)
     {
-        $job = $this->Jobs->get($id, contain: ['JobAttachments.UploadedBy', 'JobLogs.Users']);
+        // Operators and Qcs are required by the template: the read-only
+        // "assigned to" boxes render the associated user names.
+        $job = $this->Jobs->get($id, contain: ['Levels', 'Operators', 'Qcs', 'JobAttachments.UploadedBy', 'JobLogs.Users']);
+        $jobPayment = $this->Jobs->paymentFor($job);
 
         // Authorization via policy
         // if (!$this->authorizeAction($job, 'edit')) {
@@ -211,6 +219,13 @@ class JobsController extends AppController
             if (empty($data['status'])) {
                 $data['status'] = $job->status ?? 'draft';
             }
+            $currentUser = $this->getCurrentUser();
+            if (!$this->canSetLevel($currentUser)) {
+                // Operators and reviewers must not change the level.
+                unset($data['level_id']);
+                unset($data['level_payment']);
+            }
+
             $job = $this->Jobs->patchEntity($job, $data);
             $jobSaved = $this->Jobs->save($job);
             if ($jobSaved) {
@@ -268,7 +283,28 @@ class JobsController extends AppController
             return ['color' => $e->color, 'label' => $e->label, 'is_terminal' => $e->is_terminal];
         })->all()->toArray();
         $canDelete = $this->authorizeAction($job, 'delete');
-        $this->set(compact('job', 'operators', 'qcs', 'organizations', 'statuses', 'statusMeta', 'canDelete', 'canAddAttachment'));
+        $levels = $this->fetchTable('Levels')->selectOptions(activeOnly: false);
+        $rateSchedule = $this->fetchTable('Levels')->rateSchedule();
+        $this->set(compact('job', 'operators', 'qcs', 'organizations', 'statuses', 'statusMeta', 'canDelete', 'canAddAttachment', 'levels', 'rateSchedule', 'jobPayment'));
+    }
+
+    /**
+     * Whether this user may choose a job's level and payment amount.
+     *
+     * Levels carry the pay rate, so only the roles that price work (admin and
+     * scheduler) may set them. Operators and reviewers see the level read-only
+     * and must not be able to post a different amount.
+     *
+     * @param object|null $user Authenticated user, or null when signed out.
+     * @return bool
+     */
+    protected function canSetLevel(?object $user): bool
+    {
+        return $user !== null && in_array(
+            $this->normalizedRole($user),
+            ['admin', 'scheduler'],
+            true
+        );
     }
 
     /**

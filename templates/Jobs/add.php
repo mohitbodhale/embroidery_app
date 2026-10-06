@@ -5,6 +5,8 @@
  * @var \Cake\Collection\CollectionInterface|string[] $operators
  * @var \Cake\Collection\CollectionInterface|string[] $qcs
  * @var \Cake\Collection\CollectionInterface|string[] $organizations
+ * @var array<int|string, string> $levels
+ * @var array<int|string, array{base: float, periods: array<int, array{from: string|null, to: string|null, amount: float}>} $rateSchedule
  */
 $this->assign('title', 'Create job');
 ?>
@@ -91,6 +93,25 @@ $this->assign('title', 'Create job');
             </div>
         </div>
 
+         <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Job level</label>
+                <?= $this->Form->control('level_id', [
+                    'options' => $levels,
+                    'empty' => 'No level',
+                    'class' => 'form-select',
+                    'label' => false,
+                    'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
+                ]) ?>
+                <div class="form-text">The payment is computed live from the rate period covering the scheduled date. Rates are maintained under Levels (sidebar &rarr; Masters).</div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Payment for this job</label>
+                <div class="form-control" style="background:#f8f9fa;color:#6c757d;cursor:default;" id="level-payment-display">—</div>
+                <div class="form-text">Pick a level and a scheduled date to preview the rate the job will pay.</div>
+            </div>
+        </div>
+
          <?= $this->Form->hidden('status', ['value' => 'draft']) ?>
 
         <hr>
@@ -139,3 +160,59 @@ $this->assign('title', 'Create job');
         <?= $this->Form->end() ?>
     </div>
 </div>
+<?php $this->start('script'); ?>
+<script>
+(function () {
+    var schedule = <?= json_encode($rateSchedule) ?>;
+    var levelSelect = document.getElementById('level_id');
+    var dateInput = document.getElementById('scheduled-date');
+    var display = document.getElementById('level-payment-display');
+    if (!display) {
+        return;
+    }
+    function today() {
+        var now = new Date();
+        var month = String(now.getMonth() + 1).padStart(2, '0');
+        var day = String(now.getDate()).padStart(2, '0');
+        return now.getFullYear() + '-' + month + '-' + day;
+    }
+    // Mirrors LevelRatesTable::rateFor(): among the periods
+    // covering the day, the one with the latest start wins;
+    // otherwise the level's base amount applies.
+    function rateForDay(level, day) {
+        var best = null;
+        var bestFrom = null;
+        for (var i = 0; i < level.periods.length; i++) {
+            var period = level.periods[i];
+            if (period.from && period.from > day) { continue; }
+            if (period.to && period.to < day) { continue; }
+            var from = period.from || '0000-00-00';
+            if (best === null || from >= bestFrom) {
+                best = period;
+                bestFrom = from;
+            }
+        }
+        if (best !== null) {
+            return Number(best.amount).toFixed(2);
+        }
+        return Number(level.base).toFixed(2);
+    }
+    function refresh() {
+        var level = levelSelect && schedule[levelSelect.value] ? schedule[levelSelect.value] : null;
+        if (!level) {
+            display.textContent = '—';
+            return;
+        }
+        var day = (dateInput && dateInput.value) || today();
+        display.textContent = rateForDay(level, day);
+    }
+    if (levelSelect) {
+        levelSelect.addEventListener('change', refresh);
+    }
+    if (dateInput) {
+        dateInput.addEventListener('change', refresh);
+    }
+    refresh();
+})();
+</script>
+<?php $this->end(); ?>

@@ -220,6 +220,19 @@ $isAuthPage = ($controller === 'Users' && in_array($action, ['login','register',
                                 <p>Job Statuses</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="<?= $this->Url->build(['controller' => 'Levels', 'action' => 'index']) ?>" class="nav-link <?= ($this->request->getParam('controller') === 'Levels') ? 'active' : '' ?>">
+                                <i class="nav-icon fas fa-layer-group"></i>
+                                <p>Levels</p>
+                            </a>
+                        </li>
+                        <li class="nav-header">WALLETS</li>
+                        <li class="nav-item">
+                            <a href="<?= $this->Url->build(['controller' => 'Wallets', 'action' => 'index']) ?>" class="nav-link <?= ($this->request->getParam('controller') === 'Wallets') ? 'active' : '' ?>">
+                                <i class="nav-icon fas fa-wallet"></i>
+                                <p>Operator Wallets</p>
+                            </a>
+                        </li>
                         <li class="nav-header">ACTIVITY</li>
                         <li class="nav-item">
                             <a href="<?= $this->Url->build(['controller' => 'JobLogs', 'action' => 'index']) ?>" class="nav-link <?= ($this->request->getParam('controller') === 'JobLogs') ? 'active' : '' ?>">
@@ -241,6 +254,15 @@ $isAuthPage = ($controller === 'Users' && in_array($action, ['login','register',
                             <a href="<?= $this->Url->build(['controller' => 'Jobs', 'action' => 'add']) ?>" class="nav-link">
                                 <i class="nav-icon fas fa-plus-circle"></i>
                                 <p>Create Job</p>
+                            </a>
+                        </li>
+                        <?php endif; ?>
+
+                        <?php if ($role === 'operator'): ?>
+                        <li class="nav-item">
+                            <a href="<?= $this->Url->build(['controller' => 'Wallets', 'action' => 'my']) ?>" class="nav-link <?= ($this->request->getParam('controller') === 'Wallets') ? 'active' : '' ?>">
+                                <i class="nav-icon fas fa-wallet"></i>
+                                <p>My Wallet</p>
                             </a>
                         </li>
                         <?php endif; ?>

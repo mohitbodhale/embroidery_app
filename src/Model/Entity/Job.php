@@ -17,13 +17,16 @@ use Cake\ORM\Entity;
  * @property int|null $operator_id
  * @property int|null $qc_id
  * @property \Cake\I18n\DateTime|null $scheduled_date
- * @property \Cake\I18n\DateTime|null $created_at
+* @property \Cake\I18n\DateTime|null $created_at
  * @property \Cake\I18n\DateTime|null $updated_at
  * @property int $organization_id
+ * @property int|null $level_id
+ * @property string|null $level_payment
  *
  * @property \App\Model\Entity\User $operator
  * @property \App\Model\Entity\User $qc
  * @property \App\Model\Entity\Organization $organization
+ * @property \App\Model\Entity\Level|null $level
  * @property \App\Model\Entity\JobAttachment[] $job_attachments
  * @property \App\Model\Entity\JobLog[] $job_logs
  */
@@ -50,9 +53,12 @@ class Job extends Entity
         'created_at' => true,
         'updated_at' => true,
         'organization_id' => true,
+        'level_id' => true,
+        'level_payment' => true,
         'operator' => true,
         'qc' => true,
         'organization' => true,
+        'level' => true,
         'job_attachments' => true,
         'job_logs' => true,
     ];

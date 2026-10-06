@@ -3,6 +3,7 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Job $job
  * @var array $statusMeta
+ * @var string|null $jobPayment Payment computed live from the job's level and scheduled date.
  */
 $statusInfo = $statusMeta[$job->status] ?? ['color' => '#6c757d', 'label' => $job->status, 'is_terminal' => false];
 $this->assign('title', $job->job_number . ' · ' . $job->title);
@@ -32,6 +33,26 @@ $this->assign('title', $job->job_number . ' · ' . $job->title);
             <dt class="col-sm-3">Quality checker</dt>
             <dd class="col-sm-9">
                 <?= $job->hasValue('qc') ? '<i class="fas fa-user-check me-1 text-muted"></i>' . h($job->qc->name) : '<span class="text-muted">—</span>' ?>
+            </dd>
+
+            <dt class="col-sm-3">Level</dt>
+            <dd class="col-sm-9">
+                <?php if ($job->hasValue('level')): ?>
+                    <span class="badge" style="background-color: <?= h($job->level->color ?: '#6c757d') ?>; color: white;">
+                        <?= h($job->level->label) ?>
+                    </span>
+                <?php else: ?>
+                    <span class="text-muted">—</span>
+                <?php endif; ?>
+            </dd>
+
+            <dt class="col-sm-3">Payment</dt>
+            <dd class="col-sm-9">
+                <?php if ($jobPayment !== null): ?>
+                    <strong><?= h(number_format((float)$jobPayment, 2)) ?></strong>
+                <?php else: ?>
+                    <span class="text-muted">—</span>
+                <?php endif; ?>
             </dd>
 
             <dt class="col-sm-3">Organization</dt>

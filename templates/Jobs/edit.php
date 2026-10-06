@@ -2,11 +2,14 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Job $job
- * @var string[]|\Cake\Collection\CollectionInterface $operators
- * @var string[]|\Cake\Collection\CollectionInterface $qcs
- * @var string[]|\Cake\Collection\CollectionInterface $organizations
- * @var string[]|\Cake\Collection\CollectionInterface $statuses
+ * @var \Cake\Collection\CollectionInterface|string[] $operators
+ * @var \Cake\Collection\CollectionInterface|string[] $qcs
+ * @var \Cake\Collection\CollectionInterface|string[] $organizations
+ * @var \Cake\Collection\CollectionInterface|string[] $statuses
  * @var array $statusMeta
+ * @var array<int|string, string> $levels
+ * @var array<int|string, array{base: float, periods: array<int, array{from: string|null, to: string|null, amount: float}>} $rateSchedule
+ * @var string|null $jobPayment Payment computed live from the job's level and scheduled date.
  */
 $currentStatusMeta = $statusMeta[$job->status] ?? ['color' => '#6c757d', 'label' => $job->status, 'is_terminal' => false];
 $this->assign('title', 'Edit job ' . $job->job_number);
@@ -124,6 +127,34 @@ $this->assign('title', 'Edit job ' . $job->job_number);
             <?php endif; ?>
         </div>
 
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Job level</label>
+                <?php if (in_array($currentRole, ['admin', 'scheduler'], true)): ?>
+                <?= $this->Form->control('level_id', [
+                    'options' => $levels,
+                    'empty' => 'No level',
+                    'class' => 'form-select',
+                    'label' => false,
+                    'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
+                ]) ?>
+                <div class="form-text">Changing the level re-prices the job from the period covering its scheduled date.</div>
+                <?php else: ?>
+                <div class="form-control" style="background:#f8f9fa;color:#6c757d;cursor:default;">
+                    <?= h($job->hasValue('level') ? $job->level->label : 'No level') ?>
+                </div>
+                <?= $this->Form->hidden('level_id', ['value' => $job->level_id ?? '']) ?>
+                <?php endif; ?>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Payment for this job</label>
+                <div class="form-control" style="background:#f8f9fa;color:#6c757d;cursor:default;" id="level-payment-display">
+                    <?= $jobPayment !== null ? h(number_format((float)$jobPayment, 2)) : '—' ?>
+                </div>
+                <div class="form-text">Computed live from the payment period covering the job's scheduled date. Change the level or the date and the rate updates. Rates are maintained under Levels (sidebar &rarr; Masters).</div>
+            </div>
+        </div>
+
         <hr>
 
         <?php if ($canAddAttachment || !empty($job->job_attachments)): ?>
@@ -171,10 +202,16 @@ $this->assign('title', 'Edit job ' . $job->job_number);
                                             <?php $canDeleteAtt = true; ?>
                                         <?php endif; ?>
                                         <?php if ($canDeleteAtt): ?>
-                                            <form method="post" action="<?= $this->Url->build(['controller' => 'JobAttachments', 'action' => 'delete', $att->id]) ?>" style="display:inline" onsubmit="return confirm('Delete this file?')">
-                                                <input type="hidden" name="_csrfToken" value="<?= h($this->request->getAttribute('csrfToken')) ?>">
-                                                <button class="btn btn-icon btn-outline-danger" type="submit" title="Delete"><i class="fas fa-trash"></i></button>
-                                            </form>
+                                            <?php /* A literal nested <form> here would terminate the job
+                                                 edit form in the HTML parser, which silently detached every
+                                                 later control (including Save) from it. postLink renders
+                                                 its own standalone form instead. */ ?>
+                                            <?= $this->Form->postLink('<i class="fas fa-trash"></i>', ['controller' => 'JobAttachments', 'action' => 'delete', $att->id], [
+                                                'confirm' => __('Delete this file?'),
+                                                'class' => 'btn btn-icon btn-outline-danger',
+                                                'escape' => false,
+                                                'title' => 'Delete',
+                                            ]) ?>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
@@ -315,3 +352,59 @@ $this->assign('title', 'Edit job ' . $job->job_number);
         <?php endif; ?>
     </div>
 </div>
+<?php $this->start('script'); ?>
+<script>
+(function () {
+    var schedule = <?= json_encode($rateSchedule) ?>;
+    var levelSelect = document.getElementById('level_id');
+    var dateInput = document.getElementById('scheduled-date');
+    var display = document.getElementById('level-payment-display');
+    if (!display) {
+        return;
+    }
+    function today() {
+        var now = new Date();
+        var month = String(now.getMonth() + 1).padStart(2, '0');
+        var day = String(now.getDate()).padStart(2, '0');
+        return now.getFullYear() + '-' + month + '-' + day;
+    }
+    // Mirrors LevelRatesTable::rateFor(): among the periods
+    // covering the day, the one with the latest start wins;
+    // otherwise the level's base amount applies.
+    function rateForDay(level, day) {
+        var best = null;
+        var bestFrom = null;
+        for (var i = 0; i < level.periods.length; i++) {
+            var period = level.periods[i];
+            if (period.from && period.from > day) { continue; }
+            if (period.to && period.to < day) { continue; }
+            var from = period.from || '0000-00-00';
+            if (best === null || from >= bestFrom) {
+                best = period;
+                bestFrom = from;
+            }
+        }
+        if (best !== null) {
+            return Number(best.amount).toFixed(2);
+        }
+        return Number(level.base).toFixed(2);
+    }
+    function refresh() {
+        var level = levelSelect && schedule[levelSelect.value] ? schedule[levelSelect.value] : null;
+        if (!level) {
+            display.textContent = '—';
+            return;
+        }
+        var day = (dateInput && dateInput.value) || today();
+        display.textContent = rateForDay(level, day);
+    }
+    if (levelSelect) {
+        levelSelect.addEventListener('change', refresh);
+    }
+    if (dateInput) {
+        dateInput.addEventListener('change', refresh);
+    }
+    refresh();
+})();
+</script>
+<?php $this->end(); ?>

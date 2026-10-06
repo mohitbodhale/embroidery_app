@@ -406,5 +406,11 @@ return [
      */
     'Session' => [
         'defaults' => 'php',
+        // XAMPP ships session.gc_maxlifetime=1440 (24 minutes), so PHP garbage
+        // collects session files after a short idle gap and silently signs the
+        // user out. Keep sessions alive for two hours instead.
+        'ini' => [
+            'session.gc_maxlifetime' => 7200,
+        ],
     ],
 ];

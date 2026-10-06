@@ -69,6 +69,7 @@ final class CreateCoreSchema extends BaseMigration
         if (!$this->table('job_statuses')->exists()) {
             $this->table('job_statuses')
                 ->addColumn('name', 'string', ['limit' => 64, 'null' => false])
+                ->addColumn('label', 'string', ['limit' => 128, 'null' => false])
                 ->addColumn('description', 'text', ['null' => true])
                 ->addColumn('color', 'string', ['limit' => 16, 'null' => true])
                 ->addColumn('sort_order', 'integer', ['null' => true])
