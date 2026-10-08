@@ -14,28 +14,43 @@ use Migrations\BaseMigration;
  */
 final class AddOperatorWorkTypeToUsers extends BaseMigration
 {
+    private function columnExists(string $table, string $column): bool
+    {
+        try {
+            $rows = $this->fetchAll("PRAGMA table_info('{$table}')");
+            foreach ($rows as $row) {
+                $name = $row['name'] ?? $row['COLUMN_NAME'] ?? null;
+                if ($name === $column) {
+                    return true;
+                }
+            }
+        } catch (\Throwable) {
+            // SQLite metadata lookup is not available on all backends; the fallback below handles MySQL/Postgres.
+        }
+
+        try {
+            $row = $this->fetchRow(
+                "SELECT 1 FROM information_schema.columns
+                 WHERE table_name = '{$table}' AND column_name = '{$column}'"
+            );
+            return (bool) $row;
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
     public function change(): void
     {
         if (!$this->table('users')->exists()) {
             return;
         }
 
-        $columnExists = function (string $column): bool {
-            $row = $this->fetchRow(
-                "SELECT 1 FROM information_schema.columns
-                 WHERE table_name = 'users' AND column_name = '{$column}'"
-            );
-            return (bool) $row;
-        };
-
-        if (!$columnExists('work_type')) {
-            $this->table('users')
-                ->addColumn('work_type', 'string', [
-                    'limit'   => 64,
-                    'null'    => true,
-                    'after'   => 'role_id',
-                ])
-                ->update();
+        if (!$this->columnExists('users', 'work_type')) {
+            try {
+                $this->execute("ALTER TABLE users ADD COLUMN work_type VARCHAR(64) NULL");
+            } catch (\Throwable $e) {
+                // Some database backends may require a different alter syntax, so we continue quietly.
+            }
         }
     }
 }

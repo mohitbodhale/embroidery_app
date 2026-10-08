@@ -1,4 +1,27 @@
-# CakePHP Application Skeleton
+# TrackBridge
+
+TrackBridge is a CakePHP 5 application for managing embroidery work from scheduling and operator assignment through QC review and production completion. Operators are a single authorization role with distinct work types such as digitizing, programming, and data entry.
+
+## Project Guide
+
+The maintained project reference is [docs/WORKFLOW.md](docs/WORKFLOW.md). It describes setup, roles and permissions, the job lifecycle, attachment rules, security configuration, troubleshooting, and the change log. Keep that file as the source of truth when behavior changes.
+
+## Local Development
+
+Requirements: PHP 8.1+, Composer, and PostgreSQL. Configure `config/app_local.php` or environment variables from `config/.env.example`; use a least-privilege database account and a unique `SECURITY_SALT` outside local development. The local config and `config/.env` are ignored by Git.
+
+Under XAMPP, the app may be available at `http://localhost/embroidery_app`. The CakePHP development server can be started with:
+
+```powershell
+php bin/cake server -p 8765
+```
+
+Run tests with:
+
+```powershell
+php vendor/bin/phpunit
+composer check
+```
 
 ![Build Status](https://github.com/cakephp/app/actions/workflows/ci.yml/badge.svg?branch=master)
 [![Total Downloads](https://img.shields.io/packagist/dt/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app)

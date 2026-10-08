@@ -40,6 +40,16 @@ class UsersFixture extends TestFixture
                 'role_id' => 40,
                 'created_at' => '2025-01-01 00:00:00',
             ],
+            [
+                'id' => 4,
+                'name' => 'Operator User',
+                'email' => 'operator@stitchcraft.com',
+                'password' => '$2y$10$N9qo8uLOickgx2ZMRZoMy...',
+                'role' => 'operator',
+                'organization_id' => 1,
+                'role_id' => 20,
+                'created_at' => '2025-01-01 00:00:00',
+            ],
         ];
         parent::init();
     }

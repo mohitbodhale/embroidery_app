@@ -14,22 +14,39 @@ class JobLogsController extends AppController
 {
     public function index()
     {
+        $this->requireRole(['admin', 'scheduler', 'operator', 'quality_checker', 'production']);
+        $user = $this->getCurrentUser();
+        $role = $this->normalizedRole($user);
         $query = $this->JobLogs->find('all')
             ->contain(['Jobs', 'Users']);
+        if ($role === 'scheduler') {
+            $query->where(['Jobs.created_by' => $user->id]);
+        } elseif ($role === 'operator') {
+            $query->where(['Jobs.operator_id' => $user->id]);
+        } elseif ($role === 'quality_checker') {
+            $query->where(['Jobs.qc_id' => $user->id]);
+        } elseif ($role === 'production') {
+            $query->where(['Jobs.status IN' => ['qc_approved', 'in_production']]);
+        }
         $jobLogs = $this->paginate($query);
         $this->set(compact('jobLogs'));
     }
 
     public function view($id = null)
     {
+        $this->requireRole(['admin', 'scheduler', 'operator', 'quality_checker', 'production']);
         $jobLog = $this->JobLogs->get($id, [
             'contain' => ['Jobs', 'Users']
         ]);
+        if (!$this->authorizeAction($jobLog->job, 'view')) {
+            throw new \Cake\Http\Exception\ForbiddenException(__('You are not authorized to view this log entry.'));
+        }
         $this->set(compact('jobLog'));
     }
 
     public function add()
     {
+        $this->requireRole(['admin']);
         $jobLog = $this->JobLogs->newEmptyEntity();
         if ($this->request->is('post')) {
             $data = $this->request->getData();
@@ -48,7 +65,8 @@ class JobLogsController extends AppController
 
     public function edit($id = null)
     {
-        $jobLog = $this->JobLogs->get($id, contain: []);
+        $this->requireRole(['admin']);
+        $jobLog = $this->JobLogs->get($id, ['contain' => []]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $jobLog = $this->JobLogs->patchEntity($jobLog, $this->request->getData());
             if ($this->JobLogs->save($jobLog)) {
@@ -63,6 +81,7 @@ class JobLogsController extends AppController
 
     public function delete($id = null)
     {
+        $this->requireRole(['admin']);
         $this->request->allowMethod(['post', 'delete']);
         $jobLog = $this->JobLogs->get($id);
         $jobId = $jobLog->job_id;

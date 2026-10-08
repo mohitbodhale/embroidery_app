@@ -26,6 +26,7 @@ class JobAttachmentsTable extends Table
         $this->belongsTo('Jobs', [
             'foreignKey' => 'job_id',
             'joinType' => 'INNER',
+            'propertyName' => 'job',
         ]);
         $this->belongsTo('UploadedBy', [
             'className' => 'Users',

@@ -28,8 +28,11 @@ class JobAttachmentPolicy
         $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
         $job = $attachment->job;
 
-        if (in_array($role, ['admin', 'scheduler'], true)) {
+        if ($role === 'admin') {
             return true;
+        }
+        if ($role === 'scheduler') {
+            return $job->created_by == ($user->id ?? null);
         }
         if ($role === 'operator') {
             return $job->operator_id == ($user->id ?? null);
@@ -50,14 +53,17 @@ class JobAttachmentPolicy
             return false;
         }
         $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
-        if (in_array($role, ['admin', 'scheduler'], true)) {
+        if ($role === 'admin') {
             return true;
+        }
+        if ($role === 'scheduler' && $job) {
+            return $job->created_by == ($user->id ?? null);
         }
         if ($role === 'operator' && $job && $job->operator_id == ($user->id ?? null)) {
-            return true;
+            return in_array($job->status, ['in_progress', 'qc_rejected'], true);
         }
         if ($role === 'quality_checker' && $job && $job->qc_id == ($user->id ?? null)) {
-            return true;
+            return $job->status === 'ready_for_qc';
         }
         if ($role === 'production' && $job && in_array($job->status, ['qc_approved', 'in_production'], true)) {
             return true;
@@ -72,10 +78,11 @@ class JobAttachmentPolicy
             return false;
         }
         $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
-        if (in_array($role, ['admin', 'scheduler'], true)) {
+        if ($role === 'admin') {
             return true;
         }
-        return $attachment->uploaded_by == ($user->id ?? null);
+        return $attachment->uploaded_by == ($user->id ?? null)
+            && $this->canAdd($user, $attachment->job ?? null);
     }
 
     public function canDelete($user, $attachment): bool
@@ -83,10 +90,7 @@ class JobAttachmentPolicy
         if (!$user || !$attachment) {
             return false;
         }
-        $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
-        if (in_array($role, ['admin', 'scheduler'], true)) {
-            return true;
-        }
+
         return $attachment->uploaded_by == ($user->id ?? null);
     }
 

@@ -79,11 +79,12 @@ class JobsController extends AppController
     public function view($id = null)
     {
         $job = $this->Jobs->get($id, contain: ['Operators', 'Qcs', 'Organizations', 'Levels', 'JobAttachments', 'JobLogs']);
-
-        // Authorization: ensure current user may view
-        // if (!$this->authorizeAction($job, 'view')) {
-        //     throw new \Cake\Http\Exception\ForbiddenException(__('You are not authorized to view this job.'));
-        // }
+        if (!$this->authorizeAction($job, 'view')) {
+            throw new \Cake\Http\Exception\ForbiddenException(__('You are not authorized to view this job.'));
+        }
+        $canEdit = $this->authorizeAction($job, 'edit');
+        $canDelete = $this->authorizeAction($job, 'delete');
+        $jobPayment = $this->Jobs->paymentFor($job);
 
         $operators = $this->Jobs->Operators->find('list', limit: 200)
             ->where(['role' => 'operator'])->all();
@@ -93,7 +94,7 @@ class JobsController extends AppController
             return ['color' => $e->color, 'label' => $e->label, 'is_terminal' => $e->is_terminal];
         })->all()->toArray();
 
-        $this->set(compact('job', 'operators', 'qcs', 'statusMeta', 'jobPayment'));
+        $this->set(compact('job', 'operators', 'qcs', 'statusMeta', 'jobPayment', 'canEdit', 'canDelete'));
     }
 
     /**
@@ -113,28 +114,35 @@ class JobsController extends AppController
         }
 
         $job = $this->Jobs->newEmptyEntity();
-        $this->JobCounters = $this->getTableLocator()->get('JobCounters');
-        $job->job_number = $this->JobCounters->getSuggestedJobNumber();
+        $jobCounters = $this->getTableLocator()->get('JobCounters');
+        $job->job_number = $jobCounters->getSuggestedJobNumber();
         if ($this->request->is('post')) {
             $data = $this->request->getData();
 
-            // Attach creator information from current user if available
             $currentUser = $this->getCurrentUser();
-            if ($currentUser && empty($data['created_by'])) {
-                $data['created_by'] = $currentUser->id ?? null;
-            }
+            $data['created_by'] = $currentUser->id;
 
             // Always use the next job number from counter so the counter tracks actual job creation
-            $this->JobCounters = $this->getTableLocator()->get('JobCounters');
-            $data['job_number'] = $this->JobCounters->getNextJobNumber();
+            $jobCounters = $this->getTableLocator()->get('JobCounters');
+            $data['job_number'] = $jobCounters->getNextJobNumber();
 
-            // Set default organization if not provided
-            if (empty($data['organization_id'])) {
-                $currentUser = $this->getCurrentUser();
-                $data['organization_id'] = $currentUser->organization_id ?? 1;
+            $organizationId = $this->normalizedRole($currentUser) === 'admin'
+                ? (int)($data['organization_id'] ?? $currentUser->organization_id)
+                : (int)$currentUser->organization_id;
+            if ($organizationId < 1 || !$this->Jobs->Organizations->exists(['id' => $organizationId])) {
+                $this->Flash->error(__('Select a valid organization.'));
+                return $this->redirect(['action' => 'add']);
+            }
+            $data['organization_id'] = $organizationId;
+
+            if (!$this->isValidAssignee($data['operator_id'] ?? null, 'operator', $organizationId)
+                || !$this->isValidAssignee($data['qc_id'] ?? null, 'quality_checker', $organizationId)) {
+                $this->Flash->error(__('The selected operator and QC reviewer must belong to the job organization.'));
+                return $this->redirect(['action' => 'add']);
             }
 
-            if (!empty($data['operator_id']) && ($data['status'] ?? 'draft') === 'draft') {
+            $data['status'] = 'draft';
+            if (!empty($data['operator_id'])) {
                 $data['status'] = 'in_progress';
             }
 
@@ -145,7 +153,7 @@ class JobsController extends AppController
             if ($this->Jobs->save($job)) {
                 $this->Flash->success(__('The job has been saved.'));
 
-                $this->JobAttachments = $this->getTableLocator()->get('JobAttachments');
+                $jobAttachments = $this->getTableLocator()->get('JobAttachments');
                 $files = $this->normalizeFiles($_FILES['files'] ?? null);
                 if (!empty($files)) {
                     $uploadedBy = $currentUser->id ?? null;
@@ -157,7 +165,7 @@ class JobsController extends AppController
                         if ($meta === false) {
                             continue;
                         }
-                        $entity = $this->JobAttachments->newEmptyEntity();
+                        $entity = $jobAttachments->newEmptyEntity();
                         $entity->job_id = (int)$job->id;
                         $entity->uploaded_by = $uploadedBy;
                         $entity->file_name = $meta['name'];
@@ -171,7 +179,7 @@ class JobsController extends AppController
                         if (!empty($comments)) {
                             $entity->comments = $comments;
                         }
-                        $this->JobAttachments->save($entity);
+                        $jobAttachments->save($entity);
                         $saved++;
                     }
                     if ($saved > 0) {
@@ -207,10 +215,10 @@ class JobsController extends AppController
         $job = $this->Jobs->get($id, contain: ['Levels', 'Operators', 'Qcs', 'JobAttachments.UploadedBy', 'JobLogs.Users']);
         $jobPayment = $this->Jobs->paymentFor($job);
 
-        // Authorization via policy
-        // if (!$this->authorizeAction($job, 'edit')) {
-        //     throw new \Cake\Http\Exception\ForbiddenException(__('You are not allowed to edit this job.'));
-        // }
+        if (!$this->authorizeAction($job, 'edit')) {
+            throw new \Cake\Http\Exception\ForbiddenException(__('You are not allowed to edit this job.'));
+        }
+        $canEdit = true;
 
         $canAddAttachment = (new \App\Policy\JobAttachmentPolicy())->canAdd($this->getCurrentUser(), $job);
 
@@ -220,6 +228,10 @@ class JobsController extends AppController
                 $data['status'] = $job->status ?? 'draft';
             }
             $currentUser = $this->getCurrentUser();
+            unset($data['status'], $data['operator_id'], $data['qc_id'], $data['organization_id'], $data['created_by']);
+            if ($this->normalizedRole($currentUser) === 'operator') {
+                $data = array_intersect_key($data, array_flip(['job_number', 'title', 'instructions']));
+            }
             if (!$this->canSetLevel($currentUser)) {
                 // Operators and reviewers must not change the level.
                 unset($data['level_id']);
@@ -235,7 +247,7 @@ class JobsController extends AppController
             }
 
             if ($canAddAttachment) {
-                $this->JobAttachments = $this->getTableLocator()->get('JobAttachments');
+                $jobAttachments = $this->getTableLocator()->get('JobAttachments');
                 $files = $this->normalizeFiles($_FILES['files'] ?? null);
                 if (!empty($files)) {
                     $uploadedBy = $this->getCurrentUser()?->id;
@@ -247,7 +259,7 @@ class JobsController extends AppController
                         if ($meta === false) {
                             continue;
                         }
-                        $entity = $this->JobAttachments->newEmptyEntity();
+                        $entity = $jobAttachments->newEmptyEntity();
                         $entity->job_id = (int)$job->id;
                         $entity->uploaded_by = $uploadedBy;
                         $entity->file_name = $meta['name'];
@@ -261,7 +273,7 @@ class JobsController extends AppController
                         if (!empty($comments)) {
                             $entity->comments = $comments;
                         }
-                        $this->JobAttachments->save($entity);
+                        $jobAttachments->save($entity);
                         $saved++;
                     }
                     if ($saved > 0) {
@@ -305,6 +317,19 @@ class JobsController extends AppController
             ['admin', 'scheduler'],
             true
         );
+    }
+
+    private function isValidAssignee($userId, string $role, int $organizationId): bool
+    {
+        if ($userId === null || $userId === '') {
+            return true;
+        }
+
+        return $this->fetchTable('Users')->exists([
+            'id' => (int)$userId,
+            'role' => $role,
+            'organization_id' => $organizationId,
+        ]);
     }
 
     /**
@@ -351,21 +376,18 @@ class JobsController extends AppController
             $patch['qc_id'] = $data['qc_id'];
         }
 
+        if (!$this->isValidAssignee($patch['operator_id'] ?? null, 'operator', (int)$job->organization_id)
+            || !$this->isValidAssignee($patch['qc_id'] ?? null, 'quality_checker', (int)$job->organization_id)) {
+            $this->Flash->error(__('The selected operator and QC reviewer must belong to the job organization.'));
+            return $this->redirect(['action' => 'view', $job->id]);
+        }
+
         if (!empty($patch['operator_id']) && in_array($job->status, ['draft', 'pending_approval'], true)) {
             $patch['status'] = 'in_progress';
         }
 
-    $job = $this->Jobs->patchEntity($job, $patch);
-    if ($this->Jobs->save($job)) {
-        $this->JobLogs = $this->getTableLocator()->get('JobLogs');
-        $log = $this->JobLogs->newEmptyEntity();
-        $currentUser = $this->getCurrentUser();
-        $log->job_id = $job->id;
-        $log->user_id = $currentUser->id ?? null;
-        $log->action = 'assigned';
-        $log->comments = json_encode($patch);
-        $this->JobLogs->save($log);
-
+        $job = $this->Jobs->patchEntity($job, $patch);
+        if ($this->saveWithLog($job, 'assigned', (string)json_encode($patch))) {
         $this->Flash->success(__('Assignment updated.'));
     } else {
         $this->Flash->error(__('Failed to assign job.'));
@@ -485,18 +507,32 @@ class JobsController extends AppController
 
     private function saveWithLog($job, string $action, string $details): bool
     {
-        if (!$this->Jobs->save($job)) {
-            return false;
-        }
-        $this->JobLogs = $this->getTableLocator()->get('JobLogs');
-        $log = $this->JobLogs->newEmptyEntity();
-        $currentUser = $this->getCurrentUser();
-        $log->job_id = $job->id;
-        $log->user_id = $currentUser->id ?? null;
-        $log->action = $action;
-        $log->comments = $details;
+        $connection = $this->Jobs->getConnection();
+        $jobLogs = $this->getTableLocator()->get('JobLogs');
+        $connection->begin();
+        try {
+            if (!$this->Jobs->save($job)) {
+                $connection->rollback();
+                return false;
+            }
 
-        return (bool)$this->JobLogs->save($log);
+            $currentUser = $this->getCurrentUser();
+            $log = $jobLogs->newEmptyEntity();
+            $log->job_id = $job->id;
+            $log->user_id = $currentUser->id ?? null;
+            $log->action = $action;
+            $log->comments = $details;
+            if (!$jobLogs->save($log)) {
+                $connection->rollback();
+                return false;
+            }
+
+            $connection->commit();
+            return true;
+        } catch (\Throwable $exception) {
+            $connection->rollback();
+            throw $exception;
+        }
     }
 
     /** Quick manual note added by any team member on the job view page. */
@@ -504,6 +540,9 @@ class JobsController extends AppController
     {
         $this->request->allowMethod(['post']);
         $job = $this->Jobs->get($id);
+        if (!$this->authorizeAction($job, 'view')) {
+            throw new \Cake\Http\Exception\ForbiddenException(__('You are not authorized to add a note to this job.'));
+        }
         $comment = trim((string)$this->request->getData('comments'));
         if ($comment === '') {
             $this->Flash->error(__('Comment cannot be empty.'));
@@ -524,7 +563,7 @@ class JobsController extends AppController
     {
         $this->request->allowMethod(['post']);
         $job = $this->Jobs->get($id);
-        if (!$this->authorizeAction($job, 'edit')) {
+        if (!$this->authorizeAction($job, 'assign')) {
             throw new \Cake\Http\Exception\ForbiddenException(__('You are not authorized to return this job.'));
         }
         $job->status = 'draft';

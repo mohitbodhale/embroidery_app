@@ -21,21 +21,20 @@ class JobPolicy
 
     public function canEdit($user, $job): bool
     {
-        \Cake\Log\Log::write('debug', 'JobPolicy::canEdit called');
-        \Cake\Log\Log::write('debug', 'User: ' . print_r($user, true));
-        \Cake\Log\Log::write('debug', 'Job: ' . print_r($job ? $job->toArray() : 'null', true));
-
         if (!$user) {
-            \Cake\Log\Log::write('debug', 'User is null/false');
             return false;
         }
         $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
         $userId = $user->id ?? ($user['id'] ?? null);
-        \Cake\Log\Log::write('debug', "Role: '$role', UserId: $userId");
 
-        if (in_array($role, ['admin', 'scheduler'], true)) {
-            \Cake\Log\Log::write('debug', 'Returning true for admin/scheduler');
+        if ($role === 'admin') {
             return true;
+        }
+
+        if ($role === 'scheduler') {
+            return !empty($job)
+                && $job->created_by == $userId
+                && $job->status === 'draft';
         }
 
         if ($role === 'operator') {
@@ -78,8 +77,17 @@ class JobPolicy
             return false;
         }
         $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
-        // Admins and schedulers can assign operators/qc
-        return in_array($role, ['admin', 'scheduler'], true);
+        if ($role === 'admin') {
+            return true;
+        }
+        if ($role === 'scheduler') {
+            $userId = $user->id ?? ($user['id'] ?? null);
+            return !empty($job)
+                && $job->created_by == $userId
+                && !in_array($job->status, ['completed', 'cancelled'], true);
+        }
+
+        return false;
     }
 
     public function canApprove($user, $job): bool
@@ -89,7 +97,8 @@ class JobPolicy
         }
         $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
         $userId = $user->id ?? ($user['id'] ?? null);
-        return $role === 'quality_checker' && (!is_object($job) || $job->qc_id == $userId);
+        return $role === 'admin'
+            || ($role === 'quality_checker' && (!is_object($job) || $job->qc_id == $userId));
     }
 
     public function canSubmit($user, $job): bool
@@ -100,7 +109,7 @@ class JobPolicy
         $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
         $userId = $user->id ?? ($user['id'] ?? null);
 
-        return $role === 'operator' && $job->operator_id == $userId;
+        return $role === 'admin' || ($role === 'operator' && $job->operator_id == $userId);
     }
 
     public function canProduce($user, $job): bool
@@ -110,7 +119,7 @@ class JobPolicy
         }
         $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
 
-        return $role === 'production';
+        return in_array($role, ['admin', 'production'], true);
     }
 
 public function canView($user, $job): bool
@@ -120,8 +129,11 @@ public function canView($user, $job): bool
         }
         $role = strtolower((string)($user->role ?? ($user['role'] ?? '')));
         $userId = $user->id ?? ($user['id'] ?? null);
-        if (in_array($role, ['admin', 'production'], true)) {
+        if ($role === 'admin') {
             return true;
+        }
+        if ($role === 'production') {
+            return in_array($job->status, ['qc_approved', 'in_production'], true);
         }
         if ($role === 'scheduler') {
             return $job->created_by == $userId;

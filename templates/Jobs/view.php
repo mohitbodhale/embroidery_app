@@ -102,7 +102,7 @@ $this->assign('title', $job->job_number . ' · ' . $job->title);
                     <?php foreach ($job->job_attachments as $att): ?>
                         <tr>
                             <td>
-                                 <a href="<?= $this->Url->webroot(ltrim((string)$att->file_path, '/')) ?>" target="_blank" rel="noopener" class="job-link">
+                                 <a href="<?= $this->Url->build(['controller' => 'JobAttachments', 'action' => 'download', $att->id]) ?>" class="job-link">
                                      <i class="fas fa-file me-1 text-muted"></i><?= h($att->file_name) ?>
                                  </a>
                              </td>
@@ -246,7 +246,7 @@ $this->assign('title', $job->job_number . ' · ' . $job->title);
 </div>
 <?php endif; ?>
 
-<?php if (!empty($currentRole) && $currentRole === 'quality_checker' && $job->status === 'ready_for_qc'): ?>
+<?php if (!empty($currentRole) && in_array($currentRole, ['admin', 'quality_checker'], true) && $job->status === 'ready_for_qc'): ?>
 <div class="page-card card mt-3">
     <div class="card-header"><h3 class="card-title"><i class="fas fa-clipboard-check me-2"></i>QC Review</h3></div>
     <div class="card-body">
@@ -270,7 +270,7 @@ $this->assign('title', $job->job_number . ' · ' . $job->title);
 </div>
 <?php endif; ?>
 
-<?php if (!empty($currentRole) && $currentRole === 'production' && in_array($job->status, ['qc_approved', 'in_production'], true)): ?>
+<?php if (!empty($currentRole) && in_array($currentRole, ['admin', 'production'], true) && in_array($job->status, ['qc_approved', 'in_production'], true)): ?>
 <div class="alert-card success mt-3">
     <div><i class="fas fa-industry me-2"></i>Production action</div>
     <?php if ($job->status === 'qc_approved'): ?>
@@ -290,8 +290,10 @@ $this->assign('title', $job->job_number . ' · ' . $job->title);
 <div class="form-actions mt-4">
     <?= $this->Html->link('<i class="fas fa-arrow-left me-1"></i>Back to jobs', ['action' => 'index'], ['class' => 'btn btn-outline-secondary', 'escape' => false]) ?>
     <div class="d-flex gap-2">
-        <?php if (!in_array($currentRole, ['operator'], true)): ?>
+        <?php if ($canEdit): ?>
             <?= $this->Html->link('<i class="fas fa-pen me-1"></i>Edit', ['action' => 'edit', $job->id], ['class' => 'btn btn-primary', 'escape' => false]) ?>
+        <?php endif; ?>
+        <?php if ($canDelete): ?>
             <form method="post" action="<?= $this->Url->build(['action' => 'delete', $job->id]) ?>" style="display:inline" onsubmit="return confirm('Delete job # <?= h($job->id) ?>?')">
                 <input type="hidden" name="_csrfToken" value="<?= h($this->request->getAttribute('csrfToken')) ?>">
                 <button class="btn btn-outline-danger" type="submit"><i class="fas fa-trash me-1"></i>Delete</button>

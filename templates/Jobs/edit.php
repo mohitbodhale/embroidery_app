@@ -59,52 +59,19 @@ $this->assign('title', 'Edit job ' . $job->job_number);
         <div class="row">
             <div class="col-md-4 mb-3">
                 <label>Status</label>
-                <?php if ($currentRole !== 'operator'): ?>
-                <?= $this->Form->control('status', [
-                    'options' => $statuses,
-                    'class' => 'form-select',
-                    'label' => false,
-                    'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
-                ]) ?>
-                <?php else: ?>
                 <div class="form-control" style="background:#f8f9fa;color:#6c757d;cursor:default;"><?= h($statusMeta[$job->status]['label'] ?? $job->status) ?></div>
-                <?= $this->Form->hidden('status', ['value' => $job->status]) ?>
-                <?php endif; ?>
             </div>
             <div class="col-md-4 mb-3">
                 <label>Operator</label>
-                <?php if ($currentRole !== 'operator'): ?>
-                <?= $this->Form->control('operator_id', [
-                    'options' => $operators,
-                    'empty' => 'Unassigned',
-                    'class' => 'form-select',
-                    'label' => false,
-                    'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
-                ]) ?>
-                <?php else: ?>
                 <div class="form-control" style="background:#f8f9fa;color:#6c757d;cursor:default;"><?= h($job->hasValue('operator') ? $job->operator->name : 'Unassigned') ?></div>
-                <?= $this->Form->hidden('operator_id', ['value' => $job->operator_id ?? '']) ?>
-                <?php endif; ?>
             </div>
             <div class="col-md-4 mb-3">
                 <label>Quality checker</label>
-                <?php if ($currentRole !== 'operator'): ?>
-                <?= $this->Form->control('qc_id', [
-                    'options' => $qcs,
-                    'empty' => 'Unassigned',
-                    'class' => 'form-select',
-                    'label' => false,
-                    'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
-                ]) ?>
-                <?php else: ?>
                 <div class="form-control" style="background:#f8f9fa;color:#6c757d;cursor:default;"><?= h($job->hasValue('qc') ? $job->qc->name : 'Unassigned') ?></div>
-                <?= $this->Form->hidden('qc_id', ['value' => $job->qc_id ?? '']) ?>
-                <?php endif; ?>
             </div>
         </div>
 
         <div class="row">
-            <?php if ($currentRole !== 'operator'): ?>
             <div class="col-md-6 mb-3">
                 <label>Scheduled date</label>
                 <?= $this->Form->control('scheduled_date', [
@@ -116,15 +83,8 @@ $this->assign('title', 'Edit job ' . $job->job_number);
             </div>
             <div class="col-md-6 mb-3">
                 <label>Organization</label>
-                <?= $this->Form->control('organization_id', [
-                    'options' => $organizations,
-                    'class' => 'form-select',
-                    'label' => false,
-                    'empty' => false,
-                    'templates' => ['inputContainer' => '{{content}}', 'inputContainerError' => '{{content}}{{error}}'],
-                ]) ?>
+                <div class="form-control" style="background:#f8f9fa;color:#6c757d;cursor:default;"><?= h($job->organization_id) ?></div>
             </div>
-            <?php endif; ?>
         </div>
 
         <div class="row">
@@ -182,7 +142,7 @@ $this->assign('title', 'Edit job ' . $job->job_number);
                     <?php foreach ($job->job_attachments as $att): ?>
                         <tr>
                             <td>
-                                <a href="<?= $this->Url->webroot(ltrim((string)$att->file_path, '/')) ?>" target="_blank" rel="noopener" class="job-link">
+                                <a href="<?= $this->Url->build(['controller' => 'JobAttachments', 'action' => 'download', $att->id]) ?>" class="job-link">
                                     <i class="fas fa-file me-1 text-muted"></i><?= h($att->file_name) ?>
                                 </a>
                             </td>
@@ -194,13 +154,7 @@ $this->assign('title', 'Edit job ' . $job->job_number);
                                 <div class="row-actions">
                                     <a href="<?= $this->Url->build(['controller' => 'JobAttachments', 'action' => 'download', $att->id]) ?>" class="btn btn-icon btn-outline-info" title="Download"><i class="fas fa-download"></i></a>
                                     <?php if ($currentUser): ?>
-                                        <?php $canDeleteAtt = false; ?>
-                                        <?php $userRole = strtolower((string)($currentUser->role ?? '')); ?>
-                                        <?php if (in_array($userRole, ['admin', 'scheduler'], true)): ?>
-                                            <?php $canDeleteAtt = true; ?>
-                                        <?php elseif ($att->uploaded_by == $currentUser->id): ?>
-                                            <?php $canDeleteAtt = true; ?>
-                                        <?php endif; ?>
+                                        <?php $canDeleteAtt = (new \App\Policy\JobAttachmentPolicy())->canDelete($currentUser, $att); ?>
                                         <?php if ($canDeleteAtt): ?>
                                             <?php /* A literal nested <form> here would terminate the job
                                                  edit form in the HTML parser, which silently detached every
@@ -272,12 +226,10 @@ $this->assign('title', 'Edit job ' . $job->job_number);
         </div>
         <?php endif; ?>
 
-        <?= $this->Form->hidden('created_by') ?>
-
         <div class="form-actions">
             <?= $this->Html->link('<i class="fas fa-arrow-left me-1"></i>Back', ['action' => 'index'], ['class' => 'btn btn-outline-secondary', 'escape' => false]) ?>
             <div class="d-flex gap-2">
-                <?php if ($currentRole !== 'operator'): ?>
+                <?php if ($canEdit): ?>
                     <?php if ($canDelete): ?>
                         <?= $this->Form->postLink('<i class="fas fa-trash me-1"></i>Delete', ['action' => 'delete', $job->id], [
                             'confirm' => __('Delete job # {0}?', $job->id),
@@ -342,11 +294,12 @@ $this->assign('title', 'Edit job ' . $job->job_number);
         </div>
         <?php endif; ?>
 
-        <?php if ($currentRole === 'operator'): ?>
+        <?php if (in_array($currentRole, ['operator', 'admin'], true)
+            && in_array($job->status, ['in_progress', 'qc_rejected'], true)
+            && $job->qc_id): ?>
         <div class="form-actions">
             <div class="d-flex gap-2">
                 <?= $this->Form->postLink('<i class="fas fa-paper-plane me-1"></i>Send to QC', ['action' => 'submit', $job->id], ['class' => 'btn btn-primary', 'escape' => false, 'confirm' => __('Submit this job for QC review?')]) ?>
-                <?= $this->Form->postLink('<i class="fas fa-undo me-1"></i>Return to Scheduler', ['action' => 'returnToScheduler', $job->id], ['class' => 'btn btn-outline-secondary', 'escape' => false, 'confirm' => __('Return this job to the scheduler?')]) ?>
             </div>
         </div>
         <?php endif; ?>

@@ -113,6 +113,15 @@ class JobsTable extends Table
 
         $validator
             ->scalar('status')
+            ->add('status', 'registeredStatus', [
+                'rule' => function ($value) {
+                    return $this->JobStatuses->exists([
+                        'name' => (string)$value,
+                        'is_active' => true,
+                    ]);
+                },
+                'message' => __('Select an active job status.'),
+            ])
             ->allowEmptyString('status');
 
         $validator

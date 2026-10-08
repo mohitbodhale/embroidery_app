@@ -15,25 +15,13 @@ final class ChangeUsersRoleFromEnumToVarchar extends BaseMigration
             return;
         }
 
-        $row = $this->fetchRow("SELECT data_type FROM information_schema.columns WHERE table_name = 'users' AND column_name = 'role'");
-        if ($row && $row['data_type'] === 'USER-DEFINED') {
-            try {
-                $this->execute("ALTER TABLE users ALTER COLUMN role TYPE VARCHAR(50) USING role::text");
-            } catch (\Throwable $e) {
-            }
+        try {
+            $this->execute('ALTER TABLE users ALTER COLUMN role TYPE VARCHAR(50) USING role::text');
+        } catch (\Throwable $e) {
         }
 
         try {
-            $row = $this->fetchRow("
-                SELECT 1 FROM information_schema.constraint_column_usage
-                WHERE table_name = 'users' AND column_name = 'role'
-            ");
-            if ($row) {
-                try {
-                    $this->execute("ALTER TABLE users DROP CONSTRAINT user_role");
-                } catch (\Throwable $e) {
-                }
-            }
+            $this->execute('ALTER TABLE users MODIFY role VARCHAR(50)');
         } catch (\Throwable $e) {
         }
     }

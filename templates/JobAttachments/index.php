@@ -27,7 +27,7 @@ $this->assign('title', 'Attachments');
                 <?php foreach ($jobAttachments as $att): ?>
                     <tr>
                         <td>
-                             <a href="<?= $this->Url->webroot(ltrim((string)$att->file_path, '/')) ?>" target="_blank" rel="noopener" class="job-link">
+                             <a href="<?= $this->Url->build(['action' => 'download', $att->id]) ?>" class="job-link">
                                 <i class="fas fa-file me-1 text-muted"></i><?= h($att->file_name) ?>
                             </a>
                         </td>

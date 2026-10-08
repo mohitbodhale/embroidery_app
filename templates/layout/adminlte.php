@@ -195,6 +195,18 @@ $isAuthPage = ($controller === 'Users' && in_array($action, ['login','register',
                                 <p>Operations Dashboard</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="<?= $this->Url->build(['controller' => 'Jobs', 'action' => 'index']) ?>" class="nav-link <?= ($this->request->getParam('controller') === 'Jobs') ? 'active' : '' ?>">
+                                <i class="nav-icon fas fa-briefcase"></i>
+                                <p>Jobs</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= $this->Url->build(['controller' => 'Jobs', 'action' => 'add']) ?>" class="nav-link">
+                                <i class="nav-icon fas fa-plus-circle"></i>
+                                <p>Create Job</p>
+                            </a>
+                        </li>
                         <li class="nav-header">MASTERS</li>
                         <li class="nav-item">
                             <a href="<?= $this->Url->build(['controller' => 'Users', 'action' => 'index']) ?>" class="nav-link <?= ($this->request->getParam('controller') === 'Users') ? 'active' : '' ?>">
@@ -254,6 +266,27 @@ $isAuthPage = ($controller === 'Users' && in_array($action, ['login','register',
                             <a href="<?= $this->Url->build(['controller' => 'Jobs', 'action' => 'add']) ?>" class="nav-link">
                                 <i class="nav-icon fas fa-plus-circle"></i>
                                 <p>Create Job</p>
+                            </a>
+                        </li>
+                        <?php endif; ?>
+
+                        <?php if ($role === 'operator'): ?>
+                        <li class="nav-item">
+                            <a href="<?= $this->Url->build(['controller' => 'Jobs', 'action' => 'index', '?' => ['status' => 'in_progress']]) ?>" class="nav-link">
+                                <i class="nav-icon fas fa-spinner"></i>
+                                <p>In Progress</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= $this->Url->build(['controller' => 'Jobs', 'action' => 'index', '?' => ['status' => 'sent_for_qc']]) ?>" class="nav-link">
+                                <i class="nav-icon fas fa-paper-plane"></i>
+                                <p>Sent for QC</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= $this->Url->build(['controller' => 'Jobs', 'action' => 'index', '?' => ['status' => 'done']]) ?>" class="nav-link">
+                                <i class="nav-icon fas fa-check-circle"></i>
+                                <p>Done</p>
                             </a>
                         </li>
                         <?php endif; ?>
@@ -351,11 +384,13 @@ $isAuthPage = ($controller === 'Users' && in_array($action, ['login','register',
                         <i class="fas fa-code-branch"></i>
                         <span>v1.0.0</span>
                     </span>
-                    <button type="button" class="btn btn-test" id="openAutoTestBtn" data-bs-toggle="modal" data-bs-target="#autoTestModal">
-                        <i class="fas fa-vial"></i>
-                        <span class="d-none d-sm-inline ms-1">Automatic testing</span>
-                        <span class="d-inline d-sm-none ms-1">Tests</span>
-                    </button>
+                    <?php if (($currentRole ?? '') === 'admin'): ?>
+                        <button type="button" class="btn btn-test" id="openAutoTestBtn" data-bs-toggle="modal" data-bs-target="#autoTestModal">
+                            <i class="fas fa-vial"></i>
+                            <span class="d-none d-sm-inline ms-1">Automatic testing</span>
+                            <span class="d-inline d-sm-none ms-1">Tests</span>
+                        </button>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

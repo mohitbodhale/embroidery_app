@@ -7,11 +7,13 @@ class WorkTypesController extends AppController
 {
     public function index()
     {
+        $this->requireRole(['admin']);
         $this->set('workTypes', $this->paginate($this->WorkTypes));
     }
 
     public function add()
     {
+        $this->requireRole(['admin']);
         $workType = $this->WorkTypes->newEmptyEntity();
         if ($this->request->is('post')) {
             $workType = $this->WorkTypes->patchEntity($workType, $this->request->getData());
@@ -27,6 +29,7 @@ class WorkTypesController extends AppController
 
     public function edit($id = null)
     {
+        $this->requireRole(['admin']);
         $workType = $this->WorkTypes->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $workType = $this->WorkTypes->patchEntity($workType, $this->request->getData());
@@ -42,6 +45,7 @@ class WorkTypesController extends AppController
 
     public function delete($id = null)
     {
+        $this->requireRole(['admin']);
         $this->request->allowMethod(['post', 'delete']);
         $workType = $this->WorkTypes->get($id);
         if ($this->WorkTypes->delete($workType)) {

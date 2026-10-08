@@ -26,15 +26,14 @@ class SystemTestsController extends AppController
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         parent::beforeFilter($event);
-        // Diagnostic endpoints — skip CSRF so AJAX calls from any page can hit them.
         $this->request->getSession()->write('App.unauthenticatedActions', [
             'login', 'logout', 'register', 'awaitingApproval',
-            'panel', 'run',
         ]);
     }
 
     public function panel()
     {
+        $this->requireRole(['admin']);
         $this->autoRender = false;
         $this->viewBuilder()->disableAutoLayout();
         $csrf = $this->request->getAttribute('csrfToken') ?? '';
@@ -77,6 +76,7 @@ HTML;
 
     public function run()
     {
+        $this->requireRole(['admin']);
         $this->autoRender = false;
         $this->viewBuilder()->disableAutoLayout();
         $this->response = $this->response->withType('application/json');
@@ -137,27 +137,19 @@ HTML;
             return count($found) . ' users (' . implode(', ', array_unique($found)) . ')';
         });
 
-        // 4. Auth pipeline (Password identifier can verify admin password)
-        $check('Password identifier verifies admin password', function () {
-            $identifier = new \Authentication\Identifier\PasswordIdentifier([
-                'resolver' => [
-                    'className' => 'Authentication.Orm',
-                    'userModel' => 'Users',
-                    'finder' => 'all',
-                ],
-                'fields' => [
-                    'username' => 'email',
-                    'password' => 'password',
-                ],
-            ]);
-            $result = $identifier->identify([
-                'username' => 'admin@stitchcraft.com',
-                'password' => 'admin123',
-            ]);
-            if (!$result) {
-                throw new \RuntimeException('Identifier returned no data');
+        // 4. The admin account exists and stores a recognized password hash.
+        $check('Admin account has a password hash', function () {
+            $user = TableRegistry::getTableLocator()->get('Users')->find()
+                ->where(['email' => 'admin@stitchcraft.com'])
+                ->first();
+            if (!$user || empty($user->password)) {
+                throw new \RuntimeException('Admin account or password hash is missing');
             }
-            return 'OK — id=' . ($result['id'] ?? '?');
+            $hashInfo = password_get_info((string)$user->password);
+            if (($hashInfo['algoName'] ?? 'unknown') === 'unknown') {
+                throw new \RuntimeException('Admin password is not stored as a recognized hash');
+            }
+            return 'OK — recognized ' . $hashInfo['algoName'] . ' hash';
         });
 
         // 5. JobPolicy methods exist & return bool

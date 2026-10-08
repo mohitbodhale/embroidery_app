@@ -118,9 +118,9 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
 
 // Cross Site Request Forgery (CSRF) Protection Middleware
             // https://book.cakephp.org/4/en/security/csrf.html#cross-site-request-forgery-middleware
-            // ->add(new CsrfProtectionMiddleware([
-            //     'httponly' => true,
-            // ]))
+            ->add(new CsrfProtectionMiddleware([
+                'httponly' => true,
+            ]))
             ;
 
         return $middlewareQueue;
@@ -212,7 +212,6 @@ class ProtectedAuthenticationMiddleware implements MiddlewareInterface
             'resetwithtoken',
             'awaitingapproval',
         ],
-        'systemtests' => ['panel', 'run'],
         // '/' (Pages::dashboard) and the TrackBridge landing page are public;
         // dashboard() redirects to welcome() when nobody is signed in.
         'pages' => ['admin_demo', 'dashboard', 'welcome', 'display'],

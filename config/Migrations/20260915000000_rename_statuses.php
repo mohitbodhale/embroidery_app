@@ -7,6 +7,10 @@ final class RenameStatuses extends BaseMigration
 {
     public function change(): void
     {
+        if ($this->getAdapter()->getAdapterType() !== 'pgsql') {
+            return;
+        }
+
         // Add missing enum values before any data updates
         $this->execute("ALTER TYPE job_status ADD VALUE IF NOT EXISTS 'in_progress'");
         $this->execute("ALTER TYPE job_status ADD VALUE IF NOT EXISTS 'ready_for_qc'");

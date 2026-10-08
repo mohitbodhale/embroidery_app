@@ -36,6 +36,7 @@ class VerifyFeaturesCommand extends Command
         $this->runLevelValidation($io);
         $this->runJobValidation($io);
         $this->runLivePayment($io);
+        $this->runWalletSummary($io);
         $this->runWalletMath($io);
         $this->runLiveRepricing($io);
         $this->runJobGuards($io);
@@ -241,6 +242,94 @@ class VerifyFeaturesCommand extends Command
                 isset($Levels->selectOptions(true)[$level->id]));
         } finally {
             $conn->rollback();
+        }
+    }
+
+    /**
+     * Verify the operator-facing totals against assigned jobs and admin payouts.
+     * All rows are rolled back so this can run against a development database.
+     */
+    private function runWalletSummary(ConsoleIo $io): void
+    {
+        $io->out('<info>== Operator wallet summary ==</info>');
+        $Users = TableRegistry::getTableLocator()->get('Users');
+        $Wallets = TableRegistry::getTableLocator()->get('OperatorWallets');
+        $Levels = TableRegistry::getTableLocator()->get('Levels');
+        $Jobs = TableRegistry::getTableLocator()->get('Jobs');
+        $operators = $Users->find()->where(['role' => 'operator'])->orderByAsc('id')->all()->toList();
+        if ($operators === []) {
+            $io->warning('no operators found; skipping wallet summary');
+
+            return;
+        }
+
+        $controller = new WalletsController(new ServerRequest());
+        $summaryMethod = new \ReflectionMethod($controller, 'walletSummary');
+        $summaryMethod->setAccessible(true);
+        $connection = ConnectionManager::get('default');
+        $connection->begin();
+        try {
+            $baseline = [];
+            foreach ($operators as $operator) {
+                $wallet = $Wallets->getOrCreate((int)$operator->id);
+                $baseline[$operator->id] = $summaryMethod->invoke($controller, $wallet);
+            }
+
+            $level = $Levels->newEmptyEntity();
+            $level->name = 'verify_wallet_summary_' . uniqid();
+            $level->label = 'Verify Wallet Summary';
+            $level->payment_amount = '100.00';
+            $level->is_active = true;
+            $Levels->saveOrFail($level);
+
+            $createJob = function (int $operatorId, string $status) use ($Jobs, $level) {
+                $job = $Jobs->newEmptyEntity();
+                $job->title = 'Wallet summary ' . $status;
+                $job->job_number = 'WS-' . uniqid();
+                $job->status = $status;
+                $job->operator_id = $operatorId;
+                $job->level_id = $level->id;
+                $Jobs->saveOrFail($job);
+
+                return $job;
+            };
+
+            $firstOperator = $operators[0];
+            $createJob((int)$firstOperator->id, 'in_progress');
+            $createJob((int)$firstOperator->id, 'completed');
+            $Wallets->recordMovement((int)$firstOperator->id, 'adjustment', 50.00);
+            $Wallets->recordMovement((int)$firstOperator->id, 'payout', 20.00);
+
+            if (isset($operators[1])) {
+                $createJob((int)$operators[1]->id, 'completed');
+            }
+
+            foreach ($operators as $operator) {
+                $wallet = $Wallets->getForUser((int)$operator->id);
+                $actual = $summaryMethod->invoke($controller, $wallet);
+                $expected = $baseline[$operator->id];
+                if ((int)$operator->id === (int)$firstOperator->id) {
+                    $expected['current_balance'] += 200.00;
+                    $expected['total_earnings'] += 100.00;
+                    $expected['paid_to_you'] += 20.00;
+                } elseif (isset($operators[1]) && (int)$operator->id === (int)$operators[1]->id) {
+                    $expected['current_balance'] += 100.00;
+                    $expected['total_earnings'] += 100.00;
+                }
+
+                $this->check($io, 'summary', sprintf('operator %s sees only assigned job and paid totals', $operator->id), [
+                    'current_balance' => round($expected['current_balance'], 2),
+                    'total_earnings' => round($expected['total_earnings'], 2),
+                    'paid_to_you' => round($expected['paid_to_you'], 2),
+                ], [
+                    'current_balance' => round($actual['current_balance'], 2),
+                    'total_earnings' => round($actual['total_earnings'], 2),
+                    'paid_to_you' => round($actual['paid_to_you'], 2),
+                ]);
+            }
+        } finally {
+            $connection->rollback();
+            $io->out('<info>rolled back</info>');
         }
     }
 

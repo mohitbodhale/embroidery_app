@@ -36,6 +36,8 @@ class JobAttachmentsController extends AppController
             $query->where(['Jobs.operator_id' => $user->id]);
         } elseif ($role === 'quality_checker' && $user) {
             $query->where(['Jobs.qc_id' => $user->id]);
+        } elseif ($role === 'scheduler' && $user) {
+            $query->where(['Jobs.created_by' => $user->id]);
         } elseif ($role === 'production' && $user) {
             $query->where(['Jobs.status IN' => ['qc_approved', 'in_production']]);
         }
@@ -134,7 +136,16 @@ class JobAttachmentsController extends AppController
         }
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
-            $jobId = $data['job_id'] ?? $jobAttachment->job_id;
+            $jobId = (int)$jobAttachment->job_id;
+            unset(
+                $data['job_id'],
+                $data['uploaded_by'],
+                $data['file_path'],
+                $data['file_name'],
+                $data['file_size'],
+                $data['mime_type'],
+                $data['created_at']
+            );
             $files = $this->normalizeFiles($_FILES['files'] ?? null);
             if (!empty($files)) {
                 $file = $files[0];
@@ -184,8 +195,10 @@ class JobAttachmentsController extends AppController
             throw new \Cake\Http\Exception\ForbiddenException(__('You are not authorized to download this file.'));
         }
 
-        $filePath = WWW_ROOT . ltrim($jobAttachment->file_path, '/');
-        if (!is_file($filePath)) {
+        $storageRoot = realpath(ROOT . DS . 'uploads' . DS . 'attachments');
+        $relativePath = ltrim(str_replace(['/', '\\'], DS, (string)$jobAttachment->file_path), DS);
+        $filePath = realpath(ROOT . DS . $relativePath);
+        if (!$storageRoot || !$filePath || !str_starts_with($filePath, $storageRoot . DS) || !is_file($filePath)) {
             throw new \Cake\Http\Exception\NotFoundException(__('File not found on disk.'));
         }
 

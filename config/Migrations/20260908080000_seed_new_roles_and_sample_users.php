@@ -5,10 +5,73 @@ use Migrations\BaseMigration;
 
 final class SeedNewRolesAndSampleUsers extends BaseMigration
 {
+    private function columnExists(string $table, string $column): bool
+    {
+        try {
+            $rows = $this->fetchAll("PRAGMA table_info('{$table}')");
+            foreach ($rows as $row) {
+                $name = $row['name'] ?? $row['COLUMN_NAME'] ?? null;
+                if ($name === $column) {
+                    return true;
+                }
+            }
+        } catch (\Throwable) {
+        }
+
+        try {
+            $row = $this->fetchRow(
+                "SELECT 1 FROM information_schema.columns
+                 WHERE table_name = '{$table}' AND column_name = '{$column}'"
+            );
+            return (bool) $row;
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
     public function change(): void
     {
         if (!$this->table('roles')->exists() || !$this->table('users')->exists() || !$this->table('work_types')->exists()) {
             return;
+        }
+
+        if (!$this->table('user_details')->exists()) {
+            $this->table('user_details')
+                ->addColumn('user_id', 'integer', ['null' => false])
+                ->addColumn('phone', 'string', ['limit' => 20, 'null' => true])
+                ->addColumn('bio', 'text', ['null' => true])
+                ->addColumn('avatar', 'string', ['limit' => 255, 'null' => true])
+                ->addColumn('website', 'string', ['limit' => 255, 'null' => true])
+                ->addColumn('location', 'string', ['limit' => 100, 'null' => true])
+                ->addColumn('work_type_id', 'integer', ['null' => true])
+                ->addColumn('created_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
+                ->addColumn('updated_at', 'datetime', ['null' => true])
+                ->addIndex(['user_id'], ['unique' => true])
+                ->create();
+        }
+
+        foreach (['user_id', 'phone', 'bio', 'avatar', 'website', 'location', 'work_type_id', 'created_at', 'updated_at'] as $column) {
+            if (!$this->columnExists('user_details', $column)) {
+                $sql = match ($column) {
+                    'user_id' => 'ALTER TABLE user_details ADD COLUMN user_id INTEGER NOT NULL',
+                    'phone' => 'ALTER TABLE user_details ADD COLUMN phone VARCHAR(20) NULL',
+                    'bio' => 'ALTER TABLE user_details ADD COLUMN bio TEXT NULL',
+                    'avatar' => 'ALTER TABLE user_details ADD COLUMN avatar VARCHAR(255) NULL',
+                    'website' => 'ALTER TABLE user_details ADD COLUMN website VARCHAR(255) NULL',
+                    'location' => 'ALTER TABLE user_details ADD COLUMN location VARCHAR(100) NULL',
+                    'work_type_id' => 'ALTER TABLE user_details ADD COLUMN work_type_id INTEGER NULL',
+                    'created_at' => 'ALTER TABLE user_details ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP',
+                    'updated_at' => 'ALTER TABLE user_details ADD COLUMN updated_at DATETIME NULL',
+                    default => null,
+                };
+
+                if ($sql !== null) {
+                    try {
+                        $this->execute($sql);
+                    } catch (\Throwable) {
+                    }
+                }
+            }
         }
 
         $now = date('Y-m-d H:i:s');
@@ -41,6 +104,7 @@ final class SeedNewRolesAndSampleUsers extends BaseMigration
         if (!$org) {
             $this->table('organizations')->insert([
                 'name' => 'Default Organization',
+                'domain_or_slug' => 'default-organization',
                 'status' => 'active',
                 'created_at' => $now,
             ])->save();

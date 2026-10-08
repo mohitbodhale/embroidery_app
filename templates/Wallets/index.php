@@ -16,7 +16,12 @@ foreach ($wallets as $wallet) {
 <div class="page-card card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h3 class="card-title m-0"><i class="fas fa-wallet me-2"></i>Operator Wallets</h3>
-        <span class="text-muted small">Income is recorded here per job level</span>
+        <div class="d-flex align-items-center gap-3">
+            <span class="text-muted small d-none d-md-inline">Income is recorded here per job level</span>
+            <?= $this->Html->link('<i class="fas fa-file-csv me-1"></i>Export all',
+                ['action' => 'export'],
+                ['class' => 'btn btn-sm btn-outline-success', 'escape' => false]) ?>
+        </div>
     </div>
     <div class="card-body p-0">
         <?php if (empty($wallets) || iterator_count($wallets) === 0): ?>
