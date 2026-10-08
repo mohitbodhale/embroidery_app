@@ -41,15 +41,15 @@ class JobPolicyTest extends TestCase
         $this->assertFalse($policy->canEdit($scheduler, $schedulerActiveJob));
     }
 
-    public function testProductionCanOnlyViewProductionQueueStatuses()
+    public function testProductionCanViewApprovedInProductionAndCompletedJobs()
     {
         $policy = new JobPolicy();
         $production = (object)['id' => 5, 'role' => 'production'];
 
         $this->assertTrue($policy->canView($production, (object)['status' => 'qc_approved']));
         $this->assertTrue($policy->canView($production, (object)['status' => 'in_production']));
+        $this->assertTrue($policy->canView($production, (object)['status' => 'completed']));
         $this->assertFalse($policy->canView($production, (object)['status' => 'draft']));
-        $this->assertFalse($policy->canView($production, (object)['status' => 'completed']));
     }
 
     public function testCanApprove()

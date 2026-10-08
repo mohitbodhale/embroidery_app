@@ -296,7 +296,12 @@ class VerifyFeaturesCommand extends Command
 
             $firstOperator = $operators[0];
             $createJob((int)$firstOperator->id, 'in_progress');
-            $createJob((int)$firstOperator->id, 'completed');
+            $completedJob = $createJob((int)$firstOperator->id, 'completed');
+            $admin = $Users->find()->where(['role' => 'admin'])->orderByAsc('id')->first();
+            $Wallets->recordMovement((int)$firstOperator->id, 'earning', 65.00, [
+                'job_id' => $completedJob->id,
+                'created_by' => $admin?->id,
+            ]);
             $Wallets->recordMovement((int)$firstOperator->id, 'adjustment', 50.00);
             $Wallets->recordMovement((int)$firstOperator->id, 'payout', 20.00);
 
@@ -311,7 +316,7 @@ class VerifyFeaturesCommand extends Command
                 if ((int)$operator->id === (int)$firstOperator->id) {
                     $expected['current_balance'] += 200.00;
                     $expected['total_earnings'] += 100.00;
-                    $expected['paid_to_you'] += 20.00;
+                    $expected['paid_to_you'] += 65.00;
                 } elseif (isset($operators[1]) && (int)$operator->id === (int)$operators[1]->id) {
                     $expected['current_balance'] += 100.00;
                     $expected['total_earnings'] += 100.00;

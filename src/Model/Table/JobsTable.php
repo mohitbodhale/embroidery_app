@@ -279,8 +279,8 @@ public function beforeFind(EventInterface $event, SelectQuery $query, ArrayObjec
             }
             break;
         case 'production':
-            // Production sees jobs that are ready to produce or in production.
-            $query->where(['Jobs.status IN' => ['qc_approved', 'in_production']]);
+            // Production sees the active queue and completed job history.
+            $query->where(['Jobs.status IN' => ['qc_approved', 'in_production', 'completed']]);
             break;
         case 'scheduler':
             if (!empty($userId)) {

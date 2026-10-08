@@ -32,6 +32,8 @@ class JobsControllerTest extends TestCase
         'app.JobCounters',
         'app.JobAttachments',
         'app.JobLogs',
+        'app.OperatorWallets',
+        'app.WalletTransactions',
     ];
 
     protected function setUp(): void
@@ -231,6 +233,64 @@ class JobsControllerTest extends TestCase
         $this->assertSame(2, (int)$schedulerJob['created_by']);
         $this->assertNotSame((int)$adminJob['operator_id'], (int)$schedulerJob['operator_id']);
         $this->assertSame($initialJobCount + 2, $jobs->find()->count());
+    }
+
+    public function testWalletPagesRenderForEachOperatorAndAdmin(): void
+    {
+        $users = TableRegistry::getTableLocator()->get('Users');
+        $users->getConnection()->execute(
+            'INSERT INTO users (name, email, password, role, organization_id, role_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            ['Second Wallet Operator', 'second-wallet-operator@example.test', 'test-password-hash', 'operator', 1, null, '2025-01-01 00:00:00']
+        );
+        $secondOperator = $users->find()
+            ->where(['email' => 'second-wallet-operator@example.test'])
+            ->firstOrFail();
+
+        $wallets = TableRegistry::getTableLocator()->get('OperatorWallets');
+        $operatorWallets = [
+            $wallets->getOrCreate(4),
+            $wallets->getOrCreate((int)$secondOperator->id),
+        ];
+        $operatorUsers = [$users->get(4), $secondOperator];
+
+        foreach ($operatorUsers as $index => $operator) {
+            $this->session(['Auth' => $operator]);
+            $this->get('/wallets/my');
+            $this->assertResponseOk();
+            $this->assertResponseContains($operator->name);
+            $this->assertResponseNotContains($operatorUsers[1 - $index]->name);
+        }
+
+        $this->session(['Auth' => $users->get(1)]);
+        $this->get('/wallets/my');
+        $this->assertRedirect('/wallets');
+        $this->get('/wallets');
+        $this->assertResponseOk();
+
+        foreach ($operatorWallets as $index => $wallet) {
+            $this->get('/wallets/view/' . $wallet->id);
+            $this->assertResponseOk();
+            $this->assertResponseContains($operatorUsers[$index]->name);
+        }
+    }
+
+    public function testProductionCanViewCompletedJobs(): void
+    {
+        $users = TableRegistry::getTableLocator()->get('Users');
+        $users->updateAll(['role' => 'production', 'role_id' => 50], ['id' => 4]);
+        $productionUser = $users->get(4);
+        $this->session(['Auth' => $productionUser]);
+
+        $jobs = TableRegistry::getTableLocator()->get('Jobs');
+        $jobs->updateAll(['status' => 'completed'], ['id' => 1]);
+
+        $this->get('/jobs/view/1');
+        $this->assertResponseOk();
+        $this->assertResponseContains('Floral design on polo');
+
+        $this->get('/jobs');
+        $this->assertResponseOk();
+        $this->assertResponseContains('Floral design on polo');
     }
 
     public function testAssignmentRejectsWrongRoleUsers(): void

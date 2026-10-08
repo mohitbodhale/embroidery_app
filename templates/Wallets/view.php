@@ -37,7 +37,7 @@ foreach ($analytics['months'] ?? [] as $index => $month) {
     ];
 }
 $monthlyRows = array_slice($monthlyRows, -12);
-$monthlyScale = max(1, ...array_map(static fn(array $row): float => abs($row['change']), $monthlyRows));
+$monthlyScale = max([1.0, ...array_map(static fn(array $row): float => abs($row['change']), $monthlyRows)]);
 $jobRows = [];
 foreach ($analytics['jobLabels'] ?? [] as $index => $label) {
     $jobRows[] = ['label' => $label, 'amount' => (float)($analytics['jobAmounts'][$index] ?? 0)];
@@ -46,8 +46,8 @@ $levelRows = [];
 foreach ($analytics['levelLabels'] ?? [] as $index => $label) {
     $levelRows[] = ['label' => $label, 'amount' => (float)($analytics['levelAmounts'][$index] ?? 0)];
 }
-$maxJobAmount = max(1, ...array_column($jobRows, 'amount'));
-$maxLevelAmount = max(1, ...array_column($levelRows, 'amount'));
+$maxJobAmount = max([1.0, ...array_column($jobRows, 'amount')]);
+$maxLevelAmount = max([1.0, ...array_column($levelRows, 'amount')]);
 ?>
 <div class="page-card card">
     <div class="card-header d-flex justify-content-between align-items-center">
@@ -85,7 +85,7 @@ $maxLevelAmount = max(1, ...array_column($levelRows, 'amount'));
                 <div class="wallet-total h-100">
                     <div class="text-muted small text-uppercase">Paid to you</div>
                     <div class="fs-5 fw-semibold"><?= h(number_format((float)$summary['paid_to_you'], 2)) ?></div>
-                    <div class="small text-muted">Total payments recorded by admin</div>
+                    <div class="small text-muted">Job payments credited by admin</div>
                 </div>
             </div>
         </div>

@@ -38,7 +38,7 @@ class JobsController extends AppController
         } elseif ($role === 'quality_checker') {
             $query->where(['Jobs.qc_id' => $userId]);
         } elseif ($role === 'production') {
-            $query->where(['Jobs.status IN' => ['qc_approved', 'in_production']]);
+            $query->where(['Jobs.status IN' => ['qc_approved', 'in_production', 'completed']]);
         } elseif ($role === 'scheduler') {
             $query->where(['Jobs.created_by' => $userId]);
         }

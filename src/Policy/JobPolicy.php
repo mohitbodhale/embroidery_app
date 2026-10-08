@@ -133,7 +133,7 @@ public function canView($user, $job): bool
             return true;
         }
         if ($role === 'production') {
-            return in_array($job->status, ['qc_approved', 'in_production'], true);
+            return in_array($job->status, ['qc_approved', 'in_production', 'completed'], true);
         }
         if ($role === 'scheduler') {
             return $job->created_by == $userId;

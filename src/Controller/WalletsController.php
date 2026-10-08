@@ -351,6 +351,7 @@ class WalletsController extends AppController
     {
         $currentBalance = 0.0;
         $totalEarnings = 0.0;
+        $paidToYou = 0.0;
         $jobs = $this->Jobs->find('all', skipOrgFilter: true)
             ->where(['Jobs.operator_id' => $wallet->user_id])
             ->all();
@@ -368,10 +369,21 @@ class WalletsController extends AppController
             }
         }
 
+        foreach ($this->WalletTransactions->find()
+            ->select(['amount'])
+            ->where([
+                'WalletTransactions.wallet_id' => $wallet->id,
+                'WalletTransactions.type' => WalletTransaction::TYPE_EARNING,
+                'WalletTransactions.job_id IS NOT' => null,
+            ])
+            ->all() as $transaction) {
+            $paidToYou += (float)$transaction->amount;
+        }
+
         return [
             'current_balance' => round($currentBalance, 2),
             'total_earnings' => round($totalEarnings, 2),
-            'paid_to_you' => round((float)$wallet->total_paid, 2),
+            'paid_to_you' => round($paidToYou, 2),
         ];
     }
 
