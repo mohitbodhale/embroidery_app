@@ -8,25 +8,14 @@ final class SeedNewRolesAndSampleUsers extends BaseMigration
     private function columnExists(string $table, string $column): bool
     {
         try {
-            $rows = $this->fetchAll("PRAGMA table_info('{$table}')");
-            foreach ($rows as $row) {
-                $name = $row['name'] ?? $row['COLUMN_NAME'] ?? null;
-                if ($name === $column) {
-                    return true;
-                }
+            $schema = $this->connection()->getSchemaCollection();
+            if ($schema->describe($table)->hasColumn($column)) {
+                return true;
             }
         } catch (\Throwable) {
+            // Table might not exist yet
         }
-
-        try {
-            $row = $this->fetchRow(
-                "SELECT 1 FROM information_schema.columns
-                 WHERE table_name = '{$table}' AND column_name = '{$column}'"
-            );
-            return (bool) $row;
-        } catch (\Throwable) {
-            return false;
-        }
+        return false;
     }
 
     public function change(): void
@@ -48,28 +37,41 @@ final class SeedNewRolesAndSampleUsers extends BaseMigration
                 ->addColumn('updated_at', 'datetime', ['null' => true])
                 ->addIndex(['user_id'], ['unique' => true])
                 ->create();
-        }
-
-        foreach (['user_id', 'phone', 'bio', 'avatar', 'website', 'location', 'work_type_id', 'created_at', 'updated_at'] as $column) {
-            if (!$this->columnExists('user_details', $column)) {
-                $sql = match ($column) {
-                    'user_id' => 'ALTER TABLE user_details ADD COLUMN user_id INTEGER NOT NULL',
-                    'phone' => 'ALTER TABLE user_details ADD COLUMN phone VARCHAR(20) NULL',
-                    'bio' => 'ALTER TABLE user_details ADD COLUMN bio TEXT NULL',
-                    'avatar' => 'ALTER TABLE user_details ADD COLUMN avatar VARCHAR(255) NULL',
-                    'website' => 'ALTER TABLE user_details ADD COLUMN website VARCHAR(255) NULL',
-                    'location' => 'ALTER TABLE user_details ADD COLUMN location VARCHAR(100) NULL',
-                    'work_type_id' => 'ALTER TABLE user_details ADD COLUMN work_type_id INTEGER NULL',
-                    'created_at' => 'ALTER TABLE user_details ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP',
-                    'updated_at' => 'ALTER TABLE user_details ADD COLUMN updated_at DATETIME NULL',
-                    default => null,
-                };
-
-                if ($sql !== null) {
-                    try {
-                        $this->execute($sql);
-                    } catch (\Throwable) {
+        } else {
+            // Table exists, ensure all required columns are present
+            foreach (['user_id', 'phone', 'bio', 'avatar', 'website', 'location', 'work_type_id', 'created_at', 'updated_at'] as $column) {
+                if (!$this->columnExists('user_details', $column)) {
+                    $ud = $this->table('user_details');
+                    switch ($column) {
+                        case 'user_id':
+                            $ud->addColumn('user_id', 'integer', ['null' => false]);
+                            break;
+                        case 'phone':
+                            $ud->addColumn('phone', 'string', ['limit' => 20, 'null' => true]);
+                            break;
+                        case 'bio':
+                            $ud->addColumn('bio', 'text', ['null' => true]);
+                            break;
+                        case 'avatar':
+                            $ud->addColumn('avatar', 'string', ['limit' => 255, 'null' => true]);
+                            break;
+                        case 'website':
+                            $ud->addColumn('website', 'string', ['limit' => 255, 'null' => true]);
+                            break;
+                        case 'location':
+                            $ud->addColumn('location', 'string', ['limit' => 100, 'null' => true]);
+                            break;
+                        case 'work_type_id':
+                            $ud->addColumn('work_type_id', 'integer', ['null' => true]);
+                            break;
+                        case 'created_at':
+                            $ud->addColumn('created_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP']);
+                            break;
+                        case 'updated_at':
+                            $ud->addColumn('updated_at', 'datetime', ['null' => true]);
+                            break;
                     }
+                    $ud->update();
                 }
             }
         }
@@ -100,7 +102,7 @@ final class SeedNewRolesAndSampleUsers extends BaseMigration
         }
 
         // 2) Get or create a default organization
-        $org = $this->fetchRow('SELECT id FROM organizations LIMIT 1');
+        $org = $this->fetchRow('SELECT id FROM organizations');
         if (!$org) {
             $this->table('organizations')->insert([
                 'name' => 'Default Organization',
@@ -108,7 +110,7 @@ final class SeedNewRolesAndSampleUsers extends BaseMigration
                 'status' => 'active',
                 'created_at' => $now,
             ])->save();
-            $org = $this->fetchRow('SELECT id FROM organizations LIMIT 1');
+            $org = $this->fetchRow('SELECT id FROM organizations');
         }
         $orgId = $org['id'] ?? 1;
 
@@ -166,7 +168,7 @@ final class SeedNewRolesAndSampleUsers extends BaseMigration
         // 5) Assign work_type to operator via user_details
         $operator = $this->fetchRow("SELECT id FROM users WHERE email = 'operator@stitchcraft.com'");
         if ($operator) {
-            $wtDigitizing = $this->fetchRow("SELECT id FROM work_types WHERE name = 'digitizing' LIMIT 1");
+            $wtDigitizing = $this->fetchRow("SELECT id FROM work_types WHERE name = 'digitizing'");
             if ($wtDigitizing) {
                 $this->table('user_details')->insert([
                     'user_id' => $operator['id'],

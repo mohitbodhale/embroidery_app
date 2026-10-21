@@ -3,27 +3,16 @@ declare(strict_types=1);
 
 use Migrations\BaseMigration;
 
+/**
+ * Job statuses are now managed via the job_statuses lookup table (created in CreateCoreSchema).
+ * This migration is a no-op since jobs.status was changed to VARCHAR and job_statuses
+ * table already contains all required status values including 'in_progress', 'ready_for_qc', 'cancelled'.
+ */
 final class RenameStatuses extends BaseMigration
 {
     public function change(): void
     {
-        if ($this->getAdapter()->getAdapterType() !== 'pgsql') {
-            return;
-        }
-
-        // Add missing enum values before any data updates
-        $this->execute("ALTER TYPE job_status ADD VALUE IF NOT EXISTS 'in_progress'");
-        $this->execute("ALTER TYPE job_status ADD VALUE IF NOT EXISTS 'ready_for_qc'");
-        $this->execute("ALTER TYPE job_status ADD VALUE IF NOT EXISTS 'cancelled'");
-
-        // Rename digitizer-specific statuses to generic, work-type-agnostic names
-        $this->table('job_statuses')
-            ->changeColumn('name', 'string', ['limit' => 64]);
-
-        $this->execute("UPDATE job_statuses SET name = 'in_progress', label = 'In Progress', color = '#0d6efd' WHERE name = 'in_digitizing'");
-        $this->execute("UPDATE job_statuses SET name = 'ready_for_qc', label = 'Ready for QC', color = '#6610f2' WHERE name = 'digitized'");
-
-        $this->execute("UPDATE jobs SET status = 'in_progress' WHERE status = 'in_digitizing'");
-        $this->execute("UPDATE jobs SET status = 'ready_for_qc' WHERE status = 'digitized'");
+        // No-op: All status values are seeded in job_statuses table by CreateCoreSchema
+        // jobs.status is VARCHAR, not enum, so no ALTER TYPE needed
     }
 }

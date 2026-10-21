@@ -8,26 +8,30 @@ final class RenameDigitizerIdToOperatorIdAndMoveWorkType extends BaseMigration
     private function columnExists(string $table, string $column): bool
     {
         try {
-            $rows = $this->fetchAll("PRAGMA table_info('{$table}')");
-            foreach ($rows as $row) {
-                $name = $row['name'] ?? $row['COLUMN_NAME'] ?? null;
-                if ($name === $column) {
+            $schema = $this->connection()->getSchemaCollection();
+            if ($schema->describe($table)->hasColumn($column)) {
+                return true;
+            }
+        } catch (\Throwable) {
+            // Table might not exist yet
+        }
+        return false;
+    }
+
+    private function indexExists(string $table, string $indexName): bool
+    {
+        try {
+            $schema = $this->connection()->getSchemaCollection();
+            $tableSchema = $schema->describe($table);
+            foreach ($tableSchema->getIndexes() as $idx) {
+                if ($idx->getName() === $indexName) {
                     return true;
                 }
             }
         } catch (\Throwable) {
-            // SQLite metadata lookup is not available to all databases.
+            // Table might not exist yet
         }
-
-        try {
-            $row = $this->fetchRow(
-                "SELECT 1 FROM information_schema.columns
-                 WHERE table_name = '{$table}' AND column_name = '{$column}'"
-            );
-            return (bool) $row;
-        } catch (\Throwable) {
-            return false;
-        }
+        return false;
     }
 
     public function change(): void
@@ -38,45 +42,50 @@ final class RenameDigitizerIdToOperatorIdAndMoveWorkType extends BaseMigration
 
         // 1) Add operator_id to jobs if missing.
         if (!$this->columnExists('jobs', 'operator_id')) {
-            try {
-                $this->execute('ALTER TABLE jobs ADD COLUMN operator_id INTEGER NULL');
-            } catch (\Throwable $e) {
-            }
+            $jobs = $this->table('jobs');
+            $jobs->addColumn('operator_id', 'integer', ['null' => true]);
+            $jobs->update();
         }
 
         // 2) Copy existing digitizer_id data to operator_id.
+        // Use CakePHP query builder for DB-agnostic UPDATE
         try {
-            $this->execute('UPDATE jobs SET operator_id = digitizer_id WHERE digitizer_id IS NOT NULL');
-        } catch (\Throwable $e) {
+            $this->update('jobs')
+                ->set(['operator_id' => new \Cake\Database\Expression\IdentifierExpression('digitizer_id')])
+                ->where(['digitizer_id IS NOT NULL' => true])
+                ->execute();
+        } catch (\Throwable) {
+            // Fallback for drivers that don't support this syntax
+            $connection = $this->getAdapter()->getConnection();
+            $connection->execute('UPDATE jobs SET operator_id = digitizer_id WHERE digitizer_id IS NOT NULL');
         }
 
         // 3) Drop old digitizer_id column if it is still present.
         if ($this->columnExists('jobs', 'digitizer_id')) {
-            try {
-                $this->execute('ALTER TABLE jobs DROP COLUMN digitizer_id');
-            } catch (\Throwable $e) {
-            }
+            $jobs = $this->table('jobs');
+            $jobs->removeColumn('digitizer_id');
+            $jobs->update();
         }
 
         // 4) Add work_type_id to user_details if missing.
         if (!$this->columnExists('user_details', 'work_type_id')) {
-            try {
-                $this->execute('ALTER TABLE user_details ADD COLUMN work_type_id INTEGER NULL');
-            } catch (\Throwable $e) {
-            }
+            $ud = $this->table('user_details');
+            $ud->addColumn('work_type_id', 'integer', ['null' => true]);
+            $ud->update();
         }
 
         // 5) Remove work_type from users if present (moved to user_details.work_type_id).
         if ($this->columnExists('users', 'work_type')) {
-            try {
-                $this->execute('ALTER TABLE users DROP COLUMN work_type');
-            } catch (\Throwable $e) {
-            }
+            $users = $this->table('users');
+            $users->removeColumn('work_type');
+            $users->update();
         }
 
-        try {
-            $this->execute('CREATE INDEX IF NOT EXISTS idx_jobs_operator_id ON jobs(operator_id)');
-        } catch (\Throwable $e) {
+        // 6) Add index on operator_id if missing
+        if (!$this->indexExists('jobs', 'idx_jobs_operator_id')) {
+            $jobs = $this->table('jobs');
+            $jobs->addIndex(['operator_id'], ['name' => 'idx_jobs_operator_id']);
+            $jobs->update();
         }
     }
 }

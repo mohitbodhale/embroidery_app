@@ -14,29 +14,20 @@ use Migrations\BaseMigration;
  */
 final class AddOperatorWorkTypeToUsers extends BaseMigration
 {
+    /**
+     * Check if column exists using CakePHP's schema collection (works on MySQL, PostgreSQL, SQLite)
+     */
     private function columnExists(string $table, string $column): bool
     {
         try {
-            $rows = $this->fetchAll("PRAGMA table_info('{$table}')");
-            foreach ($rows as $row) {
-                $name = $row['name'] ?? $row['COLUMN_NAME'] ?? null;
-                if ($name === $column) {
-                    return true;
-                }
+            $schema = $this->connection()->getSchemaCollection();
+            if ($schema->describe($table)->hasColumn($column)) {
+                return true;
             }
         } catch (\Throwable) {
-            // SQLite metadata lookup is not available on all backends; the fallback below handles MySQL/Postgres.
+            // Table might not exist yet
         }
-
-        try {
-            $row = $this->fetchRow(
-                "SELECT 1 FROM information_schema.columns
-                 WHERE table_name = '{$table}' AND column_name = '{$column}'"
-            );
-            return (bool) $row;
-        } catch (\Throwable) {
-            return false;
-        }
+        return false;
     }
 
     public function change(): void
@@ -46,11 +37,12 @@ final class AddOperatorWorkTypeToUsers extends BaseMigration
         }
 
         if (!$this->columnExists('users', 'work_type')) {
-            try {
-                $this->execute("ALTER TABLE users ADD COLUMN work_type VARCHAR(64) NULL");
-            } catch (\Throwable $e) {
-                // Some database backends may require a different alter syntax, so we continue quietly.
-            }
+            $users = $this->table('users');
+            $users->addColumn('work_type', 'string', [
+                'limit' => 64,
+                'null' => true,
+            ]);
+            $users->update();
         }
     }
 }

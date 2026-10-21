@@ -15,14 +15,14 @@ final class ChangeUsersRoleFromEnumToVarchar extends BaseMigration
             return;
         }
 
-        try {
-            $this->execute('ALTER TABLE users ALTER COLUMN role TYPE VARCHAR(50) USING role::text');
-        } catch (\Throwable $e) {
-        }
-
-        try {
-            $this->execute('ALTER TABLE users MODIFY role VARCHAR(50)');
-        } catch (\Throwable $e) {
-        }
+        $users = $this->table('users');
+        // Change column type to string/varchar (works on both MySQL and PostgreSQL)
+        // CakePHP will generate appropriate ALTER TABLE for each driver
+        $users->changeColumn('role', 'string', [
+            'limit' => 50,
+            'null' => false,
+            'default' => 'digitizer',
+        ]);
+        $users->update();
     }
 }

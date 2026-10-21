@@ -3,23 +3,20 @@ declare(strict_types=1);
 
 use Migrations\BaseMigration;
 
-/** Allows public registrations to wait for an Administrator role assignment. */
+/** 
+ * The 'pending' role is now handled by the roles lookup table (created in CreateCoreSchema).
+ * This migration is a no-op since users.role was changed to VARCHAR.
+ */
 final class AddPendingUserRole extends BaseMigration
 {
     public function up(): void
     {
-        if ($this->getAdapter()->getAdapterType() !== 'pgsql') {
-            return;
-        }
-
-        $typeExists = $this->fetchRow("SELECT 1 FROM pg_type WHERE typname = 'user_role'");
-        if ($typeExists) {
-            $this->execute("ALTER TYPE user_role ADD VALUE IF NOT EXISTS 'pending'");
-        }
+        // No-op: 'pending' role is seeded in roles table by CreateCoreSchema
+        // users.role is VARCHAR, not enum, so no ALTER TYPE needed
     }
 
     public function down(): void
     {
-        // PostgreSQL cannot safely remove a value from an enum in place.
+        // No-op
     }
 }

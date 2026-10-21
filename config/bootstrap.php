@@ -55,8 +55,8 @@ require CAKE . 'functions.php';
  * See https://github.com/josegonzalez/php-dotenv for API details.
  *
  * Uncomment block of code below if you want to use `.env` file during development.
- * You should copy `config/.env.example` to `config/.env` and set/modify the
- * variables as required.
+ * You should copy `.env.example` to `.env` (project root) or `config/.env.example` to `config/.env`
+ * and set/modify the variables as required.
  *
  * The purpose of the .env file is to emulate the presence of the environment
  * variables like they would be present in production.
@@ -64,13 +64,23 @@ require CAKE . 'functions.php';
  * If you use .env files, be careful to not commit them to source control to avoid
  * security risks. See https://github.com/josegonzalez/php-dotenv#general-security-information
  * for more information for recommended practices.
-*/
-if (!env('APP_NAME') && file_exists(CONFIG . '.env') && class_exists(\josegonzalez\Dotenv\Loader::class)) {
-    $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
-    $dotenv->parse()
-        ->putenv()
-        ->toEnv()
-        ->toServer();
+ */
+if (!env('APP_NAME') && class_exists(\josegonzalez\Dotenv\Loader::class)) {
+    // Check project root first, then config/
+    $envPaths = [
+        ROOT . DS . '.env',
+        CONFIG . '.env',
+    ];
+    foreach ($envPaths as $envPath) {
+        if (file_exists($envPath)) {
+            $dotenv = new \josegonzalez\Dotenv\Loader([$envPath]);
+            $dotenv->parse()
+                ->putenv()
+                ->toEnv()
+                ->toServer();
+            break;
+        }
+    }
 }
 
 /*

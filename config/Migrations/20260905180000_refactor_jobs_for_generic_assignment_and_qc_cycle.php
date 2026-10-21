@@ -36,90 +36,57 @@ use Migrations\BaseMigration;
  */
 final class RefactorJobsForGenericAssignmentAndQcCycle extends BaseMigration
 {
+    /**
+     * Check if column exists using CakePHP's schema collection (works on MySQL, PostgreSQL, SQLite)
+     */
     private function columnExists(string $table, string $column): bool
     {
         try {
-            $row = $this->fetchRow(
-                "SELECT 1 FROM information_schema.columns
-                 WHERE table_name = '{$table}' AND column_name = '{$column}'"
-            );
-            if ($row) {
+            $schema = $this->connection()->getSchemaCollection();
+            if ($schema->describe($table)->hasColumn($column)) {
                 return true;
             }
         } catch (\Throwable) {
-            // Fall back to SQLite metadata lookup below.
+            // Table might not exist yet
         }
-
-        try {
-            $rows = $this->fetchAll("PRAGMA table_info('{$table}')");
-            foreach ($rows as $row) {
-                $name = $row['name'] ?? $row['COLUMN_NAME'] ?? null;
-                if ($name === $column) {
-                    return true;
-                }
-            }
-        } catch (\Throwable) {
-            // SQLite not available; if the query type is different, the migration will continue.
-        }
-
         return false;
     }
 
+    /**
+     * Check if index exists using CakePHP's schema collection (works on MySQL, PostgreSQL, SQLite)
+     */
     private function indexExists(string $table, string $indexName): bool
     {
         try {
-            $row = $this->fetchRow(
-                "SELECT 1 FROM pg_indexes
-                 WHERE tablename = '{$table}' AND indexname = '{$indexName}'"
-            );
-            if ($row) {
-                return true;
-            }
-        } catch (\Throwable) {
-            // Fall back to SQLite metadata lookup below.
-        }
-
-        try {
-            $rows = $this->fetchAll("PRAGMA index_list('{$table}')");
-            foreach ($rows as $row) {
-                $name = $row['name'] ?? $row['index_name'] ?? null;
-                if ($name === $indexName) {
+            $schema = $this->connection()->getSchemaCollection();
+            $tableSchema = $schema->describe($table);
+            foreach ($tableSchema->getIndexes() as $idx) {
+                if ($idx->getName() === $indexName) {
                     return true;
                 }
             }
         } catch (\Throwable) {
-            // Ignore unsupported metadata lookups.
+            // Table might not exist yet
         }
-
         return false;
     }
 
+    /**
+     * Check if foreign key exists using CakePHP's schema collection (works on MySQL, PostgreSQL, SQLite)
+     */
     private function foreignKeyExists(string $table, string $constraintName): bool
     {
         try {
-            $row = $this->fetchRow(
-                "SELECT 1 FROM information_schema.table_constraints
-                 WHERE constraint_name = '{$constraintName}' AND table_name = '{$table}'"
-            );
-            if ($row) {
-                return true;
-            }
-        } catch (\Throwable) {
-            // Fall back to SQLite metadata lookup below.
-        }
-
-        try {
-            $rows = $this->fetchAll("PRAGMA foreign_key_list('{$table}')");
-            foreach ($rows as $row) {
-                $name = $row['id'] ?? $row['name'] ?? null;
-                if ($name !== null && $name === $constraintName) {
+            $schema = $this->connection()->getSchemaCollection();
+            $tableSchema = $schema->describe($table);
+            foreach ($tableSchema->getForeignKeys() as $fk) {
+                if ($fk->getName() === $constraintName) {
                     return true;
                 }
             }
         } catch (\Throwable) {
-            // Ignore unsupported metadata lookups.
+            // Table might not exist yet
         }
-
         return false;
     }
 

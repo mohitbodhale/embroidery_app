@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 use Migrations\BaseMigration;
+use Cake\Database\Driver\Mysql;
+use Cake\Database\Driver\Postgres;
 
 /**
  * One wallet per operator. balance is the running figure, total_earned and
@@ -54,14 +56,47 @@ final class CreateOperatorWallets extends BaseMigration
             ->update();
 
         // Give every existing operator a zeroed wallet so income can be recorded
-        // immediately without a setup step.
+        // immediately without a setup step. Use DB-agnostic upsert.
+        $this->seedOperatorWallets($this->getAdapter()->getConnection()->getDriver());
+    }
+
+    /**
+     * Insert zero-balance wallets for all operator users.
+     * Uses INSERT IGNORE (MySQL) or ON CONFLICT DO NOTHING (PostgreSQL).
+     */
+    private function seedOperatorWallets($driver): void
+    {
         $now = date('Y-m-d H:i:s');
-        $this->execute(
-            'INSERT INTO operator_wallets (user_id, balance, total_earned, total_paid, created_at, modified_at)
-             SELECT u.id, 0, 0, 0, \'' . $now . '\', \'' . $now . '\'
-             FROM users u
-             WHERE LOWER(u.role) = \'operator\'
-             ON CONFLICT (user_id) DO NOTHING'
-        );
+
+        if ($driver instanceof Postgres) {
+            $this->execute(
+                'INSERT INTO operator_wallets (user_id, balance, total_earned, total_paid, created_at, modified_at)
+                 SELECT u.id, 0, 0, 0, ?, ?
+                 FROM users u
+                 WHERE LOWER(u.role) = \'operator\'
+                 ON CONFLICT (user_id) DO NOTHING',
+                [$now, $now]
+            );
+        } elseif ($driver instanceof Mysql) {
+            $this->execute(
+                'INSERT IGNORE INTO operator_wallets (user_id, balance, total_earned, total_paid, created_at, modified_at)
+                 SELECT u.id, 0, 0, 0, ?, ?
+                 FROM users u
+                 WHERE LOWER(u.role) = \'operator\'',
+                [$now, $now]
+            );
+        } else {
+            // Fallback: check and insert individually (SQLite, etc.)
+            $operators = $this->fetchAll("SELECT id FROM users WHERE LOWER(role) = 'operator'");
+            foreach ($operators as $op) {
+                $exists = $this->fetchOne('SELECT 1 FROM operator_wallets WHERE user_id = ?', [$op['id']]);
+                if (!$exists) {
+                    $this->execute(
+                        'INSERT INTO operator_wallets (user_id, balance, total_earned, total_paid, created_at, modified_at) VALUES (?, 0, 0, 0, ?, ?)',
+                        [$op['id'], $now, $now]
+                    );
+                }
+            }
+        }
     }
 }
